@@ -285,3 +285,6 @@ h3 { font: 700 22px/1.2 var(--display); margin: 1.8em 0 .3em; }
 .count-kinds { margin-left: 8px; white-space: nowrap; }
 .count-kinds .ficon { margin: 0 10px 0 4px; font-size: 10px; vertical-align: 2px; }
 @media (max-width: 640px) { .count-kinds { display: block; margin: 4px 0 0; } }
+.dek-em { color: #f4f2ee; font-weight: inherit; }
+.kicker-gh { display: inline-flex; align-items: center; margin-left: 12px; color: var(--muted); transition: color .2s; }
+.kicker-gh:hover, .kicker-gh:focus-visible { color: var(--text); }
