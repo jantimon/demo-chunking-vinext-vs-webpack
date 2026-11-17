@@ -404,6 +404,121 @@ function pack() {
   }, { threshold: 0.45 }).observe(stage);
 }
 
+/* 05 · animated download waterfall of both median runs, one time axis */
+function waterfallFigure(redraw = false) {
+  const data = window.WATERFALL;
+  const MAX = 2800;
+  const GROUPS = [
+    ["lcp", "product image"],
+    ["html", "HTML"],
+    ["css", "CSS · Highest"],
+    ["js", null],
+    ["font", "fonts"],
+    ["img", "other images"],
+    ["other", "API, other"],
+  ];
+  const lanes = [...document.querySelectorAll(".wf-lane")].map((lane) => {
+    const side = lane.dataset.side;
+    const svg = lane.querySelector("svg");
+    const { rows, fcp, lcp } = data[side];
+    const ordered = GROUPS.flatMap(([type]) => rows.filter((row) => row[0] === type).sort((a, b) => a[1] - b[1] || a[3] - b[3]));
+    const width = Math.round(Math.min(1000, Math.max(300, lane.clientWidth || 1000)));
+    const compact = width < 600;
+    const labelWidth = compact ? 74 : 140;
+    const imageHeight = 14;
+    const lineHeight = side === "vinext" ? 0.42 : 2.2;
+    const height = imageHeight + 8 + (ordered.length - 1) * lineHeight + 36;
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    const x = (t) => labelWidth + (t / MAX) * (width - labelWidth - 10);
+    const ns = "http://www.w3.org/2000/svg";
+    const make = (tag, attrs) => { const node = document.createElementNS(ns, tag); for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v); svg.append(node); return node; };
+    for (let t = 0; t <= MAX; t += 500) {
+      make("line", { x1: x(t), x2: x(t), y1: 0, y2: height - 20, class: "wf-grid" });
+      make("text", { x: x(t), y: height - 4, class: "wf-tick", "text-anchor": "middle" }).textContent = `${t / 1000} s`;
+    }
+    const bars = [];
+    let y = 0;
+    let groupStart = 0;
+    let lastType = null;
+    const groupLabel = (type, top, bottom) => {
+      const label = type === "js"
+        ? `${compact ? "JS" : "scripts"} · ${side === "webpack" ? "Low" : "High"}`
+        : compact ? { lcp: "image", html: "HTML", css: "CSS", font: "fonts", img: "images", other: "other" }[type] : GROUPS.find(([g]) => g === type)[1];
+      const count = ordered.filter((row) => row[0] === type).length;
+      if (bottom - top < 6 && type !== "lcp") return;
+      make("text", { x: labelWidth - 8, y: (top + bottom) / 2 + 4, class: `wf-group ${type === "js" ? `js-${side === "webpack" ? "wp" : "rd"}` : type}`, "text-anchor": "end" }).textContent = type === "lcp" || compact ? label : `${label} (${count})`;
+    };
+    ordered.forEach((row, index) => {
+      const [type, start, response, end] = row;
+      if (type !== lastType) {
+        if (lastType) groupLabel(lastType, groupStart, y);
+        if (lastType) y += type === "lcp" ? 0 : 3;
+        groupStart = y;
+        lastType = type;
+      }
+      const h = type === "lcp" ? imageHeight : Math.max(lineHeight * 0.9, 0.4);
+      const cls = type === "js" ? `js-${side === "webpack" ? "wp" : "rd"}` : type;
+      const wait = make("rect", { x: x(start), y, width: 0, height: h, class: `wf-bar wait ${cls}` });
+      const load = make("rect", { x: x(response), y, width: 0, height: h, class: `wf-bar ${cls}` });
+      bars.push({ start, response, end, wait, load });
+      y += type === "lcp" ? imageHeight + 8 : lineHeight;
+      if (index === ordered.length - 1) groupLabel(type, groupStart, y);
+    });
+    const marks = [["fcp", fcp, "0"], ["lcp", lcp, "4 3"]].map(([kind, t, dash]) => {
+      const line = make("line", { x1: x(t), x2: x(t), y1: 0, y2: height - 18, class: `wf-mark ${kind}`, "stroke-dasharray": dash });
+      return { t, line };
+    });
+    const image = rows.find((row) => row[0] === "lcp");
+    const imageLabel = make("text", { x: x(image[3]) + 6, y: 11, class: "wf-imglabel" });
+    imageLabel.textContent = compact ? `${(image[3] / 1000).toFixed(2)} s` : `product image arrives ${(image[3] / 1000).toFixed(2)} s`;
+    const cursor = make("line", { x1: x(0), x2: x(0), y1: 0, y2: height - 18, class: "wf-cursor" });
+    return { bars, marks, imageLabel, image, cursor, x };
+  });
+  const draw = (t) => {
+    for (const lane of lanes) {
+      for (const bar of lane.bars) {
+        const waitEnd = Math.min(t, bar.response);
+        bar.wait.setAttribute("width", Math.max(0, lane.x(waitEnd) - lane.x(bar.start)));
+        const loadEnd = Math.min(t, bar.end);
+        bar.load.setAttribute("width", Math.max(0, lane.x(loadEnd) - lane.x(bar.response)));
+      }
+      for (const mark of lane.marks) mark.line.classList.toggle("on", t >= mark.t);
+      lane.imageLabel.classList.toggle("on", t >= lane.image[3]);
+      lane.cursor.setAttribute("x1", lane.x(t));
+      lane.cursor.setAttribute("x2", lane.x(t));
+      lane.cursor.classList.toggle("off", t >= MAX);
+    }
+    $("#wfClock").textContent = `${(Math.min(t, MAX) / 1000).toFixed(2)} s`;
+  };
+  // Plays at a third of real time, so the image's wait is visible.
+  let frame = 0;
+  const play = () => {
+    cancelAnimationFrame(frame);
+    const began = performance.now();
+    const tick = (now) => {
+      const t = ((now - began) / 3) | 0;
+      draw(t);
+      if (t < MAX) frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+  };
+  wfWidth = $("#wf").clientWidth;
+  if (redraw || matchMedia("(prefers-reduced-motion: reduce)").matches) draw(MAX);
+  else {
+    draw(0);
+    onView($("#wf"), play);
+  }
+  $("#wfReplay").onclick = play;
+}
+let wfWidth = 0;
+addEventListener("resize", () => {
+  const width = $("#wf").clientWidth;
+  if (Math.abs(width - wfWidth) < 40) return;
+  wfWidth = width;
+  document.querySelectorAll(".wf-svg").forEach((svg) => (svg.innerHTML = ""));
+  waterfallFigure(true);
+});
+
 /* 04 · squares and bars, filled when they scroll into view */
 function onView(element, run) {
   new IntersectionObserver(([entry], observer) => {
@@ -446,6 +561,7 @@ graph();
 pack();
 squares();
 onView($("#race"), () => $("#race").classList.add("seen"));
+waterfallFigure();
 onView($("#rg"), () => {
   [...document.querySelectorAll(".rg-step")].forEach((item, index) => (item.style.transitionDelay = `${index * 0.9}s`));
   $("#rg").classList.add("seen");

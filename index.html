@@ -22,6 +22,7 @@
 <link rel="stylesheet" href="styles.css">
 <script>document.documentElement.classList.add("js")</script>
 <script src="data.js" defer></script>
+<script src="waterfall.js" defer></script>
 <script src="main.js" defer></script>
 </head>
 <body>
@@ -97,8 +98,21 @@
   </figure>
 </section>
 
+<section id="sprio">
+  <h2><span class="num">05</span>Who gets the connection <span class="hi">first</span></h2>
+  <p>Chrome tells the server how urgent each file is. Render-blocking CSS is Highest. webpack's scripts load with <code>defer</code> and are Low. vinext's are module scripts and are High from the start. The product image starts at Medium and becomes High only once layout shows it on screen.</p>
+  <figure class="wf wide" id="wf" aria-label="Download waterfall of the product page, webpack and vinext on one time axis">
+    <div class="wf-head"><p class="wf-cap">Product page, iPhone 13 profile over emulated 4G · every line is one request</p><p class="wf-clock" id="wfClock">0.00 s</p></div>
+    <div class="wf-lane" data-side="webpack"><p class="wf-name"><i class="tok wp"></i>webpack</p><svg class="wf-svg" aria-hidden="true"></svg></div>
+    <div class="wf-lane" data-side="vinext"><p class="wf-name"><i class="tok rd"></i>vinext</p><svg class="wf-svg" aria-hidden="true"></svg></div>
+    <div class="wf-legend"><span><i class="wf-k lcp"></i>product image</span><span><i class="wf-k css"></i>CSS</span><span><i class="wf-k js-wp"></i>scripts, webpack</span><span><i class="wf-k js-rd"></i>scripts, vinext</span><span><i class="wf-k other"></i>other</span><span class="wf-k-line">│ first paint · ┊ largest paint</span><button type="button" class="wf-replay" id="wfReplay">Replay</button></div>
+  </figure>
+  <p>Both ask for the product image at 0.15 s. webpack has it at 0.77 s. On vinext it shares the connection with about 700 other requests that started at the same moment, and arrives at 1.71 s. The largest paint follows the image within 25 ms in both.</p>
+  <p class="small">Chrome's "tight mode", which holds back requests early in a page load, does not explain this: it only delays requests below High, and only until the HTML reaches <code>&lt;body&gt;</code>. Chrome's network emulation, used for these numbers, shares the link equally and ignores priorities. A server that sends by priority would put vinext's High scripts ahead of the image while it is still Medium.</p>
+</section>
+
 <section id="s5">
-  <h2><span class="num">05</span>What makes <span class="hi">fixing</span> so <span class="hi">hard</span>?</h2>
+  <h2><span class="num">06</span>What makes <span class="hi">fixing</span> so <span class="hi">hard</span>?</h2>
   <ol class="fixes wide">
     <li class="fix">
       <p class="fix-k">1 · "HTTP/2 makes small files free"</p>
