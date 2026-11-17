@@ -302,63 +302,56 @@ function closeDecider() {
 
 /** Each root that imports the module flies from the roots row into the card, one after the other. */
 function flyUsages() {
-  const box = stage.getBoundingClientRect();
   [...decider.querySelectorAll(".root-pill.slot")].forEach((slot, index) => {
     later(index * 220, () => {
       const source = $(`#roots [data-root="${slot.dataset.root}"]`);
-      const from = source.getBoundingClientRect();
-      const to = slot.getBoundingClientRect();
       source.classList.add("ping");
       later(700, () => source.classList.remove("ping"));
-      const clone = source.cloneNode(true);
-      clone.classList.add("flyer");
-      clone.classList.remove("ping");
-      clone.style.cssText = `left:${from.left - box.left}px;top:${from.top - box.top}px`;
-      stage.append(clone);
-      clone.animate(
-        [
-          { transform: "none" },
-          { transform: `translate(${(to.left - from.left) / 2}px, ${(to.top - from.top) / 2 - 14}px) scale(1.06)`, offset: 0.5 },
-          { transform: `translate(${to.left - from.left}px, ${to.top - from.top}px)` },
-        ],
-        { duration: 650, easing: "cubic-bezier(.45,0,.25,1)" },
-      ).onfinish = () => {
-        clone.remove();
-        slot.classList.add("in");
-      };
+      flip(slot, source.getBoundingClientRect(), 650, 14, () => slot.classList.add("in"));
     });
   });
 }
 
-/** A copy of the decided chip flies from its decision line into each file that receives it. */
+/**
+ * FLIP: the element is shown in its final place at once, then animated from where it starts
+ * (`from`, a viewport rect) back to that place. The animation is relative to the element's own
+ * position, so scrolling or a moving section during the flight cannot make it land in the wrong spot.
+ */
+function flip(element, from, duration, arc, show) {
+  show();
+  const to = element.getBoundingClientRect();
+  const dx = from.left - to.left;
+  const dy = from.top - to.top;
+  element.classList.add("flipping");
+  element.animate(
+    [
+      { transform: `translate(${dx}px, ${dy}px) scale(1.08)` },
+      { transform: `translate(${dx / 2}px, ${dy / 2 - arc}px) scale(1.08)`, offset: 0.5 },
+      { transform: "none" },
+    ],
+    { duration, easing: "cubic-bezier(.45,0,.25,1)" },
+  ).onfinish = () => element.classList.remove("flipping");
+}
+
+/** The decided chip flies from its decision line into each file that receives it. */
 function fly(key) {
   const mod = STEPS[step].mod;
-  const row = decider.querySelector(`.dc-row.${key}`);
-  const targets = mod === "css" ? [] : [...laneEl(key).querySelectorAll(`.chip[data-mod="${mod}"]`)].map((chip) => chip.closest(".file"));
-  const box = stage.getBoundingClientRect();
-  const from = row.getBoundingClientRect();
-  for (const fileEl of targets) {
-    const to = fileEl.querySelector(".file-mods").getBoundingClientRect();
-    const clone = document.createElement("span");
-    clone.className = "chip flyer";
-    clone.style.cssText = `--c:${color(mod)};left:${from.left - box.left + 70}px;top:${from.top - box.top}px`;
-    clone.textContent = mod;
-    stage.append(clone);
-    const dx = to.left - from.left - 70 + Math.min(to.width - 60, fileEl.querySelectorAll('.chip:not([style*="none"])').length * 70);
-    const dy = to.top - from.top;
-    clone.animate(
-      [
-        { transform: "none", opacity: 1 },
-        { transform: `translate(${dx / 2}px, ${dy / 2 - 24}px) scale(1.08)`, offset: 0.5 },
-        { transform: `translate(${dx}px, ${dy}px)`, opacity: 1, offset: 0.88 },
-        { transform: `translate(${dx}px, ${dy}px)`, opacity: 0 },
-      ],
-      { duration: 1100, easing: "cubic-bezier(.45,0,.25,1)" },
-    ).onfinish = () => clone.remove();
+  if (mod === "css") {
+    later(200, () => { landed[key] = true; render(true); });
+    return;
+  }
+  const from = decider.querySelector(`.dc-row.${key} span`).getBoundingClientRect();
+  for (const chip of laneEl(key).querySelectorAll(`.chip[data-mod="${mod}"]`)) {
+    const fileEl = chip.closest(".file");
+    flip(chip, from, 1000, 24, () => {
+      chip.classList.remove("land");
+      chip.style.display = "";
+      fileEl.classList.add("has");
+    });
     fileEl.classList.remove("glow");
     later(950, () => { void fileEl.offsetWidth; fileEl.classList.add("glow"); });
   }
-  later(targets.length ? 950 : 200, () => { landed[key] = true; render(true); });
+  later(1000, () => { landed[key] = true; render(false); });
 }
 
 /** One step in sub-steps: lift the module, decide for webpack, fly, decide for Rolldown, fly. */

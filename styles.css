@@ -269,7 +269,7 @@ h3 { font: 700 22px/1.2 var(--display); margin: 1.8em 0 .3em; }
 .root-pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font: 500 11.5px/1.5 var(--mono); color: var(--text); background: var(--bg3); border: 1px solid var(--line2); transition: box-shadow .3s, border-color .3s; }
 .root-pill.ping { border-color: var(--text); box-shadow: 0 0 14px rgb(255 255 255 / .25); }
 .root-pill.slot { opacity: 0; }
-.root-pill.slot.in { opacity: 1; animation: land .5s cubic-bezier(.3, 1.4, .5, 1); }
+.root-pill.slot.in { opacity: 1; }
 .root-pill.flyer { position: absolute; z-index: 9; pointer-events: none; }
 .ficon { display: inline-block; font: 700 8.5px/1 var(--mono); font-style: normal; letter-spacing: .02em; padding: 2px 3px 1px; border-radius: 3px; margin-right: 6px; vertical-align: 1px; }
 .ficon.js { background: #f0db4f; color: #1a1a1a; }
@@ -330,3 +330,4 @@ h3 { font: 700 22px/1.2 var(--display); margin: 1.8em 0 .3em; }
 .wf-replay { margin-left: auto; min-height: 32px; padding: 0 12px; border-radius: 9px; border: 1px solid var(--line2); background: var(--bg3); color: var(--text); font: 600 12px var(--mono); cursor: pointer; }
 @media (max-width: 640px) { .wf { padding: 12px 10px; } .wf-group { font-size: 10px; } .wf-tick { font-size: 9.5px; } .wf-imglabel { font-size: 10.5px; } }
 @media (max-width: 640px) { .stage-head .keys { display: none; } }
+.flipping { position: relative; z-index: 9; }
