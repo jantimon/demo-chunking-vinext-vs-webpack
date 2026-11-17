@@ -186,7 +186,9 @@ function render(animate) {
   equalizeRows();
   $("#packCap").textContent = step === STEPS.length - 1 && landed.rd ? `Product page: ${LANES.wp.js + LANES.wp.css} files with webpack, ${LANES.rd.js + LANES.rd.css} with Rolldown` : current.cap;
   [...$("#packDots").children].forEach((dot, index) => dot.setAttribute("aria-current", index === step));
-  $('[data-act="play"]').textContent = playing ? "❚❚" : "▶︎";
+  const playButton = $('[data-act="play"]');
+  playButton.classList.toggle("is-playing", playing);
+  playButton.setAttribute("aria-label", playing ? "Pause" : "Play");
 }
 
 /** Gives both cells of a virtual row the height of the taller one. */
@@ -360,7 +362,8 @@ function pack() {
   });
   addEventListener("keydown", (event) => {
     const rect = stage.getBoundingClientRect();
-    if (rect.bottom < 0 || rect.top > innerHeight) return;
+    const coveredFrom = stage.closest("section").nextElementSibling?.getBoundingClientRect().top ?? innerHeight;
+    if (rect.bottom < 0 || rect.top > Math.min(innerHeight, coveredFrom)) return;
     if (event.key === "ArrowRight") next();
     else if (event.key === "ArrowLeft") { setPlaying(false); jump(step - 1); }
     else if (event.key === " ") { event.preventDefault(); setPlaying(!playing); }
@@ -408,6 +411,16 @@ function squares() {
   });
 }
 
+/* Stacked sections: a section taller than the viewport sticks once its bottom reaches the viewport's bottom. */
+function stack() {
+  const sections = [...document.querySelectorAll(".stack > section")];
+  const setStickTop = () => sections.forEach((section) => section.style.setProperty("--stick-top", `${Math.min(0, innerHeight - section.offsetHeight)}px`));
+  const observer = new ResizeObserver(setStickTop);
+  sections.forEach((section) => observer.observe(section));
+  addEventListener("resize", setStickTop);
+}
+
+stack();
 graph();
 pack();
 squares();

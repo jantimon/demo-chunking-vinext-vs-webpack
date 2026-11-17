@@ -14,6 +14,7 @@
 <meta property="og:image" content="https://jantimon.github.io/demo-chunking-vinext-vs-webpack/assets/og.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@jantimon">
 <link rel="canonical" href="https://jantimon.github.io/demo-chunking-vinext-vs-webpack/">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,6 +33,7 @@
   <p class="dek">webpack copies small shared code into every chunk that needs it. Rolldown never copies, so it cuts one chunk for every unique set of importers, and a large app ends up with hundreds of tiny files.</p>
 </header>
 
+<div class="stack">
 <section id="s1">
   <h2><span class="num">01</span>Why bundlers <span class="hi">split</span> code</h2>
   <p>A page needs its own code plus code it shares with other pages. Put everything in one file and every page download repeats the shared part. Put every module in its own file and the browser makes a request for each of them. Bundlers pick a middle: one file per page, plus chunks for code several pages share.</p>
@@ -62,7 +64,7 @@
       <div class="lane wp-lane"><p class="lane-name"><i class="tok wp"></i>webpack <span>Next.js 16.4 settings</span></p><div class="files" id="laneWp"></div><p class="lane-note" id="noteWp"></p><p class="count" id="countWp"></p></div>
       <div class="lane rd-lane"><p class="lane-name"><i class="tok rd"></i>Rolldown <span>vinext 1.4 Pages Router</span></p><div class="files" id="laneRd"></div><p class="lane-note" id="noteRd"></p><p class="count" id="countRd"></p></div>
     </div>
-    <div class="stage-foot"><div class="controls" id="packControls"><button type="button" data-act="back" aria-label="Back">◀</button><button type="button" data-act="play" aria-label="Play or pause">❚❚</button><button type="button" data-act="next" aria-label="Next">▶</button><span class="dots" id="packDots"></span><button type="button" data-act="replay" class="replay">Replay</button></div></div>
+    <div class="stage-foot"><div class="controls" id="packControls"><button type="button" data-act="back" aria-label="Back"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" data-act="play" class="pk-play" aria-label="Play"><svg class="pk-i-play" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M4.5 2.8v10.4L13 8Z" fill="currentColor"/></svg><svg class="pk-i-pause" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z" fill="currentColor"/></svg></button><button type="button" data-act="next" aria-label="Next"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><span class="dots" id="packDots"></span><button type="button" data-act="replay" class="replay"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 1 0 1.8-4.07M2.5 2.5v3h3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Replay</button></div></div>
   </figure>
   <p>The two differ only on small code that several pages share:</p>
   <ul class="diff">
@@ -122,13 +124,18 @@
     </li>
   </ol>
 </section>
+</div>
 
 <footer class="about wide">
   <div>
     <p class="about-k">Written by</p>
     <p class="about-name">Jan Nicklas <span>@jantimon</span></p>
     <p>Feel free to reach out, I'd love to hear from you.</p>
-    <ul class="social"><li><a href="https://github.com/jantimon">GitHub</a></li></ul>
+    <ul class="social">
+      <li><a href="https://bsky.app/profile/jantimon.bsky.social"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M3.5 2.2C5.3 3.5 7.3 6.3 8 7.8c.7-1.5 2.7-4.3 4.5-5.6 1.3-1 3.5-1.7 3.5.7 0 .5-.3 4-.4 4.6-.6 2-2.6 2.5-4.4 2.2 3.1.5 3.9 2.3 2.2 4-3.3 3.3-4.7-.8-5.1-1.9L8 11.1l-.3.7c-.4 1.1-1.8 5.2-5.1 1.9-1.7-1.7-.9-3.5 2.2-4-1.8.3-3.8-.2-4.4-2.2C.3 6.9 0 3.4 0 2.9 0 .5 2.2 1.2 3.5 2.2z"/></svg>Bluesky</a></li>
+      <li><a href="https://x.com/jantimon"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M12.2 1h2.3L9.5 6.8 15.4 15h-4.6L7.2 10.2 3 15H.7l5.4-6.2L.4 1h4.7l3.3 4.4L12.2 1zm-.8 12.6h1.3L4.6 2.3H3.2l8.2 11.3z"/></svg>X</a></li>
+      <li><a href="https://github.com/jantimon"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38v-1.49c-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a></li>
+    </ul>
   </div>
   <div>
     <p class="about-k">Sources</p>
