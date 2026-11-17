@@ -64,7 +64,12 @@
     </div>
     <div class="stage-foot"><div class="controls" id="packControls"><button type="button" data-act="back" aria-label="Back">◀</button><button type="button" data-act="play" aria-label="Play or pause">❚❚</button><button type="button" data-act="next" aria-label="Next">▶</button><span class="dots" id="packDots"></span><button type="button" data-act="replay" class="replay">Replay</button></div></div>
   </figure>
-  <p>Both agree on React, on the 30 KB gallery and on code only one page uses. They split on everything small that several pages share. webpack copies <code>Price</code> and <code>useCart</code> into the cart page's file. Rolldown makes a file for each, and another for <code>Button</code>, because it doesn't know <code>_app</code> always loads before a page.</p>
+  <p>The two differ only on small code that several pages share:</p>
+  <ul class="diff">
+    <li><b class="wp-t">webpack copies it.</b> <code>Price</code> and <code>useCart</code> sit a second time in the cart page's file.</li>
+    <li><b class="rd-t">Rolldown gives it a file.</b> One for <code>Price</code>, one for <code>useCart</code>, and one for <code>Button</code>, because Rolldown doesn't know <code>_app</code> always loads before a page.</li>
+  </ul>
+  <p>React, the 30 KB gallery and code that only one page uses end up the same in both. The product page loads 6 more files with Rolldown: those three, plus one stylesheet each for <code>Button</code>, <code>Price</code> and the carousel chunk.</p>
 </section>
 
 <section id="s4">

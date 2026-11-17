@@ -243,3 +243,5 @@ h3 { font: 700 22px/1.2 var(--display); margin: 1.8em 0 .3em; }
   .ficon { margin-right: 4px; }
 }
 .file.gap { border: 1px dashed transparent; background: none; }
+.diff { padding-left: 1.2em; margin: 0 0 1em; }
+.diff li { margin: 6px 0; }
