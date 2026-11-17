@@ -1,0 +1,61 @@
+name: Pages
+
+on:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Build _site from all branches
+        run: |
+          set -euo pipefail
+          export_ref() {
+            mkdir -p "$2"
+            git archive "$1" | tar -x -C "$2" --exclude=.github
+          }
+
+          export_ref origin/main _site
+          export_ref origin/main _site/1.4.5
+
+          reserved="$(git ls-tree --name-only origin/main) 1.4.5"
+          for ref in $(git for-each-ref --format='%(refname:short)' refs/remotes/origin); do
+            branch="${ref#origin/}"
+            [ "$branch" = "main" ] || [ "$branch" = "HEAD" ] || [ "$ref" = "origin" ] && continue
+            name="${branch//\//-}"
+            if printf '%s\n' $reserved | grep -qxF "$name"; then
+              echo "::warning::Skipping branch $branch: /$name/ is taken by main"
+              continue
+            fi
+            echo "Publishing $branch at /$name/"
+            export_ref "$ref" "_site/$name"
+          done
+
+          touch _site/.nojekyll
+
+      - uses: actions/configure-pages@v6
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v5

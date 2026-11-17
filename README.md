@@ -4,6 +4,18 @@ An explainer: why webpack (with Next.js's settings) packs a Pages Router app int
 
 Live: https://jantimon.github.io/demo-chunking-vinext-vs-webpack/
 
+## Versions
+
+Every branch is published to GitHub Pages under its own name (`/` in a name becomes `-`):
+
+| URL | Branch |
+|---|---|
+| [/](https://jantimon.github.io/demo-chunking-vinext-vs-webpack/) | `main` (vinext 1.4.5) |
+| [/1.4.5/](https://jantimon.github.io/demo-chunking-vinext-vs-webpack/1.4.5/) | `main` |
+| `/<branch>/` | any other branch, e.g. [/vite-pr-4726/](https://jantimon.github.io/demo-chunking-vinext-vs-webpack/vite-pr-4726/) |
+
+A push to any branch redeploys all of them (`.github/workflows/pages.yml`).
+
 ## Run it
 
 Open `index.html` in a browser. No build step.
