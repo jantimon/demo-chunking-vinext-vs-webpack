@@ -24,19 +24,40 @@ const color = (name) => `var(--s-${MODULES[name].set})`;
 const kb = (value) => (value < 1 ? `${value * 1000} B` : `${value} KB`);
 const chipHtml = (name, withSize = true) => `<span class="chip" style="--c:${color(name)}">${name}${withSize ? `<span class="sz">${kb(MODULES[name].kb)}</span>` : ""}</span>`;
 
-/* 02 · module graph */
+/* 02 · module graph: hover or focus a card to see its importers (or a root's modules) */
+const GRAPH_ROOTS = [
+  ["_app", "wraps every page"],
+  ["home", "page"],
+  ["product", "page"],
+  ["cart", "page"],
+  ["ReviewsDialog", "lazy, from product"],
+  ["SizeGuide", "lazy, from product + cart"],
+];
+const BY_TO_ROOT = { _app: ["_app"], home: ["home"], product: ["product"], cart: ["cart"], reviews: ["ReviewsDialog"], "size guide": ["SizeGuide"], everything: GRAPH_ROOTS.map(([id]) => id) };
 function graph() {
-  const roots = [
-    ["_app", "wraps every page"],
-    ["home", "page"],
-    ["product", "page"],
-    ["cart", "page"],
-    ["ReviewsDialog", "lazy, from product"],
-    ["SizeGuide", "lazy, from product + cart"],
-  ];
   const shared = ["react", "Header", "Button", "Carousel", "Rating", "Price", "useCart", "Gallery", "formatDate", "SizeTable"];
-  $("#graph").innerHTML = `<div class="g-roots">${roots.map(([name, note]) => `<div class="g-root">${name}<small>${note}</small></div>`).join("")}</div>
-    <div class="g-mods">${shared.map((name) => `<div class="mod" style="--c:${color(name)}"><span>${name}</span><span class="sz">${kb(MODULES[name].kb)}</span><span class="by-k">imported by</span><span class="by">${MODULES[name].by.map((by) => `<i>${by}</i>`).join("")}</span></div>`).join("")}</div>`;
+  const rootsOf = (name) => [...new Set(MODULES[name].by.flatMap((by) => BY_TO_ROOT[by] ?? []))];
+  const host = $("#graph");
+  host.innerHTML = `<div class="g-roots">${GRAPH_ROOTS.map(([name, note]) => `<div class="g-root" tabindex="0" data-root="${name}">${name}<small>${note}</small></div>`).join("")}</div>
+    <div class="g-mods">${shared.map((name) => `<div class="mod" tabindex="0" data-mod="${name}" data-roots="${rootsOf(name).join(" ")}" style="--c:${color(name)}"><span>${name}</span><span class="sz">${kb(MODULES[name].kb)}</span><span class="by-k">imported by</span><span class="by">${MODULES[name].by.map((by) => `<i>${by}</i>`).join("")}</span></div>`).join("")}</div>`;
+  const mods = [...host.querySelectorAll(".mod")];
+  const roots = [...host.querySelectorAll(".g-root")];
+  const light = (lit) => {
+    host.classList.toggle("hovering", lit.size > 0);
+    [...mods, ...roots].forEach((card) => card.classList.toggle("lit", lit.has(card)));
+  };
+  for (const mod of mods) {
+    const show = () => light(new Set([mod, ...roots.filter((root) => mod.dataset.roots.split(" ").includes(root.dataset.root))]));
+    mod.addEventListener("mouseenter", show);
+    mod.addEventListener("focus", show);
+  }
+  for (const root of roots) {
+    const show = () => light(new Set([root, ...mods.filter((mod) => mod.dataset.roots.split(" ").includes(root.dataset.root))]));
+    root.addEventListener("mouseenter", show);
+    root.addEventListener("focus", show);
+  }
+  host.addEventListener("mouseleave", () => light(new Set()));
+  host.addEventListener("focusout", (event) => { if (!host.contains(event.relatedTarget)) light(new Set()); });
 }
 
 /* 03 · step figure: where each module of the product page lands */

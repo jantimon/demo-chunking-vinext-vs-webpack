@@ -288,3 +288,10 @@ h3 { font: 700 22px/1.2 var(--display); margin: 1.8em 0 .3em; }
 .dek-em { color: #f4f2ee; font-weight: inherit; }
 .kicker-gh { display: inline-flex; align-items: center; margin-left: 12px; color: var(--muted); transition: color .2s; }
 .kicker-gh:hover, .kicker-gh:focus-visible { color: var(--text); }
+/* 02 · hover links between modules and their importers */
+.graph .mod, .graph .g-root { transition: opacity .25s, box-shadow .25s, transform .25s; cursor: default; outline: none; }
+.graph.hovering .mod:not(.lit), .graph.hovering .g-root:not(.lit) { opacity: .28; }
+.graph .mod.lit { box-shadow: 0 0 0 2px var(--c), 0 0 22px color-mix(in srgb, var(--c) 45%, transparent); }
+.graph .g-root.lit { box-shadow: 0 0 0 2px var(--text); transform: translateY(-2px); }
+.graph .mod:focus-visible, .graph .g-root:focus-visible { box-shadow: 0 0 0 2px var(--text); }
+@media (hover: hover) { .g-mods::after { content: none; } }
