@@ -213,16 +213,71 @@ function render(animate) {
 }
 
 /** Gives both cells of a virtual row the height of the taller one. */
-function equalizeRows() {
+/**
+ * Both cells of a virtual row get the height of the taller one in the final state, measured once
+ * with every chip and stylesheet shown, so the figure never changes height while it plays.
+ */
+let rowHeights = null;
+function measureFinalRows() {
+  const cells = [...document.querySelectorAll("#laneWp > .file, #laneRd > .file")];
+  const hidden = [...document.querySelectorAll("#pack .files .chip, #pack .files .css-tag")].filter((node) => node.style.display === "none");
+  hidden.forEach((node) => (node.style.display = ""));
+  cells.forEach((cell) => (cell.style.minHeight = ""));
   const left = [...$("#laneWp").children];
   const right = [...$("#laneRd").children];
-  [...left, ...right].forEach((cell) => (cell.style.minHeight = ""));
-  left.forEach((cell, index) => {
-    const height = Math.max(cell.offsetHeight, right[index].offsetHeight);
-    cell.style.minHeight = right[index].style.minHeight = `${height}px`;
-  });
+  rowHeights = left.map((cell, index) => Math.max(cell.offsetHeight, right[index].offsetHeight));
+  hidden.forEach((node) => (node.style.display = "none"));
+  equalizeRows();
+  reserveTextHeights();
 }
-addEventListener("resize", () => equalizeRows());
+/** The caption, the lane notes and the counts get the height of their tallest text across all steps. */
+function reserveTextHeights() {
+  const finalCount = (key) => `Product page: ${LANES[key].js + LANES[key].css} files <span class="count-kinds">${LANES[key].js}<i class="ficon js">JS</i> ${LANES[key].css}<i class="ficon css">CSS</i></span>`;
+  const targets = [
+    [$("#packCap"), [...STEPS.map((item) => item.cap), `Product page: ${LANES.wp.js + LANES.wp.css} files with webpack, ${LANES.rd.js + LANES.rd.css} with Rolldown`]],
+    [$("#noteWp"), STEPS.map((item) => item.wp)],
+    [$("#noteRd"), STEPS.map((item) => item.rd)],
+    [$("#countWp"), [finalCount("wp")]],
+    [$("#countRd"), [finalCount("rd")]],
+  ];
+  for (const [node, texts] of targets) {
+    const keep = node.innerHTML;
+    const keepFinal = node.classList.contains("final");
+    node.style.minHeight = "";
+    if (node.classList.contains("count")) node.classList.add("final");
+    let max = 0;
+    for (const text of texts) {
+      node.innerHTML = text;
+      max = Math.max(max, node.offsetHeight);
+    }
+    node.innerHTML = keep;
+    node.classList.toggle("final", keepFinal);
+    node.style.minHeight = `${max}px`;
+  }
+}
+function equalizeRows() {
+  if (!rowHeights) return;
+  const left = [...$("#laneWp").children];
+  const right = [...$("#laneRd").children];
+  left.forEach((cell, index) => (cell.style.minHeight = right[index].style.minHeight = `${rowHeights[index]}px`));
+}
+let packWidth = 0;
+addEventListener("resize", () => {
+  if (Math.abs(stage.clientWidth - packWidth) < 2) return;
+  packWidth = stage.clientWidth;
+  measureFinalRows();
+});
+
+/** True when at least a third of the element is on screen and not covered by the next section. */
+function isShown(element) {
+  const rect = element.getBoundingClientRect();
+  const section = element.closest("section");
+  const next = section?.nextElementSibling;
+  const coverTop = next ? next.getBoundingClientRect().top : Infinity;
+  const top = Math.max(rect.top, 0);
+  const bottom = Math.min(rect.bottom, innerHeight, coverTop);
+  return (bottom - top) / Math.min(rect.height, innerHeight) > 0.33;
+}
 
 /** Opens the decision card right under the module's chip in the tray, so the eye stays there. */
 function openDecider() {
@@ -361,10 +416,38 @@ function setPlaying(value) {
   animateStep();
 }
 
+let suspended = false;
+function watchPackVisibility() {
+  let queued = false;
+  const check = () => {
+    queued = false;
+    const shown = isShown(stage);
+    if (!shown && playing) {
+      // Finish the current step at once, so nothing moves while the figure is out of sight.
+      suspended = true;
+      setPlaying(false);
+    } else if (shown && suspended) {
+      suspended = false;
+      if (step < STEPS.length - 1) {
+        playing = true;
+        step += 1;
+        animateStep();
+      }
+    }
+  };
+  const queue = () => { if (!queued) { queued = true; requestAnimationFrame(check); } };
+  addEventListener("scroll", queue, { passive: true });
+  addEventListener("resize", queue);
+}
+
 function pack() {
   $("#roots").innerHTML = `<span class="roots-k">roots</span>${ROOTS.map(([id, label]) => `<span class="root-pill" data-root="${id}">${label}</span>`).join("")}`;
   buildLane("wp");
   buildLane("rd");
+  measureFinalRows();
+  packWidth = stage.clientWidth;
+  document.fonts?.ready.then(measureFinalRows);
+  watchPackVisibility();
   $("#packDots").innerHTML = STEPS.map((_, index) => `<button type="button" aria-label="Step ${index}"></button>`).join("");
   [...$("#packDots").children].forEach((dot, index) => dot.addEventListener("click", () => { setPlaying(false); jump(index); }));
   const next = () => {
@@ -378,7 +461,7 @@ function pack() {
     const act = event.target.closest("button")?.dataset.act;
     if (act === "back") { setPlaying(false); jump(step - 1); }
     if (act === "next") next();
-    if (act === "play") setPlaying(!playing);
+    if (act === "play") { suspended = false; setPlaying(!playing); }
     if (act === "replay") { jump(0); setPlaying(true); }
   });
   addEventListener("keydown", (event) => {
@@ -409,7 +492,7 @@ function waterfallFigure(redraw = false) {
   const data = window.WATERFALL;
   const MAX = 2800;
   const GROUPS = [
-    ["lcp", "product image"],
+    ["lcp", "product image · Medium → High"],
     ["html", "HTML"],
     ["css", "CSS · Highest"],
     ["js", null],
@@ -424,7 +507,7 @@ function waterfallFigure(redraw = false) {
     const ordered = GROUPS.flatMap(([type]) => rows.filter((row) => row[0] === type).sort((a, b) => a[1] - b[1] || a[3] - b[3]));
     const width = Math.round(Math.min(1000, Math.max(300, lane.clientWidth || 1000)));
     const compact = width < 600;
-    const labelWidth = compact ? 74 : 140;
+    const labelWidth = compact ? 96 : 196;
     const imageHeight = 14;
     const lineHeight = side === "vinext" ? 0.42 : 2.2;
     const height = imageHeight + 8 + (ordered.length - 1) * lineHeight + 36;
@@ -443,7 +526,7 @@ function waterfallFigure(redraw = false) {
     const groupLabel = (type, top, bottom) => {
       const label = type === "js"
         ? `${compact ? "JS" : "scripts"} · ${side === "webpack" ? "Low" : "High"}`
-        : compact ? { lcp: "image", html: "HTML", css: "CSS", font: "fonts", img: "images", other: "other" }[type] : GROUPS.find(([g]) => g === type)[1];
+        : compact ? { lcp: "image · Med→High", html: "HTML", css: "CSS", font: "fonts", img: "images", other: "other" }[type] : GROUPS.find(([g]) => g === type)[1];
       const count = ordered.filter((row) => row[0] === type).length;
       if (bottom - top < 6 && type !== "lcp") return;
       make("text", { x: labelWidth - 8, y: (top + bottom) / 2 + 4, class: `wf-group ${type === "js" ? `js-${side === "webpack" ? "wp" : "rd"}` : type}`, "text-anchor": "end" }).textContent = type === "lcp" || compact ? label : `${label} (${count})`;
@@ -492,12 +575,15 @@ function waterfallFigure(redraw = false) {
   };
   // Plays at a third of real time, so the image's wait is visible.
   let frame = 0;
+  // The clock only advances while the figure is visible, so it resumes where it stopped.
   const play = () => {
     cancelAnimationFrame(frame);
-    const began = performance.now();
+    let t = 0;
+    let last = performance.now();
     const tick = (now) => {
-      const t = ((now - began) / 3) | 0;
-      draw(t);
+      if (isShown($("#wf"))) t += (now - last) / 3;
+      last = now;
+      draw(t | 0);
       if (t < MAX) frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);

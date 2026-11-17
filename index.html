@@ -108,7 +108,7 @@
     <div class="wf-legend"><span><i class="wf-k lcp"></i>product image</span><span><i class="wf-k css"></i>CSS</span><span><i class="wf-k js-wp"></i>scripts, webpack</span><span><i class="wf-k js-rd"></i>scripts, vinext</span><span><i class="wf-k other"></i>other</span><span class="wf-k-line">│ first paint · ┊ largest paint</span><button type="button" class="wf-replay" id="wfReplay">Replay</button></div>
   </figure>
   <p>Both ask for the product image at 0.15 s. webpack has it at 0.77 s. On vinext it shares the connection with about 700 other requests that started at the same moment, and arrives at 1.71 s. The largest paint follows the image within 25 ms in both.</p>
-  <p class="small">Chrome's "tight mode", which holds back requests early in a page load, does not explain this: it only delays requests below High, and only until the HTML reaches <code>&lt;body&gt;</code>. Chrome's network emulation, used for these numbers, shares the link equally and ignores priorities. A server that sends by priority would put vinext's High scripts ahead of the image while it is still Medium.</p>
+  <p class="small">Chrome's <a href="https://web.dev/articles/fetch-priority">"tight mode"</a>, which holds back requests early in a page load, does not explain this: it only delays requests below High priority, and only until the HTML reaches <code>&lt;body&gt;</code> (<a href="https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/platform/loader/fetch/resource_load_scheduler.cc">Chromium's scheduler source</a>). A server that sends by priority would put vinext's High scripts ahead of the image while it is still Medium.</p>
 </section>
 
 <section id="s5">
@@ -158,6 +158,7 @@
       <li><a href="https://rolldown.rs/reference/OutputOptions.codeSplitting">codeSplitting</a> <span>Rolldown docs</span></li>
       <li><a href="https://rolldown.rs/in-depth/inline-common-chunks">Inline common chunks</a> <span>Rolldown docs</span></li>
       <li><a href="https://vite.dev/config/build-options#build-csscodesplit">build.cssCodeSplit</a> <span>Vite docs</span></li>
+      <li><a href="https://web.dev/articles/fetch-priority">Fetch Priority and tight mode</a> <span>web.dev</span></li>
       <li><a href="https://github.com/cloudflare/vinext">vinext</a> <span>GitHub</span></li>
       <li><a href="https://github.com/jantimon/demo-chunking-vinext-vs-webpack">Repo for this article, with the demo builds</a> <span>GitHub</span></li>
     </ul>

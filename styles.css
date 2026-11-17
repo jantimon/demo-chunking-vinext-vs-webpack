@@ -329,3 +329,4 @@ h3 { font: 700 22px/1.2 var(--display); margin: 1.8em 0 .3em; }
 .wf-k.lcp { background: #ff6fae; } .wf-k.css { background: #c99a1c; } .wf-k.js-wp { background: var(--wp); } .wf-k.js-rd { background: var(--rd); } .wf-k.other { background: #6d6b67; }
 .wf-replay { margin-left: auto; min-height: 32px; padding: 0 12px; border-radius: 9px; border: 1px solid var(--line2); background: var(--bg3); color: var(--text); font: 600 12px var(--mono); cursor: pointer; }
 @media (max-width: 640px) { .wf { padding: 12px 10px; } .wf-group { font-size: 10px; } .wf-tick { font-size: 9.5px; } .wf-imglabel { font-size: 10.5px; } }
+@media (max-width: 640px) { .stage-head .keys { display: none; } }
