@@ -2,21 +2,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 body{margin:0;width:1200px;height:630px;background:#0c0c0e;color:#e9e7e2;overflow:hidden;position:relative;font-family:"JetBrains Mono",monospace}
-body::before{content:"";position:absolute;inset:0;background:radial-gradient(600px 380px at 10% -40px,rgb(91 156 255/.16),transparent 70%),radial-gradient(600px 380px at 90% 0,rgb(255 138 61/.14),transparent 70%)}
-.in{position:relative;padding:64px 72px}
-.k{font-size:18px;letter-spacing:.14em;text-transform:uppercase;color:#a3a09a;display:flex;gap:8px;align-items:center}
-.k i{width:12px;height:12px;border-radius:50%;display:inline-block}
-h1{font:800 92px/.92 "Bricolage Grotesque";letter-spacing:-.04em;margin:26px 0 40px}
+body::before{content:"";position:absolute;inset:0;background:radial-gradient(520px 360px at 6% -40px,rgb(91 156 255/.16),transparent 70%),radial-gradient(520px 360px at 40% 110%,rgb(255 138 61/.12),transparent 70%)}
+.wrap{position:relative;display:grid;grid-template-columns:1fr 772px;gap:28px;height:100%;padding:28px 28px 28px 44px;box-sizing:border-box;align-items:center}
+.k{font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:#a3a09a;display:flex;gap:7px;align-items:center}
+.k i{width:10px;height:10px;border-radius:50%;display:inline-block}
+h1{font:800 44px/.98 "Bricolage Grotesque";letter-spacing:-.04em;margin:20px 0 26px}
 h1 span{color:#ff8a3d}
-.row{display:grid;grid-template-columns:150px 1fr 90px;gap:16px;align-items:center;margin:12px 0;font-size:20px}
-.sq{display:flex;flex-wrap:wrap;gap:2px;width:820px}
-.sq b{width:6px;height:6px;border-radius:1px;display:block}
-.n{font:800 34px "Bricolage Grotesque"}
-</style></head><body><div class="in">
-<div class="k"><i style="background:#5b9cff"></i><i style="background:#ff8a3d"></i>&nbsp;webpack × Rolldown · Next.js Pages Router</div>
+.c{font-size:17px;line-height:1.7;color:#a3a09a}
+.c b{font:800 30px/1 "Bricolage Grotesque";margin-right:8px}
+.wp{color:#5b9cff}.rd{color:#ff8a3d}
+img{width:772px;height:auto;display:block;border-radius:14px}
+</style></head><body><div class="wrap">
+<div><div class="k"><i style="background:#5b9cff"></i><i style="background:#ff8a3d"></i>&nbsp;webpack × Rolldown</div>
 <h1>Same code,<br><span>ten times the files</span></h1>
-<div class="row"><span>webpack</span><div class="sq" id="w"></div><span class="n" style="color:#5b9cff">55</span></div>
-<div class="row"><span>Rolldown</span><div class="sq" id="r"></div><span class="n" style="color:#ff8a3d">576</span></div>
-</div><script>
-w.innerHTML='<b style="background:#5b9cff"></b>'.repeat(55); r.innerHTML='<b style="background:#ff8a3d"></b>'.repeat(576);
-</script></body></html>
+<div class="c"><div><b class="wp">8</b>vs <b class="rd" style="margin-left:6px">14</b>files</div><div style="font-size:14px;margin:-4px 0 12px">toy shop, product page (right)</div><div><b class="wp">55</b>vs <b class="rd" style="margin-left:6px">576</b>files</div><div style="font-size:14px;margin-top:-4px">a 225-page app, product page</div></div></div>
+<img src="og-lanes.png" alt="">
+</div></body></html>
