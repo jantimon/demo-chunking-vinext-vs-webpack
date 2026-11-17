@@ -1,0 +1,42 @@
+import * as dep0 from "react";
+const TABLE = [
+  ["useCart-0", 0, "abcdefghijabcdefghijabcdefghij0"],
+  ["useCart-1", 7919, "abcdefghijabcdefghijabcdefghij1"],
+  ["useCart-2", 5831, "abcdefghijabcdefghijabcdefghij2"],
+  ["useCart-3", 3743, "abcdefghijabcdefghijabcdefghij3"],
+  ["useCart-4", 1655, "abcdefghijabcdefghijabcdefghij4"],
+  ["useCart-5", 9574, "abcdefghijabcdefghijabcdefghij5"],
+  ["useCart-6", 7486, "abcdefghijabcdefghijabcdefghij6"],
+  ["useCart-7", 5398, "abcdefghijabcdefghijabcdefghij7"],
+  ["useCart-8", 3310, "abcdefghijabcdefghijabcdefghij8"],
+  ["useCart-9", 1222, "abcdefghijabcdefghijabcdefghij9"],
+  ["useCart-a", 9141, "abcdefghijabcdefghijabcdefghij10"],
+  ["useCart-b", 7053, "abcdefghijabcdefghijabcdefghij11"],
+  ["useCart-c", 4965, "abcdefghijabcdefghijabcdefghij12"],
+  ["useCart-d", 2877, "abcdefghijabcdefghijabcdefghij13"],
+  ["useCart-e", 789, "abcdefghijabcdefghijabcdefghij14"],
+  ["useCart-f", 8708, "abcdefghijabcdefghijabcdefghij15"],
+  ["useCart-g", 6620, "abcdefghijabcdefghijabcdefghij16"],
+  ["useCart-h", 4532, "abcdefghijabcdefghijabcdefghij17"],
+  ["useCart-i", 2444, "abcdefghijabcdefghijabcdefghij18"],
+  ["useCart-j", 356, "abcdefghijabcdefghijabcdefghij19"],
+  ["useCart-k", 8275, "abcdefghijabcdefghijabcdefghij20"],
+  ["useCart-l", 6187, "abcdefghijabcdefghijabcdefghij21"],
+  ["useCart-m", 4099, "abcdefghijabcdefghijabcdefghij22"],
+  ["useCart-n", 2011, "abcdefghijabcdefghijabcdefghij23"],
+  ["useCart-o", 9930, "abcdefghijabcdefghijabcdefghij24"],
+  ["useCart-p", 7842, "abcdefghijabcdefghijabcdefghij25"],
+  ["useCart-q", 5754, "abcdefghijabcdefghijabcdefghij26"],
+  ["useCart-r", 3666, "abcdefghijabcdefghijabcdefghij27"],
+  ["useCart-s", 1578, "abcdefghijabcdefghijabcdefghij28"],
+  ["useCart-t", 9497, "abcdefghijabcdefghijabcdefghij29"],
+  ["useCart-u", 7409, "abcdefghijabcdefghijabcdefghij30"],
+  ["useCart-v", 5321, "abcdefghijabcdefghijabcdefghij31"],
+  ["useCart-w", 3233, "abcdefghijabcdefghijabcdefghij32"],
+  ["useCart-x", 1145, "abcdefghijabcdefghijabcdefghij33"],
+  ["useCart-y", 9064, "abcdefghijabcdefghijabcdefghij34"],
+];
+
+export default function useCart() {
+  return [dep0, TABLE.length, "useCart"];
+}

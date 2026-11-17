@@ -1,0 +1,1 @@
+import{t as e}from"./client-entry-BfGkITZs.js";e();

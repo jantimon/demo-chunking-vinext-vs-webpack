@@ -1,0 +1,43 @@
+import * as dep0 from "react";
+import "./Button.css";
+const TABLE = [
+  ["Button-0", 0, "abcdefghijabcdefghijabcdefghij0"],
+  ["Button-1", 7919, "abcdefghijabcdefghijabcdefghij1"],
+  ["Button-2", 5831, "abcdefghijabcdefghijabcdefghij2"],
+  ["Button-3", 3743, "abcdefghijabcdefghijabcdefghij3"],
+  ["Button-4", 1655, "abcdefghijabcdefghijabcdefghij4"],
+  ["Button-5", 9574, "abcdefghijabcdefghijabcdefghij5"],
+  ["Button-6", 7486, "abcdefghijabcdefghijabcdefghij6"],
+  ["Button-7", 5398, "abcdefghijabcdefghijabcdefghij7"],
+  ["Button-8", 3310, "abcdefghijabcdefghijabcdefghij8"],
+  ["Button-9", 1222, "abcdefghijabcdefghijabcdefghij9"],
+  ["Button-a", 9141, "abcdefghijabcdefghijabcdefghij10"],
+  ["Button-b", 7053, "abcdefghijabcdefghijabcdefghij11"],
+  ["Button-c", 4965, "abcdefghijabcdefghijabcdefghij12"],
+  ["Button-d", 2877, "abcdefghijabcdefghijabcdefghij13"],
+  ["Button-e", 789, "abcdefghijabcdefghijabcdefghij14"],
+  ["Button-f", 8708, "abcdefghijabcdefghijabcdefghij15"],
+  ["Button-g", 6620, "abcdefghijabcdefghijabcdefghij16"],
+  ["Button-h", 4532, "abcdefghijabcdefghijabcdefghij17"],
+  ["Button-i", 2444, "abcdefghijabcdefghijabcdefghij18"],
+  ["Button-j", 356, "abcdefghijabcdefghijabcdefghij19"],
+  ["Button-k", 8275, "abcdefghijabcdefghijabcdefghij20"],
+  ["Button-l", 6187, "abcdefghijabcdefghijabcdefghij21"],
+  ["Button-m", 4099, "abcdefghijabcdefghijabcdefghij22"],
+  ["Button-n", 2011, "abcdefghijabcdefghijabcdefghij23"],
+  ["Button-o", 9930, "abcdefghijabcdefghijabcdefghij24"],
+  ["Button-p", 7842, "abcdefghijabcdefghijabcdefghij25"],
+  ["Button-q", 5754, "abcdefghijabcdefghijabcdefghij26"],
+  ["Button-r", 3666, "abcdefghijabcdefghijabcdefghij27"],
+  ["Button-s", 1578, "abcdefghijabcdefghijabcdefghij28"],
+  ["Button-t", 9497, "abcdefghijabcdefghijabcdefghij29"],
+  ["Button-u", 7409, "abcdefghijabcdefghijabcdefghij30"],
+  ["Button-v", 5321, "abcdefghijabcdefghijabcdefghij31"],
+  ["Button-w", 3233, "abcdefghijabcdefghijabcdefghij32"],
+  ["Button-x", 1145, "abcdefghijabcdefghijabcdefghij33"],
+  ["Button-y", 9064, "abcdefghijabcdefghijabcdefghij34"],
+];
+
+export default function Button() {
+  return [dep0, TABLE.length, "Button"];
+}

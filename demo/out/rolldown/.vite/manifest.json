@@ -1,0 +1,174 @@
+{
+  "_Button-BQ5aMOdj.css": {
+    "file": "Button-BQ5aMOdj.css",
+    "src": "_Button-BQ5aMOdj.css"
+  },
+  "_Button-BqhN2skQ.js": {
+    "file": "Button-BqhN2skQ.js",
+    "name": "Button",
+    "imports": [
+      "_rolldown-runtime-DK3Fl9T5.js",
+      "_framework-Rw71HLQU.js"
+    ],
+    "css": [
+      "Button-BQ5aMOdj.css"
+    ]
+  },
+  "_Carousel-DZGUhspq.css": {
+    "file": "Carousel-DZGUhspq.css",
+    "src": "_Carousel-DZGUhspq.css"
+  },
+  "_Carousel-Dc-Ykblq.js": {
+    "file": "Carousel-Dc-Ykblq.js",
+    "name": "Carousel",
+    "imports": [
+      "_rolldown-runtime-DK3Fl9T5.js",
+      "_framework-Rw71HLQU.js"
+    ],
+    "css": [
+      "Carousel-DZGUhspq.css"
+    ]
+  },
+  "_Price-Bcfh0ai9.css": {
+    "file": "Price-Bcfh0ai9.css",
+    "src": "_Price-Bcfh0ai9.css"
+  },
+  "_Price-M20sQqwv.js": {
+    "file": "Price-M20sQqwv.js",
+    "name": "Price",
+    "imports": [
+      "_rolldown-runtime-DK3Fl9T5.js",
+      "_framework-Rw71HLQU.js"
+    ],
+    "css": [
+      "Price-Bcfh0ai9.css"
+    ]
+  },
+  "_framework-Rw71HLQU.js": {
+    "file": "framework-Rw71HLQU.js",
+    "name": "framework",
+    "imports": [
+      "_rolldown-runtime-DK3Fl9T5.js"
+    ]
+  },
+  "_rolldown-runtime-DK3Fl9T5.js": {
+    "file": "rolldown-runtime-DK3Fl9T5.js",
+    "name": "rolldown-runtime"
+  },
+  "_useCart-Dlllppmx.js": {
+    "file": "useCart-Dlllppmx.js",
+    "name": "useCart",
+    "imports": [
+      "_rolldown-runtime-DK3Fl9T5.js",
+      "_framework-Rw71HLQU.js"
+    ]
+  },
+  "src/client-entry.js": {
+    "file": "index-auPbwyzh.js",
+    "name": "index",
+    "src": "src/client-entry.js",
+    "isEntry": true,
+    "dynamicImports": [
+      "src/pages/home.js",
+      "src/pages/product.js",
+      "src/pages/cart.js",
+      "src/pages/_app.js"
+    ]
+  },
+  "src/dialogs/ReviewsDialog.js": {
+    "file": "ReviewsDialog-i4h8CVBq.js",
+    "name": "ReviewsDialog",
+    "src": "src/dialogs/ReviewsDialog.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "src/pages/product.js",
+      "_Button-BqhN2skQ.js"
+    ],
+    "css": [
+      "ReviewsDialog-CIwHDl2e.css"
+    ]
+  },
+  "src/dialogs/SizeGuide.js": {
+    "file": "SizeGuide-CRfwHSdC.js",
+    "name": "SizeGuide",
+    "src": "src/dialogs/SizeGuide.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-DK3Fl9T5.js",
+      "_framework-Rw71HLQU.js",
+      "_useCart-Dlllppmx.js",
+      "_Button-BqhN2skQ.js"
+    ],
+    "css": [
+      "SizeGuide-B8STsB-e.css"
+    ]
+  },
+  "src/pages/_app.js": {
+    "file": "_app-HhKhCOg2.js",
+    "name": "_app",
+    "src": "src/pages/_app.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-DK3Fl9T5.js",
+      "_framework-Rw71HLQU.js",
+      "_Button-BqhN2skQ.js"
+    ],
+    "css": [
+      "_app-uEdTZqYg.css"
+    ]
+  },
+  "src/pages/cart.js": {
+    "file": "cart-EAi1JwkX.js",
+    "name": "cart",
+    "src": "src/pages/cart.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_Button-BqhN2skQ.js",
+      "_Price-M20sQqwv.js",
+      "_useCart-Dlllppmx.js",
+      "src/client-entry.js"
+    ],
+    "dynamicImports": [
+      "src/dialogs/SizeGuide.js"
+    ],
+    "css": [
+      "cart-Brb4BWRu.css"
+    ]
+  },
+  "src/pages/home.js": {
+    "file": "home-DLNgAfJu.js",
+    "name": "home",
+    "src": "src/pages/home.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_Button-BqhN2skQ.js",
+      "_Price-M20sQqwv.js",
+      "_Carousel-Dc-Ykblq.js"
+    ],
+    "css": [
+      "home-BHOkn21T.css"
+    ]
+  },
+  "src/pages/product.js": {
+    "file": "product-CNliJi0-.js",
+    "name": "product",
+    "src": "src/pages/product.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-DK3Fl9T5.js",
+      "_Button-BqhN2skQ.js",
+      "_Price-M20sQqwv.js",
+      "_Carousel-Dc-Ykblq.js",
+      "_framework-Rw71HLQU.js",
+      "_useCart-Dlllppmx.js",
+      "src/client-entry.js"
+    ],
+    "dynamicImports": [
+      "src/dialogs/ReviewsDialog.js",
+      "src/dialogs/SizeGuide.js"
+    ],
+    "css": [
+      "product-DEW-EwBs.css"
+    ]
+  }
+}

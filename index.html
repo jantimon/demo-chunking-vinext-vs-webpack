@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Same code, ten times the files</title>
+<meta name="description" content="webpack copies small shared code into every chunk that needs it. Rolldown never copies, so it cuts one chunk per unique set of importers, and a large Next.js Pages Router app on vinext ends up with hundreds of tiny files.">
+<meta name="theme-color" content="#0c0c0e">
+<meta name="author" content="Jan Nicklas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Same code, ten times the files">
+<meta property="og:description" content="webpack copies small shared code into every chunk that needs it. Rolldown never copies, so it cuts one chunk per unique set of importers, and a large Next.js Pages Router app on vinext ends up with hundreds of tiny files.">
+<meta property="og:url" content="https://jantimon.github.io/demo-chunking-vinext-vs-webpack/">
+<meta property="og:image" content="https://jantimon.github.io/demo-chunking-vinext-vs-webpack/assets/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://jantimon.github.io/demo-chunking-vinext-vs-webpack/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script>document.documentElement.classList.add("js")</script>
+<script src="data.js" defer></script>
+<script src="main.js" defer></script>
+</head>
+<body>
+<main class="wrap">
+
+<header class="intro">
+  <p class="kicker"><i class="tok wp"></i><i class="tok rd"></i> webpack × Rolldown · Next.js Pages Router</p>
+  <h1>Same code,<br><span>ten times the files</span></h1>
+  <p class="dek">webpack copies small shared code into every chunk that needs it. Rolldown never copies, so it cuts one chunk for every unique set of importers, and a large app ends up with hundreds of tiny files.</p>
+</header>
+
+<section id="s1">
+  <h2><span class="num">01</span>Why bundlers <span class="hi">split</span> code</h2>
+  <p>A page needs its own code plus code it shares with other pages. Put everything in one file and every page download repeats the shared part. Put every module in its own file and the browser makes a request for each of them. Bundlers pick a middle: one file per page, plus chunks for code several pages share.</p>
+  <div class="split wide" aria-label="Three ways to pack the same pages">
+    <figure class="pack-way"><figcaption>One file per page</figcaption><div class="ways"><b class="w-big"></b><b class="w-big"></b><b class="w-big"></b></div><p>Shared code downloads again on every page.</p></figure>
+    <figure class="pack-way good"><figcaption>Pages + shared chunks</figcaption><div class="ways"><b class="w-mid"></b><b class="w-mid"></b><b class="w-mid shared"></b></div><p>The goal: few files, shared code cached once.</p></figure>
+    <figure class="pack-way"><figcaption>One file per module</figcaption><div class="ways"><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b></div><p>Every file costs a request and a compile step.</p></figure>
+  </div>
+  <p>A module that several pages share, but not all, needs a home. webpack copies it into each page's file when it is under 20 KB. Rolldown never copies: it puts the module into a chunk for exactly that set of pages.</p>
+</section>
+
+<section id="s2">
+  <h2><span class="num">02</span>A small <span class="hi">shop</span></h2>
+  <p>Three pages, an <code>_app</code> that wraps every page, and two dialogs that load on demand. Each module shows its size and which of them import it. The color marks the set of importers.</p>
+  <figure class="graph wide" id="graph" aria-label="The toy shop's modules and their importers"></figure>
+  <p class="small">The app is real and has one set of source files. <a href="demo/">The demo</a> builds it with webpack 5 using Next.js 16.4's chunk settings, and with Vite 8 / Rolldown the way vinext 1.4 loads Pages Router pages. Only the entry and the bundler settings differ. Every chunk in the next figure is a file from those builds.</p>
+</section>
+
+<section id="s3">
+  <h2><span class="num">03</span>Watch both <span class="hi">pack</span> the product page</h2>
+  <p>One module per step, for everything the product page loads.</p>
+  <figure class="stage wide" id="pack" aria-label="Step by step: where each module of the product page lands">
+    <div class="stage-head"><p class="cap" id="packCap">The product page's modules</p><p class="keys">← → step · space play</p></div>
+    <div class="roots" id="roots" aria-label="Roots: what can import a module"></div>
+    <div class="tray" id="tray"></div>
+    <div class="decide-slot" id="decideSlot"></div>
+    <div class="lanes">
+      <div class="lane wp-lane"><p class="lane-name"><i class="tok wp"></i>webpack <span>Next.js 16.4 settings</span></p><div class="files" id="laneWp"></div><p class="lane-note" id="noteWp"></p><p class="count" id="countWp"></p></div>
+      <div class="lane rd-lane"><p class="lane-name"><i class="tok rd"></i>Rolldown <span>vinext 1.4 Pages Router</span></p><div class="files" id="laneRd"></div><p class="lane-note" id="noteRd"></p><p class="count" id="countRd"></p></div>
+    </div>
+    <div class="stage-foot"><div class="controls" id="packControls"><button type="button" data-act="back" aria-label="Back">◀</button><button type="button" data-act="play" aria-label="Play or pause">❚❚</button><button type="button" data-act="next" aria-label="Next">▶</button><span class="dots" id="packDots"></span><button type="button" data-act="replay" class="replay">Replay</button></div></div>
+  </figure>
+  <p>Both agree on React, on the 30 KB gallery and on code only one page uses. They split on everything small that several pages share. webpack copies <code>Price</code> and <code>useCart</code> into the cart page's file. Rolldown makes a file for each, and another for <code>Button</code>, because it doesn't know <code>_app</code> always loads before a page.</p>
+</section>
+
+<section id="s4">
+  <h2><span class="num">04</span>The same rule in a <span class="hi">large</span> app</h2>
+  <p>A real Next.js Pages Router app with 225 pages, built both ways. Every page and every lazy import is a root, and almost every module is reached by its own mix of roots. The product page alone touches 536 different importer sets.</p>
+  <figure class="scale wide" id="scale" aria-label="JavaScript files the product page loads at start">
+    <div class="scale-row"><p class="scale-name"><i class="tok wp"></i>webpack</p><div class="squares" data-n="55" data-kind="wp"></div><p class="scale-num"><b>55</b> files</p></div>
+    <div class="scale-row"><p class="scale-name"><i class="tok rd"></i>Rolldown</p><div class="squares" data-n="576" data-kind="rd"></div><p class="scale-num"><b>576</b> files</p></div>
+    <figcaption>JavaScript files the product page loads at start. 385 of Rolldown's are under 1 KB; none of webpack's are.</figcaption>
+  </figure>
+  <div class="facts wide">
+    <div class="fact"><p class="fact-k">Code shipped, joined into one file</p><p class="fact-v"><span class="wp-t">837 KB</span> vs <span class="rd-t">850 KB</span></p><p>Nearly the same code. Both builds gzipped as one file.</p></div>
+    <div class="fact"><p class="fact-k">The same code as separate files</p><p class="fact-v"><span class="wp-t">865 KB</span> vs <span class="rd-t">954 KB</span></p><p>gzip restarts for each file: 28 KB overhead against 104 KB.</p></div>
+    <div class="fact"><p class="fact-k">Stylesheets before the first paint</p><p class="fact-v"><span class="wp-t">6</span> vs <span class="rd-t">145</span></p><p>Vite emits one stylesheet per chunk, and the page lists all of them.</p></div>
+    <div class="fact"><p class="fact-k">Whole build on disk</p><p class="fact-v"><span class="wp-t">21.0 MB</span> vs <span class="rd-t">16.8 MB</span></p><p>webpack's build is bigger: that is the price of the copies.</p></div>
+  </div>
+  <h3>What a customer notices</h3>
+  <p>iPhone 13 profile over emulated 4G, median of 5 runs. The tap test taps a line every 100 ms until its dialog opens.</p>
+  <figure class="race wide" id="race" aria-label="First paint and first working tap">
+    <div class="race-row"><p>First paint</p><div class="bar-pair"><span class="bar wp" style="--v:832"><b>0.83 s</b></span><span class="bar rd" style="--v:1576"><b>1.58 s</b></span></div></div>
+    <div class="race-row"><p>First tap works</p><div class="bar-pair"><span class="bar wp" style="--v:1430"><b>1.43 s</b></span><span class="bar rd" style="--v:2167"><b>2.17 s</b></span></div></div>
+    <figcaption>The 145 stylesheets share the connection with 576 scripts, so the page paints later. React hydrates only after the last of those scripts has arrived.</figcaption>
+  </figure>
+</section>
+
+<section id="s5">
+  <h2><span class="num">05</span>The fixes you would <span class="hi">try</span></h2>
+  <ol class="fixes wide">
+    <li class="fix">
+      <p class="fix-k">1 · "HTTP/2 makes small files free"</p>
+      <p>It removes the six-connection limit, not the cost per file. Each file still pays its own gzip start, its own compile step, and for CSS a render-blocking request. The HTML of the product page carries 1,152 script and preload tags.</p>
+    </li>
+    <li class="fix fix-wide">
+      <p class="fix-k">2 · "Port vinext's App Router grouping to the Pages Router"</p>
+      <p>vinext already groups chunks the Next.js way, but only for the App Router. We ported its rule: modules that the same set of pages load at start share one chunk.</p>
+      <div class="rg" id="rg">
+        <div class="rg-step" data-i="0"><span class="rg-mark ok">✓</span><p><b>Start-up code merges.</b> The chunks <code>_app</code> loads go from 136 to 11.</p></div>
+        <div class="rg-step" data-i="1"><span class="rg-mark no">✗</span><p><b>Lazy code stays split.</b> The rule leaves dynamic <code>import()</code> alone, and lazy dialogs reach most of the app: about 500 tiny chunks remain, and the product page still loads about 470 scripts.</p></div>
+        <div class="rg-step" data-i="2"><span class="rg-mark warn">!</span><p><b>Keep page files out of the groups.</b> vinext's server finds a page's scripts and CSS through the page file's own chunk. Our first port grouped the page files too, and the product page painted without its CSS.</p></div>
+      </div>
+    </li>
+    <li class="fix">
+      <p class="fix-k">3 · Manual chunk groups</p>
+      <p>Rolldown's <code>codeSplitting.groups</code> with framework, library and app groups cut the files to 371. Each group carries code for other pages too: 3 MB of JavaScript, and the product image appears after 3.6 s instead of 0.85 s.</p>
+    </li>
+    <li class="fix">
+      <p class="fix-k">4 · Copy small chunks, like webpack</p>
+      <p>Rolldown 1.2 can copy small automatic chunks into the chunks that use them: <code>experimentalInlineCommonChunks: { maxSize: 20000 }</code>, webpack's floor. The build drops from 1,618 to 457 files, the product page loads 72 scripts and 33 stylesheets. But copied modules bring their CSS twice, the cascade order changes, and the header logo rendered twice.</p>
+      <p class="pending">Speed results from the overnight run follow here.</p>
+    </li>
+  </ol>
+</section>
+
+<footer class="about wide">
+  <div>
+    <p class="about-k">Written by</p>
+    <p class="about-name">Jan Nicklas <span>@jantimon</span></p>
+    <p>Feel free to reach out, I'd love to hear from you.</p>
+    <ul class="social"><li><a href="https://github.com/jantimon">GitHub</a></li></ul>
+  </div>
+  <div>
+    <p class="about-k">Sources</p>
+    <ul>
+      <li><a href="https://webpack.js.org/plugins/split-chunks-plugin/">SplitChunksPlugin</a> <span>webpack docs</span></li>
+      <li><a href="https://rolldown.rs/reference/OutputOptions.codeSplitting">codeSplitting</a> <span>Rolldown docs</span></li>
+      <li><a href="https://rolldown.rs/in-depth/inline-common-chunks">Inline common chunks</a> <span>Rolldown docs</span></li>
+      <li><a href="https://vite.dev/config/build-options#build-csscodesplit">build.cssCodeSplit</a> <span>Vite docs</span></li>
+      <li><a href="https://github.com/cloudflare/vinext">vinext</a> <span>GitHub</span></li>
+      <li><a href="https://github.com/jantimon/demo-chunking-vinext-vs-webpack">Repo for this article, with the demo builds</a> <span>GitHub</span></li>
+    </ul>
+  </div>
+</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,4 @@
+.DS_Store
+# demo/src and demo/out are published: GitHub Pages shows the real build output.
+!demo/src/node_modules/
+explainer-brief.md

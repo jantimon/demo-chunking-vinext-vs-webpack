@@ -1,0 +1,69 @@
+{
+  "_app~_app~home~product~cart~SizeGuide-DB-6sr1K.css": {
+    "file": "app~_app~home~product~cart~SizeGuide-DB-6sr1K.css",
+    "src": "_app~_app~home~product~cart~SizeGuide-DB-6sr1K.css"
+  },
+  "_app~_app~home~product~cart~SizeGuide-Tsyo__Or.js": {
+    "file": "app~_app~home~product~cart~SizeGuide-Tsyo__Or.js",
+    "name": "app~_app~home~product~cart~SizeGuide",
+    "imports": [
+      "_rolldown-runtime-DK3Fl9T5.js",
+      "_framework-Rw71HLQU.js",
+      "src/client-entry.js"
+    ],
+    "css": [
+      "app~_app~home~product~cart~SizeGuide-DB-6sr1K.css"
+    ]
+  },
+  "_app~product~ReviewsDialog~cart-B2eC0sPZ.css": {
+    "file": "app~product~ReviewsDialog~cart-B2eC0sPZ.css",
+    "src": "_app~product~ReviewsDialog~cart-B2eC0sPZ.css"
+  },
+  "_app~product~ReviewsDialog~cart-C0oSKjIr.js": {
+    "file": "app~product~ReviewsDialog~cart-C0oSKjIr.js",
+    "name": "app~product~ReviewsDialog~cart",
+    "imports": [
+      "_rolldown-runtime-DK3Fl9T5.js",
+      "_framework-Rw71HLQU.js",
+      "src/client-entry.js",
+      "_app~_app~home~product~cart~SizeGuide-Tsyo__Or.js"
+    ],
+    "dynamicImports": [
+      "_app~_app~home~product~cart~SizeGuide-Tsyo__Or.js",
+      "_app~product~ReviewsDialog~cart-C0oSKjIr.js"
+    ],
+    "css": [
+      "app~product~ReviewsDialog~cart-B2eC0sPZ.css"
+    ]
+  },
+  "_framework-Rw71HLQU.js": {
+    "file": "framework-Rw71HLQU.js",
+    "name": "framework",
+    "imports": [
+      "_rolldown-runtime-DK3Fl9T5.js"
+    ]
+  },
+  "_rolldown-runtime-DK3Fl9T5.js": {
+    "file": "rolldown-runtime-DK3Fl9T5.js",
+    "name": "rolldown-runtime"
+  },
+  "src/client-entry.js": {
+    "file": "index-BQG6dnjd.js",
+    "name": "index",
+    "src": "src/client-entry.js",
+    "isEntry": true,
+    "imports": [
+      "_rolldown-runtime-DK3Fl9T5.js",
+      "_framework-Rw71HLQU.js",
+      "_app~_app~home~product~cart~SizeGuide-Tsyo__Or.js"
+    ],
+    "dynamicImports": [
+      "src/client-entry.js",
+      "_app~product~ReviewsDialog~cart-C0oSKjIr.js",
+      "_app~_app~home~product~cart~SizeGuide-Tsyo__Or.js"
+    ],
+    "css": [
+      "index-0HRBxIfX.css"
+    ]
+  }
+}
