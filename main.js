@@ -180,7 +180,7 @@ function render(animate) {
     const model = LANES[key];
     const done = step === STEPS.length - 1 && landed.wp && landed.rd;
     const count = $(key === "wp" ? "#countWp" : "#countRd");
-    count.textContent = done ? `Product page: ${model.js + model.css} files (${model.js} JS, ${model.css} CSS)` : "";
+    count.innerHTML = done ? `Product page: ${model.js + model.css} files <span class="count-kinds">${model.js}<i class="ficon js">JS</i> ${model.css}<i class="ficon css">CSS</i></span>` : "";
     count.classList.toggle("final", done);
   }
   equalizeRows();
