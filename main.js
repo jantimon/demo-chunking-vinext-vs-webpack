@@ -62,15 +62,15 @@ function graph() {
 
 /* 03 · step figure: where each module of the product page lands */
 const STEPS = [
-  { cap: "The product page's modules, before bundling", mod: null, wp: "Next.js makes every page an entry that depends on <code>_app</code>, and splits shared code from 20 KB up.", rd: "vinext loads <code>_app</code> and every page with <code>import()</code> from one client entry. Rolldown splits with no size floor." },
+  { cap: "The product page's modules, before bundling", mod: null, wp: "Next.js makes every page an entry that depends on <code>_app</code>, and splits shared code from 20 KB up.", rd: "vinext loads <code>_app</code> and every page with <code>import()</code>. PR #4726 puts <code>_app</code>'s imports in one group and copies shared chunks under 20 KB that hold no CSS." },
   { cap: "React · every page", mod: "react", wp: "Into the <b>framework</b> chunk, as Next.js configures it.", rd: "Into the <b>framework</b> chunk, as vinext configures it." },
   { cap: "_app · wraps every page", mod: "_app", wp: "Its own entry file.", rd: "Its own chunk." },
-  { cap: "Header · only _app uses it", mod: "Header", wp: "Into <code>_app</code>.", rd: "Into <code>_app</code>." },
-  { cap: "Button · 2 KB · _app, every page, both dialogs", mod: "Button", wp: "Already in <code>_app</code>, and every page loads <code>_app</code> first: <b>stays there</b>.", rd: "<code>_app</code> and the pages are separate roots, so this set gets <b>a new chunk</b>." },
+  { cap: "Header · only _app uses it", mod: "Header", wp: "Into <code>_app</code>.", rd: "<code>_app</code> imports it: into the <b>pages-app</b> group." },
+  { cap: "Button · 2 KB · _app, every page, both dialogs", mod: "Button", wp: "Already in <code>_app</code>, and every page loads <code>_app</code> first: <b>stays there</b>.", rd: "Header uses it, so it <b>joins the pages-app group</b>. Pages and dialogs load it from there." },
   { cap: "Carousel · 26 KB · home + product", mod: "Carousel", wp: "Shared and over 20 KB: <b>a shared chunk</b>.", rd: "Set home + product: <b>a new chunk</b>." },
   { cap: "Rating · 1 KB · home + product", mod: "Rating", wp: "Same pages as Carousel: joins its chunk.", rd: "Same set as Carousel: joins its chunk." },
-  { cap: "Price · 1.5 KB · home + product + cart", mod: "Price", wp: "Joins the home + product chunk and is <b>copied</b> into the cart page's file.", rd: "Set home + product + cart: <b>a new chunk</b>." },
-  { cap: "useCart · 2 KB · product + cart + size guide", mod: "useCart", wp: "Under 20 KB: <b>copied</b> into the product and cart files.", rd: "Set product + cart: <b>a new chunk</b>." },
+  { cap: "Price · 1.5 KB · home + product + cart", mod: "Price", wp: "Joins the home + product chunk and is <b>copied</b> into the cart page's file.", rd: "Under 20 KB, but it carries CSS: <b>a new chunk</b>, no copy." },
+  { cap: "useCart · 2 KB · product + cart + size guide", mod: "useCart", wp: "Under 20 KB: <b>copied</b> into the product and cart files.", rd: "Under 20 KB, no CSS: <b>copied</b> into the product and cart chunks." },
   { cap: "Gallery · 30 KB · only product", mod: "Gallery", wp: "Into the product page's file.", rd: "Into the product page's chunk." },
   { cap: "formatDate · 0.6 KB · product + reviews dialog", mod: "formatDate", wp: "The dialog only opens from product, which has it already: stays in product.", rd: "Same decision: the product page's chunk." },
   { cap: "The product page itself", mod: "product", wp: "Its own entry file.", rd: "Its own chunk." },
@@ -93,15 +93,15 @@ function laneModel(build) {
     css: css.find((sheet) => stem(sheet) === stem(file)) ?? null,
     infra: !files[file].modules.some((mod) => ORDER.includes(mod)),
   }));
-  if (build === "webpack") {
-    const cartFile = pages.cart.start.find((file) => files[file].kind === "js" && files[file].modules.includes("cart"));
+  const cartFile = pages.cart.start.find((file) => files[file].kind === "js" && files[file].modules.includes("cart"));
+  if (files[cartFile].modules.some((mod) => mod !== "cart" && ORDER.includes(mod))) {
     // The cart page's copies sit with the module files; runtime files stay last, as in the Rolldown lane.
     const firstInfra = rows.findIndex((row) => row.infra);
     rows.splice(firstInfra === -1 ? rows.length : firstInfra, 0, { file: cartFile, modules: files[cartFile].modules.filter((mod) => ORDER.includes(mod)), css: null, infra: false, other: "cart page only" });
   }
   return { rows, js: js.length, css: css.length };
 }
-const LANES = { wp: laneModel("webpack"), rd: laneModel("rolldown") };
+const LANES = { wp: laneModel("webpack"), rd: laneModel("pr4726") };
 
 /**
  * Both lanes share virtual rows: a file's row is its largest module, so webpack's 161 sits next to
@@ -132,12 +132,12 @@ const ROOTS = [["_app", "_app"], ["home", "home"], ["product", "product"], ["car
 const DECIDE = {
   react: [["_app", "home", "product", "cart", "reviews", "sizeGuide"], "framework chunk", "framework chunk"],
   _app: [["_app"], "its own entry file", "its own chunk"],
-  Header: [["_app"], "into _app", "into _app"],
-  Button: [["_app", "home", "product", "cart", "reviews", "sizeGuide"], "stays in _app · pages load _app first", "new chunk · _app and pages are separate roots"],
+  Header: [["_app"], "into _app", "pages-app group · _app imports it"],
+  Button: [["_app", "home", "product", "cart", "reviews", "sizeGuide"], "stays in _app · pages load _app first", "pages-app group · Header uses it"],
   Carousel: [["home", "product"], "shared chunk · shared and over 20 KB", "new chunk for home + product"],
   Rating: [["home", "product"], "Carousel's chunk · same pages", "Carousel's chunk · same set"],
-  Price: [["home", "product", "cart"], "home + product chunk, COPY in cart", "new chunk for home + product + cart"],
-  useCart: [["product", "cart", "sizeGuide"], "COPY into product and cart · under 20 KB", "new chunk for product + cart"],
+  Price: [["home", "product", "cart"], "home + product chunk, COPY in cart", "new chunk · has CSS, so no copy"],
+  useCart: [["product", "cart", "sizeGuide"], "COPY into product and cart · under 20 KB", "COPY into product and cart · under 20 KB, no CSS"],
   Gallery: [["product"], "into product", "into product"],
   formatDate: [["product", "reviews"], "into product · the dialog opens only there", "into product · same decision"],
   product: [["product"], "its own entry file", "its own chunk"],

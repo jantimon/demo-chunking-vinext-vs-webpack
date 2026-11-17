@@ -1,0 +1,173 @@
+{
+  "_Carousel-DZGUhspq.css": {
+    "file": "Carousel-DZGUhspq.css",
+    "src": "_Carousel-DZGUhspq.css"
+  },
+  "_Carousel-kwIQ8Myo.js": {
+    "file": "Carousel-kwIQ8Myo.js",
+    "name": "Carousel",
+    "imports": [
+      "_rolldown-runtime-CyFmcnh3.js",
+      "_framework-CYQSzyXs.js"
+    ],
+    "css": [
+      "Carousel-DZGUhspq.css"
+    ]
+  },
+  "_Price-Bcfh0ai9.css": {
+    "file": "Price-Bcfh0ai9.css",
+    "src": "_Price-Bcfh0ai9.css"
+  },
+  "_Price-Dm6vukl_.js": {
+    "file": "Price-Dm6vukl_.js",
+    "name": "Price",
+    "imports": [
+      "_rolldown-runtime-CyFmcnh3.js",
+      "_framework-CYQSzyXs.js"
+    ],
+    "css": [
+      "Price-Bcfh0ai9.css"
+    ]
+  },
+  "_client-entry-CRENOKil.js": {
+    "file": "client-entry-CRENOKil.js",
+    "name": "client-entry",
+    "imports": [
+      "_rolldown-runtime-CyFmcnh3.js"
+    ],
+    "dynamicImports": [
+      "src/pages/home.js",
+      "src/pages/product.js",
+      "src/pages/cart.js",
+      "src/pages/_app.js"
+    ]
+  },
+  "_framework-CYQSzyXs.js": {
+    "file": "framework-CYQSzyXs.js",
+    "name": "framework",
+    "imports": [
+      "_rolldown-runtime-CyFmcnh3.js"
+    ]
+  },
+  "_pages-app-CjYNBkEp.css": {
+    "file": "pages-app-CjYNBkEp.css",
+    "src": "_pages-app-CjYNBkEp.css"
+  },
+  "_pages-app-FuDLnPS-.js": {
+    "file": "pages-app-FuDLnPS-.js",
+    "name": "pages-app",
+    "imports": [
+      "_rolldown-runtime-CyFmcnh3.js",
+      "_framework-CYQSzyXs.js"
+    ],
+    "css": [
+      "pages-app-CjYNBkEp.css"
+    ]
+  },
+  "_rolldown-runtime-CyFmcnh3.js": {
+    "file": "rolldown-runtime-CyFmcnh3.js",
+    "name": "rolldown-runtime"
+  },
+  "src/client-entry.js": {
+    "file": "index-DNYy_KTs.js",
+    "name": "index",
+    "src": "src/client-entry.js",
+    "isEntry": true,
+    "imports": [
+      "_client-entry-CRENOKil.js"
+    ]
+  },
+  "src/dialogs/ReviewsDialog.js": {
+    "file": "ReviewsDialog-BP3stinu.js",
+    "name": "ReviewsDialog",
+    "src": "src/dialogs/ReviewsDialog.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-CyFmcnh3.js",
+      "_pages-app-FuDLnPS-.js"
+    ],
+    "css": [
+      "ReviewsDialog-CIwHDl2e.css"
+    ]
+  },
+  "src/dialogs/SizeGuide.js": {
+    "file": "SizeGuide-CK7XntwM.js",
+    "name": "SizeGuide",
+    "src": "src/dialogs/SizeGuide.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-CyFmcnh3.js",
+      "_framework-CYQSzyXs.js",
+      "_pages-app-FuDLnPS-.js"
+    ],
+    "css": [
+      "SizeGuide-B8STsB-e.css"
+    ]
+  },
+  "src/pages/_app.js": {
+    "file": "_app-B2Qf3Lhj.js",
+    "name": "_app",
+    "src": "src/pages/_app.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-CyFmcnh3.js",
+      "_framework-CYQSzyXs.js",
+      "_pages-app-FuDLnPS-.js"
+    ]
+  },
+  "src/pages/cart.js": {
+    "file": "cart-DyUV4Cyy.js",
+    "name": "cart",
+    "src": "src/pages/cart.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-CyFmcnh3.js",
+      "_client-entry-CRENOKil.js",
+      "_pages-app-FuDLnPS-.js",
+      "_framework-CYQSzyXs.js",
+      "_Price-Dm6vukl_.js"
+    ],
+    "dynamicImports": [
+      "src/dialogs/SizeGuide.js"
+    ],
+    "css": [
+      "cart-Brb4BWRu.css"
+    ]
+  },
+  "src/pages/home.js": {
+    "file": "home-DiazmhsQ.js",
+    "name": "home",
+    "src": "src/pages/home.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-CyFmcnh3.js",
+      "_pages-app-FuDLnPS-.js",
+      "_Price-Dm6vukl_.js",
+      "_Carousel-kwIQ8Myo.js"
+    ],
+    "css": [
+      "home-BHOkn21T.css"
+    ]
+  },
+  "src/pages/product.js": {
+    "file": "product-DX1bN3e5.js",
+    "name": "product",
+    "src": "src/pages/product.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-CyFmcnh3.js",
+      "_framework-CYQSzyXs.js",
+      "_client-entry-CRENOKil.js",
+      "_pages-app-FuDLnPS-.js",
+      "_Price-Dm6vukl_.js",
+      "_Carousel-kwIQ8Myo.js"
+    ],
+    "dynamicImports": [
+      "src/dialogs/ReviewsDialog.js",
+      "src/dialogs/SizeGuide.js"
+    ],
+    "css": [
+      "product-DEW-EwBs.css"
+    ]
+  }
+}

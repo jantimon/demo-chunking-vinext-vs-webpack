@@ -115,7 +115,7 @@ function lazyFilesWebpack(json, page) {
 }
 
 /** Vite 8 + Rolldown with vinext's Pages Router shape: one client entry, pages and _app as import(). */
-async function buildVite(variant, codeSplitting, extraRolldown = {}) {
+async function buildVite(variant, codeSplitting, extraRolldown = {}, extraPlugins = []) {
   const dir = join(out, variant);
   trashDir(dir);
   let bundle;
@@ -135,7 +135,7 @@ async function buildVite(variant, codeSplitting, extraRolldown = {}) {
         ...extraRolldown,
       },
     },
-    plugins: [{ name: "toy:capture", writeBundle(_options, output) { bundle = output; } }],
+    plugins: [...extraPlugins, { name: "toy:capture", writeBundle(_options, output) { bundle = output; } }],
   });
   const files = {};
   for (const [fileName, chunk] of Object.entries(bundle)) {
@@ -203,6 +203,49 @@ function routeGroups(defaultBuild) {
   return [{ name: (id) => plan.get(moduleName(id)) ?? null, minSize: 0, maxModuleSize: 102_400, includeDependenciesRecursively: false, priority: 10 }];
 }
 
+/**
+ * vinext PR #4726 for the Pages Router: a "pages-app" group with _app's static imports (vinext's
+ * collectPagesAppChunkRoots), then small common chunks copied into their importers except stylesheets
+ * (withInlineCommonChunks).
+ */
+function prPagesApp() {
+  const isFramework = (id) => /node_modules[\\/]react[\\/]/.test(id);
+  const appRoots = new Set();
+  const plugin = {
+    name: "toy:pages-app-roots",
+    buildEnd() {
+      const info = (id) => this.getModuleInfo(id);
+      const ids = [...this.getModuleIds()];
+      const appId = ids.find((id) => id.endsWith("/pages/_app.js"));
+      const closure = (start) => {
+        const seen = new Set();
+        const stack = [...start];
+        while (stack.length) {
+          const id = stack.pop();
+          if (seen.has(id)) continue;
+          seen.add(id);
+          stack.push(...(info(id)?.importedIds ?? []));
+        }
+        return seen;
+      };
+      const leadsToEntry = new Set([appId]);
+      const entries = [];
+      const firstGroup = [];
+      for (const id of ids) {
+        if (info(id)?.isEntry) entries.push(id);
+        if (isFramework(id)) firstGroup.push(id);
+        else if (info(id)?.dynamicImporters.length) leadsToEntry.add(id);
+      }
+      const firstGroupTakes = closure(firstGroup);
+      for (const id of closure(entries)) if (!isFramework(id) && !firstGroupTakes.has(id)) leadsToEntry.add(id);
+      const pending = [...leadsToEntry];
+      while (pending.length) for (const importer of info(pending.pop())?.importers ?? []) if (!leadsToEntry.has(importer)) (leadsToEntry.add(importer), pending.push(importer));
+      for (const id of info(appId)?.importedIds ?? []) if (!isFramework(id) && !leadsToEntry.has(id)) appRoots.add(id);
+    },
+  };
+  return { plugin, group: { name: (id) => (appRoots.has(id) ? "pages-app" : null), minSize: 0 } };
+}
+
 const framework = { name: "framework", test: /node_modules[\\/]react[\\/]/, priority: 40 };
 const result = { webpack: await buildWebpack() };
 result.rolldown = await buildVite("rolldown", { groups: [framework] });
@@ -211,6 +254,17 @@ result.chunkGroups = await buildVite("chunk-groups", {
   groups: [framework, { name: "app", test: (id) => !id.includes("node_modules"), priority: 10, entriesAware: true, entriesAwareMergeThreshold: 20_000, maxSize: 300_000 }],
 });
 result.inlineCommon = await buildVite("inline-common", { groups: [framework], experimentalInlineCommonChunks: { maxSize: 20_000 } });
+const pr = prPagesApp();
+result.pr4726 = await buildVite(
+  "pr-4726",
+  {
+    minSize: 10_000,
+    groups: [framework, pr.group],
+    experimentalInlineCommonChunks: { maxSize: 20_000, exclude: /\.(?:css|less|sass|scss|styl|stylus|pcss|postcss|sss)(?:$|\?)/ },
+  },
+  {},
+  [pr.plugin],
+);
 writeFileSync(join(here, "result.json"), JSON.stringify(result, null, 1));
 for (const [name, item] of Object.entries(result)) {
   const product = item.pages.product;

@@ -63,16 +63,17 @@
     <div class="decide-slot" id="decideSlot"></div>
     <div class="lanes">
       <div class="lane wp-lane"><p class="lane-name"><i class="tok wp"></i>webpack <span>Next.js 16.4 settings</span></p><div class="files" id="laneWp"></div><p class="lane-note" id="noteWp"></p><p class="count" id="countWp"></p></div>
-      <div class="lane rd-lane"><p class="lane-name"><i class="tok rd"></i>Rolldown <span>vinext 1.4 Pages Router</span></p><div class="files" id="laneRd"></div><p class="lane-note" id="noteRd"></p><p class="count" id="countRd"></p></div>
+      <div class="lane rd-lane"><p class="lane-name"><i class="tok rd"></i>Rolldown <span>vinext with PR #4726</span></p><div class="files" id="laneRd"></div><p class="lane-note" id="noteRd"></p><p class="count" id="countRd"></p></div>
     </div>
     <div class="stage-foot"><div class="controls" id="packControls"><button type="button" data-act="back" aria-label="Back"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" data-act="play" class="pk-play" aria-label="Play"><svg class="pk-i-play" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M4.5 2.8v10.4L13 8Z" fill="currentColor"/></svg><svg class="pk-i-pause" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z" fill="currentColor"/></svg></button><button type="button" data-act="next" aria-label="Next"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><span class="dots" id="packDots"></span><button type="button" data-act="replay" class="replay"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 1 0 1.8-4.07M2.5 2.5v3h3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Replay</button></div></div>
   </figure>
-  <p>The two differ only on small code that several pages share:</p>
+  <p>With <a href="https://github.com/cloudflare/vinext/pull/4726">vinext PR #4726</a>, Rolldown copies small shared code too, but not all of it:</p>
   <ul class="diff">
-    <li><b class="wp-t">webpack copies it.</b> <code>Price</code> and <code>useCart</code> sit a second time in the cart page's file.</li>
-    <li><b class="rd-t">Rolldown gives it a file.</b> One for <code>Price</code>, one for <code>useCart</code>, and one for <code>Button</code>, because Rolldown doesn't know <code>_app</code> always loads before a page.</li>
+    <li><b class="rd-t">Both copy <code>useCart</code>.</b> It is small, has no CSS, and sits a second time in the cart page's file.</li>
+    <li><b class="wp-t">Only webpack copies <code>Price</code>.</b> The PR never copies a shared chunk that holds CSS, so <code>Price</code> keeps its own chunk and its own stylesheet.</li>
+    <li><b class="rd-t"><code>Button</code> joins <code>_app</code>'s group.</b> The PR groups everything <code>_app</code> imports, so it no longer gets a file of its own.</li>
   </ul>
-  <p>React, the 30 KB gallery and code that only one page uses end up the same in both. The product page loads 6 more files with Rolldown: those three, plus one stylesheet each for <code>Button</code>, <code>Price</code> and the carousel chunk.</p>
+  <p>The product page loads 13 files instead of 14 without the PR, and webpack's 8. One of the 13 is new: a 71-byte entry file that only starts the real entry chunk.</p>
 </section>
 
 <section id="s4">

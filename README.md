@@ -27,7 +27,7 @@ Open `index.html` in a browser. No build step.
 ```sh
 cd demo
 node make-app.mjs    # writes src/: 3 pages, _app, 2 lazy dialogs, shared modules
-node build.mjs       # builds it with webpack and 4 Vite/Rolldown setups, writes result.json
+node build.mjs       # builds it with webpack and 5 Vite/Rolldown setups, writes result.json
 node page-data.mjs   # writes ../data.js for the page
 ```
 
@@ -40,5 +40,6 @@ node page-data.mjs   # writes ../data.js for the page
 | routeGroups | vinext's App Router grouping ported to pages: modules the same set of pages load at start share a chunk |
 | chunkGroups | Rolldown `codeSplitting.groups` with `entriesAware` app groups |
 | inlineCommon | Rolldown `experimentalInlineCommonChunks: { maxSize: 20000 }` |
+| pr4726 | [vinext PR #4726](https://github.com/cloudflare/vinext/pull/4726): `_app`'s imports in one `pages-app` group, `minSize: 10000`, `experimentalInlineCommonChunks: { maxSize: 20000, exclude: <stylesheets> }`. The step figure on this branch uses it |
 
 The numbers for the large app come from a real Pages Router app with 225 pages, measured on one laptop with Chrome's phone and network emulation.
