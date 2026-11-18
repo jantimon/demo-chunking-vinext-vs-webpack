@@ -97,27 +97,27 @@
     <div class="fact"><p class="fact-k">Whole build on disk</p><p class="fact-v"><span class="wp-t">21.0 MB</span> vs <span class="rd-t">16.8 MB</span></p><p>webpack's build is bigger: that is the price of the copies.</p></div>
   </div>
   <h3>What a customer notices</h3>
-  <p>iPhone 13 profile over emulated 4G, median of 5 runs. The tap test taps a line every 100 ms until its dialog opens.</p>
+  <p>iPhone 13 profile over emulated 4G, median of 5 runs. The server sends files in the order Chrome asks for, as a CDN does. The tap test taps a line every 100 ms until its dialog opens.</p>
   <p class="frame-tag real wide">Real app · Next.js Pages Router, 225 pages</p>
   <figure class="race wide" id="race" aria-label="First paint and first working tap">
-    <div class="race-row"><p>First paint</p><div class="bar-pair"><span class="bar wp" style="--v:832"><b>0.83 s</b></span><span class="bar rd" style="--v:1576"><b>1.58 s</b></span></div></div>
-    <div class="race-row"><p>First tap works</p><div class="bar-pair"><span class="bar wp" style="--v:1430"><b>1.43 s</b></span><span class="bar rd" style="--v:2167"><b>2.17 s</b></span></div></div>
-    <figcaption>The 145 stylesheets share the connection with 576 scripts, so the page paints later. React hydrates only after the last of those scripts has arrived.</figcaption>
+    <div class="race-row"><p>First paint</p><div class="bar-pair"><span class="bar wp" style="--v:860"><b>0.86 s</b></span><span class="bar rd" style="--v:952"><b>0.95 s</b></span></div></div>
+    <div class="race-row"><p>First tap works</p><div class="bar-pair"><span class="bar wp" style="--v:1755"><b>1.76 s</b></span><span class="bar rd" style="--v:2328"><b>2.33 s</b></span></div></div>
+    <figcaption>The server sends the 145 stylesheets first, so vinext paints only 0.09 s later. React hydrates only after the last of the 576 scripts has arrived, so a tap works 0.57 s later.</figcaption>
   </figure>
 </section>
 
 <section id="sprio">
   <h2><span class="num">05</span>Who gets the connection <span class="hi">first</span></h2>
-  <p>Chrome tells the server how urgent each file is. Render-blocking CSS is Highest. webpack's scripts load with <code>defer</code> and are Low. vinext's are module scripts and are High from the start. The product image starts at Medium and becomes High only once layout shows it on screen.</p>
+  <p>Chrome tells the server how urgent each file is. Render-blocking CSS is Highest. webpack's scripts load with <code>defer</code> and are Low. vinext's are module scripts and are High from the start. The product image starts at Medium and becomes High only once layout shows it on screen. In these runs the server sends files in that order, as a CDN does.</p>
   <p class="frame-tag real wide">Real app · Next.js Pages Router, 225 pages</p>
   <figure class="wf wide" id="wf" aria-label="Download waterfall of the product page, webpack and vinext on one time axis">
-    <div class="wf-head"><p class="wf-cap">Product page, iPhone 13 profile over emulated 4G · every line is one request</p><p class="wf-clock" id="wfClock">0.00 s</p></div>
+    <div class="wf-head"><p class="wf-cap">Product page, iPhone 13 profile over emulated 4G, server sends by Chrome's priorities · every line is one request</p><p class="wf-clock" id="wfClock">0.00 s</p></div>
     <div class="wf-lane" data-side="webpack"><p class="wf-name"><i class="tok wp"></i><svg class="bi webpack" aria-hidden="true"><use href="#bi-webpack"/></svg>webpack</p><svg class="wf-svg" aria-hidden="true"></svg></div>
     <div class="wf-lane" data-side="vinext"><p class="wf-name"><i class="tok rd"></i><svg class="bi vite" aria-hidden="true"><use href="#bi-vite"/></svg>vinext</p><svg class="wf-svg" aria-hidden="true"></svg></div>
     <div class="wf-legend"><span><i class="wf-k lcp"></i>product image</span><span><i class="wf-k css"></i>CSS</span><span><i class="wf-k js-wp"></i>scripts, <svg class="bi webpack" aria-hidden="true"><use href="#bi-webpack"/></svg>webpack</span><span><i class="wf-k js-rd"></i>scripts, <svg class="bi vite" aria-hidden="true"><use href="#bi-vite"/></svg>vinext</span><span><i class="wf-k other"></i>other</span><span class="wf-k-line">│ first paint · ┊ largest paint</span><button type="button" class="wf-replay" id="wfReplay">Replay</button></div>
   </figure>
-  <p>Both ask for the product image at 0.15 s. webpack has it at 0.77 s. On vinext it shares the connection with about 700 other requests that started at the same moment, and arrives at 1.71 s. The largest paint follows the image within 25 ms in both.</p>
-  <p class="small">Chrome's <a href="https://web.dev/articles/fetch-priority">"tight mode"</a>, which holds back requests early in a page load, is probably not the reason, as it only delays requests below High priority, and only until the HTML reaches <code>&lt;body&gt;</code> (<a href="https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/platform/loader/fetch/resource_load_scheduler.cc">Chromium's scheduler source</a>). A server that sends by priority would put vinext's High scripts ahead of the image while it is still Medium.</p>
+  <p>Both ask for the product image at about 0.47 s. webpack has it at 1.11 s, vinext at 1.01 s, and the largest paint follows right after. The image does not wait behind vinext's 641 scripts.</p>
+  <p>What still differs is when the page answers a tap. React hydrates only after every script the HTML lists has arrived: 55 for webpack, 576 for vinext. A tap works at 1.76 s with webpack and at 2.33 s with vinext.</p>
 </section>
 
 <section id="s5">
@@ -138,7 +138,7 @@
     </li>
     <li class="fix">
       <p class="fix-k">3 · Manual chunk groups</p>
-      <p>Rolldown's <code>codeSplitting.groups</code> with framework, library and app groups cut the files to 371. Each group carries code for other pages too: 3 MB of JavaScript, and the product image appears after 3.6 s instead of 0.85 s.</p>
+      <p>Rolldown's <code>codeSplitting.groups</code> with framework, library and app groups cut the files to 371. Each group carries code for other pages too: the product page loads 3 MB of JavaScript.</p>
     </li>
     <li class="fix">
       <p class="fix-k">4 · Copy small chunks, like webpack</p>
