@@ -80,10 +80,10 @@
 <section id="s4">
   <h2><span class="num">04</span>The same rule in a <span class="hi">large</span> app</h2>
   <p>A real Next.js Pages Router app with 225 pages, built both ways. Every page and every lazy import is a root, and almost every module is reached by its own mix of roots. The product page alone touches 536 different importer sets.</p>
-  <figure class="scale wide" id="scale" aria-label="JavaScript files the product page loads at start">
+  <figure class="scale wide" id="scale" aria-label="JavaScript files the product page's HTML lists at start">
     <div class="scale-row"><p class="scale-name"><i class="tok wp"></i>webpack</p><div class="squares" data-n="55" data-kind="wp"></div><p class="scale-num"><b>55</b> files</p></div>
     <div class="scale-row"><p class="scale-name"><i class="tok rd"></i>Rolldown</p><div class="squares" data-n="576" data-kind="rd"></div><p class="scale-num"><b>576</b> files</p></div>
-    <figcaption>JavaScript files the product page loads at start. 385 of Rolldown's are under 1 KB; none of webpack's are.</figcaption>
+    <figcaption>JavaScript files the product page's HTML lists at start. 385 of Rolldown's are under 1 KB; none of webpack's are.</figcaption>
   </figure>
   <div class="facts wide">
     <div class="fact"><p class="fact-k">Code shipped, joined into one file</p><p class="fact-v"><span class="wp-t">837 KB</span> vs <span class="rd-t">850 KB</span></p><p>Nearly the same code. Both builds gzipped as one file.</p></div>
@@ -166,10 +166,10 @@
         <tr class="ptab-best"><td><i class="tok rd"></i>PR #4726 + R1, R2o, R3, R4</td><td>8</td><td>5</td><td>0</td><td>kept</td></tr>
       </tbody>
     </table>
-    <figcaption>Files the product page loads at start. A module counts as an extra copy for every file of the page it sits in beyond the first. CSS order kept: <code>IconButton</code>'s rules come after <code>Button</code>'s. webpack copies too, but into files of different pages, so no single page loads a module twice.</figcaption>
+    <figcaption>Files the product page's HTML lists at start. A module counts as an extra copy for every file of the page it sits in beyond the first. CSS order kept: <code>IconButton</code>'s rules come after <code>Button</code>'s. webpack copies too, but into files of different pages, so no single page loads a module twice.</figcaption>
   </figure>
   <p>The stylesheet count stays where it was: R2o keeps one stylesheet for every chunk that held CSS. In the toy, a simpler split that groups stylesheets by the pages that load them, without a rank, also keeps the one <code>Button</code>/<code>IconButton</code> pair in order.</p>
-  <p>The large app shows the difference. On its product page, there are 321 pairs of a component and one that extends it. The simple split put the extension's CSS first in 19 of them; the patched build in none. JavaScript files the product page loads at start, counted on a newer build of the app than section 04's:</p>
+  <p>The large app shows the difference. On its product page, there are 321 pairs of a component and one that extends it. The simple split put the extension's CSS first in 19 of them; the patched build in none. JavaScript files the browser loaded on the product page until the load event, on an iPhone 13 profile. This count includes chunks fetched right after start, so it is higher than section 04's count of files the HTML lists at start (55 for webpack, 576 for vinext 1.4.5):</p>
   <div class="facts wide">
     <div class="fact"><p class="fact-k">webpack</p><p class="fact-v"><span class="wp-t">71</span></p><p>6 stylesheets</p></div>
     <div class="fact"><p class="fact-k">vinext 1.4.5</p><p class="fact-v"><span class="rd-t">637</span></p><p>145 stylesheets</p></div>
