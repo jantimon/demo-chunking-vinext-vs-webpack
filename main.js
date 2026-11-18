@@ -505,7 +505,7 @@ function pack() {
 /* 05 · animated download waterfall of both median runs, one time axis */
 function waterfallFigure(redraw = false) {
   const data = window.WATERFALL;
-  const MAX = 2800;
+  const MAX = 3000;
   const GROUPS = [
     ["lcp", "product image · Medium → High"],
     ["html", "HTML"],
@@ -524,7 +524,7 @@ function waterfallFigure(redraw = false) {
     const compact = width < 600;
     const labelWidth = compact ? 96 : 196;
     const imageHeight = 14;
-    const lineHeight = side === "vinext" ? 0.42 : 2.2;
+    const lineHeight = Math.min(2.2, 340 / ordered.length);
     const height = imageHeight + 8 + (ordered.length - 1) * lineHeight + 36;
     svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
     const x = (t) => labelWidth + (t / MAX) * (width - labelWidth - 10);
