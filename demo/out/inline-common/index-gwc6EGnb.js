@@ -1,0 +1,1 @@
+import{t as e}from"./client-entry-B1OEW50u.js";e();

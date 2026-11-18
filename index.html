@@ -48,8 +48,9 @@
 
 <section id="s2">
   <h2><span class="num">02</span>A small <span class="hi">shop</span></h2>
-  <p>Three pages, an <code>_app</code> that wraps every page, and two dialogs that load on demand. Each module shows its size and which of them import it. The color marks the set of importers.</p>
+  <p>Three pages, an <code>_app</code> that wraps every page, and three dialogs that load on demand. Each module shows its size and which of them import it. The color marks the set of importers.</p>
   <figure class="graph wide" id="graph" aria-label="The toy shop's modules and their importers"></figure>
+  <p>As with CSS Modules or a compile-time CSS-in-JS library, every component imports its own stylesheet, and here also a small styling runtime, <code>styled</code>. <code>IconButton</code> extends <code>Button</code>, so its CSS has to load after Button's.</p>
   <p class="small">The app is real and has one set of source files. <a href="demo/">The demo</a> builds it with webpack 5 using Next.js 16.4's chunk settings, and with Vite 8 / Rolldown the way vinext 1.4 loads Pages Router pages. Only the entry and the bundler settings differ. Every chunk in the next figure is a file from those builds.</p>
 </section>
 
@@ -69,10 +70,10 @@
   </figure>
   <p>The two differ only on small code that several pages share:</p>
   <ul class="diff">
-    <li><b class="wp-t">webpack copies it.</b> <code>Price</code> and <code>useCart</code> sit a second time in the cart page's file.</li>
-    <li><b class="rd-t">Rolldown gives it a file.</b> One for <code>Price</code>, one for <code>useCart</code>, and one for <code>Button</code>, because Rolldown doesn't know <code>_app</code> always loads before a page.</li>
+    <li><b class="wp-t">webpack copies it.</b> <code>Price</code>, <code>translate</code>, <code>IconButton</code> and <code>useCart</code> sit a second time in the cart page's file.</li>
+    <li><b class="rd-t">Rolldown gives it a file.</b> One for <code>Price</code>, one for <code>translate</code>, one for <code>IconButton</code> and <code>useCart</code>, and one for <code>Button</code> and <code>styled</code>, because Rolldown doesn't know <code>_app</code> always loads before a page.</li>
   </ul>
-  <p>React, the 30 KB gallery and code that only one page uses end up the same in both. The product page loads 6 more files with Rolldown: those three, plus one stylesheet each for <code>Button</code>, <code>Price</code> and the carousel chunk.</p>
+  <p>React, the 30 KB gallery and code that only one page uses end up the same in both. The product page loads 8 more files with Rolldown: those four, plus one stylesheet each for <code>Button</code>, <code>Price</code>, <code>IconButton</code> and the carousel chunk.</p>
 </section>
 
 <section id="s4">

@@ -1,4 +1,6 @@
 import * as dep0 from "react";
+import * as dep1 from "../lib/translate.js";
+import * as dep2 from "../lib/styled.js";
 import "./Price.css";
 const TABLE = [
   ["Price-0", 0, "abcdefghijabcdefghijabcdefghij0"],
@@ -31,5 +33,5 @@ const TABLE = [
 ];
 
 export default function Price() {
-  return [dep0, TABLE.length, "Price"];
+  return [dep0, dep1, dep2, TABLE.length, "Price"];
 }

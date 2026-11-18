@@ -1,4 +1,6 @@
 import * as dep0 from "react";
+import * as dep1 from "../lib/translate.js";
+import * as dep2 from "../lib/styled.js";
 import "./Carousel.css";
 const TABLE = [
   ["Carousel-0", 0, "abcdefghijabcdefghijabcdefghij0"],
@@ -427,5 +429,5 @@ const TABLE = [
 ];
 
 export default function Carousel() {
-  return [dep0, TABLE.length, "Carousel"];
+  return [dep0, dep1, dep2, TABLE.length, "Carousel"];
 }

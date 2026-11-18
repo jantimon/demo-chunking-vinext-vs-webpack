@@ -1,5 +1,7 @@
 import * as dep0 from "../lib/formatDate.js";
 import * as dep1 from "../components/Button.js";
+import * as dep2 from "../lib/translate.js";
+import * as dep3 from "../lib/styled.js";
 import "./ReviewsDialog.css";
 const TABLE = [
   ["ReviewsDialog-0", 0, "abcdefghijabcdefghijabcdefghij0"],
@@ -97,5 +99,5 @@ const TABLE = [
 ];
 
 export default function ReviewsDialog() {
-  return [dep0, dep1, TABLE.length, "ReviewsDialog"];
+  return [dep0, dep1, dep2, dep3, TABLE.length, "ReviewsDialog"];
 }

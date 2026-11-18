@@ -1,10 +1,12 @@
 import * as dep0 from "../components/Button.js";
 import * as dep1 from "../components/Price.js";
-import * as dep2 from "../components/Rating.js";
-import * as dep3 from "../components/Carousel.js";
-import * as dep4 from "../components/Gallery.js";
-import * as dep5 from "../lib/useCart.js";
-import * as dep6 from "../lib/formatDate.js";
+import * as dep2 from "../components/IconButton.js";
+import * as dep3 from "../components/Rating.js";
+import * as dep4 from "../components/Carousel.js";
+import * as dep5 from "../components/Gallery.js";
+import * as dep6 from "../lib/useCart.js";
+import * as dep7 from "../lib/formatDate.js";
+import * as dep8 from "../lib/styled.js";
 import "./product.css";
 export const openReviewsDialog = () => import("../dialogs/ReviewsDialog.js");
 export const openSizeGuide = () => import("../dialogs/SizeGuide.js");
@@ -97,6 +99,6 @@ const TABLE = [
 ];
 
 export default function product() {
-  return [dep0, dep1, dep2, dep3, dep4, dep5, dep6, TABLE.length, "product"];
+  return [dep0, dep1, dep2, dep3, dep4, dep5, dep6, dep7, dep8, TABLE.length, "product"];
 }
 (window.__NEXT_P = window.__NEXT_P || []).push(["/product", () => product]);

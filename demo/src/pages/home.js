@@ -2,6 +2,7 @@ import * as dep0 from "../components/Button.js";
 import * as dep1 from "../components/Price.js";
 import * as dep2 from "../components/Rating.js";
 import * as dep3 from "../components/Carousel.js";
+import * as dep4 from "../lib/styled.js";
 import "./home.css";
 const TABLE = [
   ["home-0", 0, "abcdefghijabcdefghijabcdefghij0"],
@@ -96,6 +97,6 @@ const TABLE = [
 ];
 
 export default function home() {
-  return [dep0, dep1, dep2, dep3, TABLE.length, "home"];
+  return [dep0, dep1, dep2, dep3, dep4, TABLE.length, "home"];
 }
 (window.__NEXT_P = window.__NEXT_P || []).push(["/home", () => home]);

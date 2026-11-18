@@ -1,6 +1,7 @@
 import * as dep0 from "../components/SizeTable.js";
 import * as dep1 from "../lib/useCart.js";
 import * as dep2 from "../components/Button.js";
+import * as dep3 from "../lib/styled.js";
 import "./SizeGuide.css";
 const TABLE = [
   ["SizeGuide-0", 0, "abcdefghijabcdefghijabcdefghij0"],
@@ -72,5 +73,5 @@ const TABLE = [
 ];
 
 export default function SizeGuide() {
-  return [dep0, dep1, dep2, TABLE.length, "SizeGuide"];
+  return [dep0, dep1, dep2, dep3, TABLE.length, "SizeGuide"];
 }

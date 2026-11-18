@@ -1,19 +1,4 @@
 {
-  "_Price-Bcfh0ai9.css": {
-    "file": "Price-Bcfh0ai9.css",
-    "src": "_Price-Bcfh0ai9.css"
-  },
-  "_Price-M20sQqwv.js": {
-    "file": "Price-M20sQqwv.js",
-    "name": "Price",
-    "imports": [
-      "_rolldown-runtime-DK3Fl9T5.js",
-      "_framework-Rw71HLQU.js"
-    ],
-    "css": [
-      "Price-Bcfh0ai9.css"
-    ]
-  },
   "_framework-Rw71HLQU.js": {
     "file": "framework-Rw71HLQU.js",
     "name": "framework",
@@ -21,8 +6,8 @@
       "_rolldown-runtime-DK3Fl9T5.js"
     ]
   },
-  "_rg-_app-RUUwVdv0.js": {
-    "file": "rg-_app-RUUwVdv0.js",
+  "_rg-_app-C9xaUZgR.js": {
+    "file": "rg-_app-C9xaUZgR.js",
     "name": "rg-_app",
     "imports": [
       "_rolldown-runtime-DK3Fl9T5.js",
@@ -36,12 +21,47 @@
     "file": "rg-_app-aTLjW6Uk.css",
     "src": "_rg-_app-aTLjW6Uk.css"
   },
-  "_rg-home-product-CmYHGxKE.js": {
-    "file": "rg-home-product-CmYHGxKE.js",
+  "_rg-cart-home-product-B9Zku2Y1.js": {
+    "file": "rg-cart-home-product-B9Zku2Y1.js",
+    "name": "rg-cart-home-product",
+    "imports": [
+      "_rolldown-runtime-DK3Fl9T5.js",
+      "_framework-Rw71HLQU.js",
+      "_rg-_app-C9xaUZgR.js"
+    ],
+    "css": [
+      "rg-cart-home-product-Bcfh0ai9.css"
+    ]
+  },
+  "_rg-cart-home-product-Bcfh0ai9.css": {
+    "file": "rg-cart-home-product-Bcfh0ai9.css",
+    "src": "_rg-cart-home-product-Bcfh0ai9.css"
+  },
+  "_rg-cart-product-CSA85Zqp.css": {
+    "file": "rg-cart-product-CSA85Zqp.css",
+    "src": "_rg-cart-product-CSA85Zqp.css"
+  },
+  "_rg-cart-product-CkVg40jd.js": {
+    "file": "rg-cart-product-CkVg40jd.js",
+    "name": "rg-cart-product",
+    "imports": [
+      "_rolldown-runtime-DK3Fl9T5.js",
+      "_framework-Rw71HLQU.js",
+      "_rg-_app-C9xaUZgR.js",
+      "_rg-cart-home-product-B9Zku2Y1.js"
+    ],
+    "css": [
+      "rg-cart-product-CSA85Zqp.css"
+    ]
+  },
+  "_rg-home-product-D2oMZktK.js": {
+    "file": "rg-home-product-D2oMZktK.js",
     "name": "rg-home-product",
     "imports": [
       "_rolldown-runtime-DK3Fl9T5.js",
-      "_framework-Rw71HLQU.js"
+      "_framework-Rw71HLQU.js",
+      "_rg-_app-C9xaUZgR.js",
+      "_rg-cart-home-product-B9Zku2Y1.js"
     ],
     "css": [
       "rg-home-product-DZGUhspq.css"
@@ -51,12 +71,13 @@
     "file": "rg-home-product-DZGUhspq.css",
     "src": "_rg-home-product-DZGUhspq.css"
   },
-  "_rg-product-CTVDkhTN.js": {
-    "file": "rg-product-CTVDkhTN.js",
+  "_rg-product-CaSI3HGT.js": {
+    "file": "rg-product-CaSI3HGT.js",
     "name": "rg-product",
     "imports": [
       "_rolldown-runtime-DK3Fl9T5.js",
-      "_framework-Rw71HLQU.js"
+      "_framework-Rw71HLQU.js",
+      "_rg-_app-C9xaUZgR.js"
     ],
     "css": [
       "rg-product-JmPS4DtS.css"
@@ -70,16 +91,8 @@
     "file": "rolldown-runtime-DK3Fl9T5.js",
     "name": "rolldown-runtime"
   },
-  "_useCart-Dlllppmx.js": {
-    "file": "useCart-Dlllppmx.js",
-    "name": "useCart",
-    "imports": [
-      "_rolldown-runtime-DK3Fl9T5.js",
-      "_framework-Rw71HLQU.js"
-    ]
-  },
   "src/client-entry.js": {
-    "file": "index-Zaa_o8kI.js",
+    "file": "index-D-Bi4myG.js",
     "name": "index",
     "src": "src/client-entry.js",
     "isEntry": true,
@@ -90,56 +103,74 @@
       "src/pages/_app.js"
     ]
   },
+  "src/dialogs/LoginDialog.js": {
+    "file": "LoginDialog-NbvPwXqq.js",
+    "name": "LoginDialog",
+    "src": "src/dialogs/LoginDialog.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rg-_app-C9xaUZgR.js",
+      "_rg-cart-home-product-B9Zku2Y1.js"
+    ],
+    "css": [
+      "LoginDialog-CBbbKixx.css"
+    ]
+  },
   "src/dialogs/ReviewsDialog.js": {
-    "file": "ReviewsDialog-DXtJBWdP.js",
+    "file": "ReviewsDialog-x_KGIGB_.js",
     "name": "ReviewsDialog",
     "src": "src/dialogs/ReviewsDialog.js",
     "isDynamicEntry": true,
     "imports": [
-      "_rg-product-CTVDkhTN.js",
-      "_rg-_app-RUUwVdv0.js"
+      "_rg-product-CaSI3HGT.js",
+      "_rg-_app-C9xaUZgR.js",
+      "_rg-cart-home-product-B9Zku2Y1.js"
     ],
     "css": [
       "ReviewsDialog-CIwHDl2e.css"
     ]
   },
   "src/dialogs/SizeGuide.js": {
-    "file": "SizeGuide-CXTiqmVm.js",
+    "file": "SizeGuide-CKW1smYj.js",
     "name": "SizeGuide",
     "src": "src/dialogs/SizeGuide.js",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-DK3Fl9T5.js",
       "_framework-Rw71HLQU.js",
-      "_useCart-Dlllppmx.js",
-      "_rg-_app-RUUwVdv0.js"
+      "_rg-_app-C9xaUZgR.js",
+      "_rg-cart-product-CkVg40jd.js"
     ],
     "css": [
       "SizeGuide-B8STsB-e.css"
     ]
   },
   "src/pages/_app.js": {
-    "file": "_app-9MN_52S_.js",
+    "file": "_app-CiR3yxJq.js",
     "name": "_app",
     "src": "src/pages/_app.js",
     "isDynamicEntry": true,
     "imports": [
       "_framework-Rw71HLQU.js",
-      "_rg-_app-RUUwVdv0.js"
+      "_rg-_app-C9xaUZgR.js",
+      "src/client-entry.js"
+    ],
+    "dynamicImports": [
+      "src/dialogs/LoginDialog.js"
     ],
     "css": [
       "_app-BDC_i7lW.css"
     ]
   },
   "src/pages/cart.js": {
-    "file": "cart-BpB0P_4x.js",
+    "file": "cart-DOgwFzYW.js",
     "name": "cart",
     "src": "src/pages/cart.js",
     "isDynamicEntry": true,
     "imports": [
-      "_rg-_app-RUUwVdv0.js",
-      "_Price-M20sQqwv.js",
-      "_useCart-Dlllppmx.js",
+      "_rg-_app-C9xaUZgR.js",
+      "_rg-cart-home-product-B9Zku2Y1.js",
+      "_rg-cart-product-CkVg40jd.js",
       "src/client-entry.js"
     ],
     "dynamicImports": [
@@ -150,31 +181,31 @@
     ]
   },
   "src/pages/home.js": {
-    "file": "home-BP-4-XQ5.js",
+    "file": "home-BXEwKaSA.js",
     "name": "home",
     "src": "src/pages/home.js",
     "isDynamicEntry": true,
     "imports": [
-      "_rg-_app-RUUwVdv0.js",
-      "_Price-M20sQqwv.js",
-      "_rg-home-product-CmYHGxKE.js"
+      "_rg-_app-C9xaUZgR.js",
+      "_rg-cart-home-product-B9Zku2Y1.js",
+      "_rg-home-product-D2oMZktK.js"
     ],
     "css": [
       "home-BHOkn21T.css"
     ]
   },
   "src/pages/product.js": {
-    "file": "product-DVPZ8gpP.js",
+    "file": "product-Dk9EkOh7.js",
     "name": "product",
     "src": "src/pages/product.js",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-DK3Fl9T5.js",
-      "_rg-_app-RUUwVdv0.js",
-      "_Price-M20sQqwv.js",
-      "_rg-home-product-CmYHGxKE.js",
-      "_rg-product-CTVDkhTN.js",
-      "_useCart-Dlllppmx.js",
+      "_rg-_app-C9xaUZgR.js",
+      "_rg-cart-home-product-B9Zku2Y1.js",
+      "_rg-cart-product-CkVg40jd.js",
+      "_rg-home-product-D2oMZktK.js",
+      "_rg-product-CaSI3HGT.js",
       "src/client-entry.js"
     ],
     "dynamicImports": [

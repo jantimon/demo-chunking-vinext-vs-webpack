@@ -1,4 +1,5 @@
 import * as dep0 from "react";
+import * as dep1 from "../lib/styled.js";
 import "./SizeTable.css";
 const TABLE = [
   ["SizeTable-0", 0, "abcdefghijabcdefghijabcdefghij0"],
@@ -54,5 +55,5 @@ const TABLE = [
 ];
 
 export default function SizeTable() {
-  return [dep0, TABLE.length, "SizeTable"];
+  return [dep0, dep1, TABLE.length, "SizeTable"];
 }

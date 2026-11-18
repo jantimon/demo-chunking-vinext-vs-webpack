@@ -1,6 +1,27 @@
 {
  "webpack": {
   "files": {
+   "11-337ffa.css": {
+    "kind": "css",
+    "chunk": "async-11",
+    "initial": false,
+    "modules": [
+     "LoginDialog"
+    ],
+    "raw": 49,
+    "gzip": 69
+   },
+   "11-75578f.js": {
+    "kind": "js",
+    "chunk": "async-11",
+    "initial": false,
+    "modules": [
+     "translate",
+     "LoginDialog"
+    ],
+    "raw": 4574,
+    "gzip": 799
+   },
    "61-ea3b32.css": {
     "kind": "css",
     "chunk": "async-61",
@@ -12,7 +33,7 @@
     "raw": 92,
     "gzip": 75
    },
-   "61-49789f.js": {
+   "61-9b5bf5.js": {
     "kind": "js",
     "chunk": "async-61",
     "initial": false,
@@ -20,51 +41,55 @@
      "SizeTable",
      "SizeGuide"
     ],
-    "raw": 6919,
-    "gzip": 1055
+    "raw": 6972,
+    "gzip": 1071
    },
-   "webpack-6e862e.js": {
+   "webpack-d83d9f.js": {
     "kind": "js",
     "chunk": "webpack",
     "initial": true,
     "modules": [],
-    "raw": 3899,
-    "gzip": 1898
+    "raw": 3928,
+    "gzip": 1919
    },
-   "161-9f6d5b.js": {
+   "161-7e9993.js": {
     "kind": "js",
     "chunk": "async-161",
     "initial": true,
     "modules": [
+     "translate",
      "Price",
      "Rating",
      "Carousel"
     ],
-    "raw": 26732,
-    "gzip": 4000
+    "raw": 28463,
+    "gzip": 4240
    },
-   "pages/cart-5ff408.css": {
+   "pages/cart-119019.css": {
     "kind": "css",
     "chunk": "pages/cart",
     "initial": true,
     "modules": [
+     "IconButton",
      "Price",
      "cart"
     ],
-    "raw": 83,
-    "gzip": 80
+    "raw": 131,
+    "gzip": 104
    },
-   "pages/cart-852e72.js": {
+   "pages/cart-5d0a72.js": {
     "kind": "js",
     "chunk": "pages/cart",
     "initial": true,
     "modules": [
+     "translate",
+     "IconButton",
      "Price",
      "useCart",
      "cart"
     ],
-    "raw": 8500,
-    "gzip": 1339
+    "raw": 11380,
+    "gzip": 1667
    },
    "framework-cddb84.js": {
     "kind": "js",
@@ -76,32 +101,34 @@
     "raw": 55104,
     "gzip": 8638
    },
-   "pages/product-d4b518.css": {
+   "pages/product-3f1a65.css": {
     "kind": "css",
     "chunk": "pages/product",
     "initial": true,
     "modules": [
+     "IconButton",
      "Price",
      "Rating",
      "Carousel",
      "Gallery",
      "product"
     ],
-    "raw": 218,
-    "gzip": 132
+    "raw": 266,
+    "gzip": 149
    },
-   "pages/product-43c345.js": {
+   "pages/product-5bfa2c.js": {
     "kind": "js",
     "chunk": "pages/product",
     "initial": true,
     "modules": [
+     "IconButton",
      "Gallery",
      "useCart",
      "formatDate",
      "product"
     ],
-    "raw": 35553,
-    "gzip": 5363
+    "raw": 36858,
+    "gzip": 5566
    },
    "pages/_app-a70cc2.css": {
     "kind": "css",
@@ -115,17 +142,18 @@
     "raw": 127,
     "gzip": 89
    },
-   "pages/_app-826f62.js": {
+   "pages/_app-96fef6.js": {
     "kind": "js",
     "chunk": "pages/_app",
     "initial": true,
     "modules": [
+     "styled",
      "Header",
      "Button",
      "_app"
     ],
-    "raw": 12527,
-    "gzip": 1915
+    "raw": 15523,
+    "gzip": 2199
    },
    "747-7f4e99.css": {
     "kind": "css",
@@ -137,15 +165,15 @@
     "raw": 51,
     "gzip": 71
    },
-   "747-b62e55.js": {
+   "747-c0f41a.js": {
     "kind": "js",
     "chunk": "async-747",
     "initial": false,
     "modules": [
      "ReviewsDialog"
     ],
-    "raw": 5828,
-    "gzip": 1011
+    "raw": 5931,
+    "gzip": 1054
    },
    "main-540732.js": {
     "kind": "js",
@@ -168,67 +196,85 @@
     "raw": 171,
     "gzip": 120
    },
-   "pages/home-e35436.js": {
+   "pages/home-c8e3b0.js": {
     "kind": "js",
     "chunk": "pages/home",
     "initial": true,
     "modules": [
      "home"
     ],
-    "raw": 5016,
-    "gzip": 1057
+    "raw": 5067,
+    "gzip": 1077
    }
   },
   "pages": {
    "home": {
     "start": [
-     "webpack-6e862e.js",
+     "webpack-d83d9f.js",
      "main-540732.js",
      "framework-cddb84.js",
      "pages/_app-a70cc2.css",
-     "pages/_app-826f62.js",
-     "161-9f6d5b.js",
+     "pages/_app-96fef6.js",
+     "161-7e9993.js",
      "pages/home-21dd52.css",
-     "pages/home-e35436.js"
+     "pages/home-c8e3b0.js"
     ],
+    "stylesheets": [
+     "pages/_app-a70cc2.css",
+     "pages/home-21dd52.css"
+    ],
+    "copies": 0,
+    "cssOrderOk": null,
     "lazy": {}
    },
    "product": {
     "start": [
-     "webpack-6e862e.js",
+     "webpack-d83d9f.js",
      "main-540732.js",
      "framework-cddb84.js",
      "pages/_app-a70cc2.css",
-     "pages/_app-826f62.js",
-     "161-9f6d5b.js",
-     "pages/product-d4b518.css",
-     "pages/product-43c345.js"
+     "pages/_app-96fef6.js",
+     "161-7e9993.js",
+     "pages/product-3f1a65.css",
+     "pages/product-5bfa2c.js"
     ],
+    "stylesheets": [
+     "pages/_app-a70cc2.css",
+     "pages/product-3f1a65.css"
+    ],
+    "copies": 0,
+    "cssOrderOk": true,
     "lazy": {
      "SizeGuide": [
       "61-ea3b32.css",
-      "61-49789f.js"
+      "61-9b5bf5.js"
      ],
      "ReviewsDialog": [
       "747-7f4e99.css",
-      "747-b62e55.js"
+      "747-c0f41a.js"
      ]
     }
    },
    "cart": {
     "start": [
-     "webpack-6e862e.js",
+     "webpack-d83d9f.js",
      "main-540732.js",
      "framework-cddb84.js",
      "pages/_app-a70cc2.css",
-     "pages/_app-826f62.js",
-     "pages/cart-5ff408.css",
-     "pages/cart-852e72.js"
+     "pages/_app-96fef6.js",
+     "pages/cart-119019.css",
+     "pages/cart-5d0a72.js"
     ],
+    "stylesheets": [
+     "pages/_app-a70cc2.css",
+     "pages/cart-119019.css"
+    ],
+    "copies": 0,
+    "cssOrderOk": true,
     "lazy": {
      "SizeGuide": [
       "61-ea3b32.css",
-      "61-49789f.js"
+      "61-9b5bf5.js"
      ]
     }
    }
@@ -236,7 +282,7 @@
  },
  "rolldown": {
   "files": {
-   "index-auPbwyzh.js": {
+   "index-bAiZdnA1.js": {
     "kind": "js",
     "chunk": "index",
     "initial": true,
@@ -246,24 +292,26 @@
     ],
     "imports": [],
     "dynamicImports": [
-     "home-DLNgAfJu.js",
-     "product-CNliJi0-.js",
-     "cart-EAi1JwkX.js",
-     "_app-HhKhCOg2.js"
+     "home-BT_fVThz.js",
+     "product-D6_MNIAO.js",
+     "cart-BvHLHAj-.js",
+     "_app-ChM4WCX8.js"
     ],
     "css": [],
     "facade": "client-entry",
-    "raw": 2606,
-    "gzip": 1305
+    "raw": 2672,
+    "gzip": 1338
    },
-   "Button-BqhN2skQ.js": {
+   "Button-VfqPalGH.js": {
     "kind": "js",
     "chunk": "Button",
     "initial": false,
     "modules": [
+     "styled",
      "Button"
     ],
     "sourceModules": [
+     "styled",
      "Button"
     ],
     "imports": [
@@ -275,10 +323,10 @@
      "Button-BQ5aMOdj.css"
     ],
     "facade": null,
-    "raw": 2015,
-    "gzip": 497
+    "raw": 4844,
+    "gzip": 815
    },
-   "Carousel-Dc-Ykblq.js": {
+   "Carousel-C2rUVacc.js": {
     "kind": "js",
     "chunk": "Carousel",
     "initial": false,
@@ -292,17 +340,67 @@
     ],
     "imports": [
      "rolldown-runtime-DK3Fl9T5.js",
-     "framework-Rw71HLQU.js"
+     "framework-Rw71HLQU.js",
+     "Button-VfqPalGH.js",
+     "translate-DPtorFpq.js"
     ],
     "dynamicImports": [],
     "css": [
      "Carousel-DZGUhspq.css"
     ],
     "facade": null,
-    "raw": 25106,
-    "gzip": 3844
+    "raw": 25197,
+    "gzip": 3906
    },
-   "Price-M20sQqwv.js": {
+   "IconButton-MvuX3eMt.js": {
+    "kind": "js",
+    "chunk": "IconButton",
+    "initial": false,
+    "modules": [
+     "IconButton",
+     "useCart"
+    ],
+    "sourceModules": [
+     "useCart",
+     "IconButton"
+    ],
+    "imports": [
+     "rolldown-runtime-DK3Fl9T5.js",
+     "framework-Rw71HLQU.js",
+     "Button-VfqPalGH.js",
+     "translate-DPtorFpq.js"
+    ],
+    "dynamicImports": [],
+    "css": [
+     "IconButton-CSA85Zqp.css"
+    ],
+    "facade": null,
+    "raw": 3178,
+    "gzip": 654
+   },
+   "LoginDialog-DzbZJCOx.js": {
+    "kind": "js",
+    "chunk": "LoginDialog",
+    "initial": false,
+    "modules": [
+     "LoginDialog"
+    ],
+    "sourceModules": [
+     "LoginDialog"
+    ],
+    "imports": [
+     "Button-VfqPalGH.js",
+     "translate-DPtorFpq.js"
+    ],
+    "dynamicImports": [],
+    "css": [
+     "LoginDialog-CBbbKixx.css"
+    ],
+    "facade": "LoginDialog",
+    "raw": 2945,
+    "gzip": 593
+   },
+   "Price-DRRzNXMH.js": {
     "kind": "js",
     "chunk": "Price",
     "initial": false,
@@ -314,17 +412,19 @@
     ],
     "imports": [
      "rolldown-runtime-DK3Fl9T5.js",
-     "framework-Rw71HLQU.js"
+     "framework-Rw71HLQU.js",
+     "translate-DPtorFpq.js",
+     "Button-VfqPalGH.js"
     ],
     "dynamicImports": [],
     "css": [
      "Price-Bcfh0ai9.css"
     ],
     "facade": null,
-    "raw": 1563,
-    "gzip": 427
+    "raw": 1652,
+    "gzip": 470
    },
-   "ReviewsDialog-i4h8CVBq.js": {
+   "ReviewsDialog-W7g38gae.js": {
     "kind": "js",
     "chunk": "ReviewsDialog",
     "initial": false,
@@ -335,18 +435,19 @@
      "ReviewsDialog"
     ],
     "imports": [
-     "product-CNliJi0-.js",
-     "Button-BqhN2skQ.js"
+     "product-D6_MNIAO.js",
+     "Button-VfqPalGH.js",
+     "translate-DPtorFpq.js"
     ],
     "dynamicImports": [],
     "css": [
      "ReviewsDialog-CIwHDl2e.css"
     ],
     "facade": "ReviewsDialog",
-    "raw": 5711,
-    "gzip": 955
+    "raw": 5771,
+    "gzip": 991
    },
-   "SizeGuide-CRfwHSdC.js": {
+   "SizeGuide-MOG6hfvC.js": {
     "kind": "js",
     "chunk": "SizeGuide",
     "initial": false,
@@ -361,18 +462,18 @@
     "imports": [
      "rolldown-runtime-DK3Fl9T5.js",
      "framework-Rw71HLQU.js",
-     "useCart-Dlllppmx.js",
-     "Button-BqhN2skQ.js"
+     "Button-VfqPalGH.js",
+     "IconButton-MvuX3eMt.js"
     ],
     "dynamicImports": [],
     "css": [
      "SizeGuide-B8STsB-e.css"
     ],
     "facade": "SizeGuide",
-    "raw": 6828,
-    "gzip": 1038
+    "raw": 6837,
+    "gzip": 1045
    },
-   "_app-HhKhCOg2.js": {
+   "_app-ChM4WCX8.js": {
     "kind": "js",
     "chunk": "_app",
     "initial": false,
@@ -387,17 +488,20 @@
     "imports": [
      "rolldown-runtime-DK3Fl9T5.js",
      "framework-Rw71HLQU.js",
-     "Button-BqhN2skQ.js"
+     "Button-VfqPalGH.js",
+     "index-bAiZdnA1.js"
     ],
-    "dynamicImports": [],
+    "dynamicImports": [
+     "LoginDialog-DzbZJCOx.js"
+    ],
     "css": [
      "_app-uEdTZqYg.css"
     ],
     "facade": "_app",
-    "raw": 10457,
-    "gzip": 1682
+    "raw": 10859,
+    "gzip": 1903
    },
-   "cart-EAi1JwkX.js": {
+   "cart-BvHLHAj-.js": {
     "kind": "js",
     "chunk": "cart",
     "initial": false,
@@ -408,20 +512,20 @@
      "cart"
     ],
     "imports": [
-     "Button-BqhN2skQ.js",
-     "Price-M20sQqwv.js",
-     "useCart-Dlllppmx.js",
-     "index-auPbwyzh.js"
+     "Button-VfqPalGH.js",
+     "Price-DRRzNXMH.js",
+     "IconButton-MvuX3eMt.js",
+     "index-bAiZdnA1.js"
     ],
     "dynamicImports": [
-     "SizeGuide-CRfwHSdC.js"
+     "SizeGuide-MOG6hfvC.js"
     ],
     "css": [
      "cart-Brb4BWRu.css"
     ],
     "facade": "cart",
-    "raw": 5207,
-    "gzip": 1190
+    "raw": 5285,
+    "gzip": 1235
    },
    "framework-Rw71HLQU.js": {
     "kind": "js",
@@ -442,7 +546,7 @@
     "raw": 55076,
     "gzip": 8626
    },
-   "home-DLNgAfJu.js": {
+   "home-BT_fVThz.js": {
     "kind": "js",
     "chunk": "home",
     "initial": false,
@@ -453,19 +557,19 @@
      "home"
     ],
     "imports": [
-     "Button-BqhN2skQ.js",
-     "Price-M20sQqwv.js",
-     "Carousel-Dc-Ykblq.js"
+     "Button-VfqPalGH.js",
+     "Price-DRRzNXMH.js",
+     "Carousel-C2rUVacc.js"
     ],
     "dynamicImports": [],
     "css": [
      "home-BHOkn21T.css"
     ],
     "facade": "home",
-    "raw": 4826,
-    "gzip": 975
+    "raw": 4840,
+    "gzip": 986
    },
-   "product-CNliJi0-.js": {
+   "product-D6_MNIAO.js": {
     "kind": "js",
     "chunk": "product",
     "initial": false,
@@ -481,23 +585,23 @@
     ],
     "imports": [
      "rolldown-runtime-DK3Fl9T5.js",
-     "Button-BqhN2skQ.js",
-     "Price-M20sQqwv.js",
-     "Carousel-Dc-Ykblq.js",
+     "Button-VfqPalGH.js",
+     "Price-DRRzNXMH.js",
+     "IconButton-MvuX3eMt.js",
+     "Carousel-C2rUVacc.js",
      "framework-Rw71HLQU.js",
-     "useCart-Dlllppmx.js",
-     "index-auPbwyzh.js"
+     "index-bAiZdnA1.js"
     ],
     "dynamicImports": [
-     "ReviewsDialog-i4h8CVBq.js",
-     "SizeGuide-CRfwHSdC.js"
+     "ReviewsDialog-W7g38gae.js",
+     "SizeGuide-MOG6hfvC.js"
     ],
     "css": [
      "product-DEW-EwBs.css"
     ],
     "facade": "product",
-    "raw": 33930,
-    "gzip": 5392
+    "raw": 34018,
+    "gzip": 5436
    },
    "rolldown-runtime-DK3Fl9T5.js": {
     "kind": "js",
@@ -512,25 +616,24 @@
     "raw": 158,
     "gzip": 154
    },
-   "useCart-Dlllppmx.js": {
+   "translate-DPtorFpq.js": {
     "kind": "js",
-    "chunk": "useCart",
+    "chunk": "translate",
     "initial": false,
     "modules": [
-     "useCart"
+     "translate"
     ],
     "sourceModules": [
-     "useCart"
+     "translate"
     ],
     "imports": [
-     "rolldown-runtime-DK3Fl9T5.js",
-     "framework-Rw71HLQU.js"
+     "rolldown-runtime-DK3Fl9T5.js"
     ],
     "dynamicImports": [],
     "css": [],
     "facade": null,
-    "raw": 2051,
-    "gzip": 494
+    "raw": 1517,
+    "gzip": 379
    },
    "Button-BQ5aMOdj.css": {
     "kind": "css",
@@ -548,6 +651,22 @@
     ],
     "raw": 71,
     "gzip": 78
+   },
+   "IconButton-CSA85Zqp.css": {
+    "kind": "css",
+    "modules": [
+     "IconButton"
+    ],
+    "raw": 40,
+    "gzip": 60
+   },
+   "LoginDialog-CBbbKixx.css": {
+    "kind": "css",
+    "modules": [
+     "LoginDialog"
+    ],
+    "raw": 41,
+    "gzip": 61
    },
    "Price-Bcfh0ai9.css": {
     "kind": "css",
@@ -612,69 +731,102 @@
   "pages": {
    "home": {
     "start": [
-     "index-auPbwyzh.js",
-     "_app-HhKhCOg2.js",
+     "index-bAiZdnA1.js",
+     "_app-ChM4WCX8.js",
      "rolldown-runtime-DK3Fl9T5.js",
      "framework-Rw71HLQU.js",
-     "Button-BqhN2skQ.js",
-     "home-DLNgAfJu.js",
-     "Price-M20sQqwv.js",
-     "Carousel-Dc-Ykblq.js",
-     "_app-uEdTZqYg.css",
+     "Button-VfqPalGH.js",
+     "home-BT_fVThz.js",
+     "Price-DRRzNXMH.js",
+     "translate-DPtorFpq.js",
+     "Carousel-C2rUVacc.js",
      "Button-BQ5aMOdj.css",
-     "home-BHOkn21T.css",
+     "_app-uEdTZqYg.css",
      "Price-Bcfh0ai9.css",
-     "Carousel-DZGUhspq.css"
+     "Carousel-DZGUhspq.css",
+     "home-BHOkn21T.css"
     ],
+    "stylesheets": [
+     "Button-BQ5aMOdj.css",
+     "_app-uEdTZqYg.css",
+     "Price-Bcfh0ai9.css",
+     "Carousel-DZGUhspq.css",
+     "home-BHOkn21T.css"
+    ],
+    "copies": 0,
+    "cssOrderOk": null,
     "pageInManifest": true,
     "lazy": {}
    },
    "product": {
     "start": [
-     "index-auPbwyzh.js",
-     "_app-HhKhCOg2.js",
+     "index-bAiZdnA1.js",
+     "_app-ChM4WCX8.js",
      "rolldown-runtime-DK3Fl9T5.js",
      "framework-Rw71HLQU.js",
-     "Button-BqhN2skQ.js",
-     "product-CNliJi0-.js",
-     "Price-M20sQqwv.js",
-     "Carousel-Dc-Ykblq.js",
-     "useCart-Dlllppmx.js",
-     "_app-uEdTZqYg.css",
+     "Button-VfqPalGH.js",
+     "product-D6_MNIAO.js",
+     "Price-DRRzNXMH.js",
+     "translate-DPtorFpq.js",
+     "IconButton-MvuX3eMt.js",
+     "Carousel-C2rUVacc.js",
      "Button-BQ5aMOdj.css",
-     "product-DEW-EwBs.css",
+     "_app-uEdTZqYg.css",
      "Price-Bcfh0ai9.css",
-     "Carousel-DZGUhspq.css"
+     "IconButton-CSA85Zqp.css",
+     "Carousel-DZGUhspq.css",
+     "product-DEW-EwBs.css"
     ],
+    "stylesheets": [
+     "Button-BQ5aMOdj.css",
+     "_app-uEdTZqYg.css",
+     "Price-Bcfh0ai9.css",
+     "IconButton-CSA85Zqp.css",
+     "Carousel-DZGUhspq.css",
+     "product-DEW-EwBs.css"
+    ],
+    "copies": 0,
+    "cssOrderOk": true,
     "pageInManifest": true,
     "lazy": {
      "ReviewsDialog": [
-      "ReviewsDialog-i4h8CVBq.js"
+      "ReviewsDialog-W7g38gae.js"
      ],
      "SizeGuide": [
-      "SizeGuide-CRfwHSdC.js"
+      "SizeGuide-MOG6hfvC.js"
      ]
     }
    },
    "cart": {
     "start": [
-     "index-auPbwyzh.js",
-     "_app-HhKhCOg2.js",
+     "index-bAiZdnA1.js",
+     "_app-ChM4WCX8.js",
      "rolldown-runtime-DK3Fl9T5.js",
      "framework-Rw71HLQU.js",
-     "Button-BqhN2skQ.js",
-     "cart-EAi1JwkX.js",
-     "Price-M20sQqwv.js",
-     "useCart-Dlllppmx.js",
-     "_app-uEdTZqYg.css",
+     "Button-VfqPalGH.js",
+     "cart-BvHLHAj-.js",
+     "Price-DRRzNXMH.js",
+     "translate-DPtorFpq.js",
+     "IconButton-MvuX3eMt.js",
      "Button-BQ5aMOdj.css",
-     "cart-Brb4BWRu.css",
-     "Price-Bcfh0ai9.css"
+     "_app-uEdTZqYg.css",
+     "Price-Bcfh0ai9.css",
+     "IconButton-CSA85Zqp.css",
+     "cart-Brb4BWRu.css"
     ],
+    "stylesheets": [
+     "Button-BQ5aMOdj.css",
+     "_app-uEdTZqYg.css",
+     "Price-Bcfh0ai9.css",
+     "IconButton-CSA85Zqp.css",
+     "cart-Brb4BWRu.css"
+    ],
+    "copies": 0,
+    "cssOrderOk": true,
     "pageInManifest": true,
     "lazy": {
      "SizeGuide": [
-      "SizeGuide-CRfwHSdC.js"
+      "SizeGuide-MOG6hfvC.js"
      ]
     }
    }
@@ -682,7 +834,7 @@
  },
  "routeGroups": {
   "files": {
-   "index-Zaa_o8kI.js": {
+   "index-D-Bi4myG.js": {
     "kind": "js",
     "chunk": "index",
     "initial": true,
@@ -692,39 +844,39 @@
     ],
     "imports": [],
     "dynamicImports": [
-     "home-BP-4-XQ5.js",
-     "product-DVPZ8gpP.js",
-     "cart-BpB0P_4x.js",
-     "_app-9MN_52S_.js"
+     "home-BXEwKaSA.js",
+     "product-Dk9EkOh7.js",
+     "cart-DOgwFzYW.js",
+     "_app-CiR3yxJq.js"
     ],
     "css": [],
     "facade": "client-entry",
-    "raw": 2679,
-    "gzip": 1332
+    "raw": 2754,
+    "gzip": 1342
    },
-   "Price-M20sQqwv.js": {
+   "LoginDialog-NbvPwXqq.js": {
     "kind": "js",
-    "chunk": "Price",
+    "chunk": "LoginDialog",
     "initial": false,
     "modules": [
-     "Price"
+     "LoginDialog"
     ],
     "sourceModules": [
-     "Price"
+     "LoginDialog"
     ],
     "imports": [
-     "rolldown-runtime-DK3Fl9T5.js",
-     "framework-Rw71HLQU.js"
+     "rg-_app-C9xaUZgR.js",
+     "rg-cart-home-product-B9Zku2Y1.js"
     ],
     "dynamicImports": [],
     "css": [
-     "Price-Bcfh0ai9.css"
+     "LoginDialog-CBbbKixx.css"
     ],
-    "facade": null,
-    "raw": 1563,
-    "gzip": 427
+    "facade": "LoginDialog",
+    "raw": 2957,
+    "gzip": 597
    },
-   "ReviewsDialog-DXtJBWdP.js": {
+   "ReviewsDialog-x_KGIGB_.js": {
     "kind": "js",
     "chunk": "ReviewsDialog",
     "initial": false,
@@ -735,18 +887,19 @@
      "ReviewsDialog"
     ],
     "imports": [
-     "rg-product-CTVDkhTN.js",
-     "rg-_app-RUUwVdv0.js"
+     "rg-product-CaSI3HGT.js",
+     "rg-_app-C9xaUZgR.js",
+     "rg-cart-home-product-B9Zku2Y1.js"
     ],
     "dynamicImports": [],
     "css": [
      "ReviewsDialog-CIwHDl2e.css"
     ],
     "facade": "ReviewsDialog",
-    "raw": 5720,
-    "gzip": 956
+    "raw": 5786,
+    "gzip": 988
    },
-   "SizeGuide-CXTiqmVm.js": {
+   "SizeGuide-CKW1smYj.js": {
     "kind": "js",
     "chunk": "SizeGuide",
     "initial": false,
@@ -761,18 +914,18 @@
     "imports": [
      "rolldown-runtime-DK3Fl9T5.js",
      "framework-Rw71HLQU.js",
-     "useCart-Dlllppmx.js",
-     "rg-_app-RUUwVdv0.js"
+     "rg-_app-C9xaUZgR.js",
+     "rg-cart-product-CkVg40jd.js"
     ],
     "dynamicImports": [],
     "css": [
      "SizeGuide-B8STsB-e.css"
     ],
     "facade": "SizeGuide",
-    "raw": 6829,
-    "gzip": 1043
+    "raw": 6838,
+    "gzip": 1048
    },
-   "_app-9MN_52S_.js": {
+   "_app-CiR3yxJq.js": {
     "kind": "js",
     "chunk": "_app",
     "initial": false,
@@ -784,17 +937,20 @@
     ],
     "imports": [
      "framework-Rw71HLQU.js",
-     "rg-_app-RUUwVdv0.js"
+     "rg-_app-C9xaUZgR.js",
+     "index-D-Bi4myG.js"
     ],
-    "dynamicImports": [],
+    "dynamicImports": [
+     "LoginDialog-NbvPwXqq.js"
+    ],
     "css": [
      "_app-BDC_i7lW.css"
     ],
     "facade": "_app",
-    "raw": 2966,
-    "gzip": 668
+    "raw": 3427,
+    "gzip": 912
    },
-   "cart-BpB0P_4x.js": {
+   "cart-DOgwFzYW.js": {
     "kind": "js",
     "chunk": "cart",
     "initial": false,
@@ -805,20 +961,20 @@
      "cart"
     ],
     "imports": [
-     "rg-_app-RUUwVdv0.js",
-     "Price-M20sQqwv.js",
-     "useCart-Dlllppmx.js",
-     "index-Zaa_o8kI.js"
+     "rg-_app-C9xaUZgR.js",
+     "rg-cart-home-product-B9Zku2Y1.js",
+     "rg-cart-product-CkVg40jd.js",
+     "index-D-Bi4myG.js"
     ],
     "dynamicImports": [
-     "SizeGuide-CXTiqmVm.js"
+     "SizeGuide-CKW1smYj.js"
     ],
     "css": [
      "cart-Brb4BWRu.css"
     ],
     "facade": "cart",
-    "raw": 5210,
-    "gzip": 1193
+    "raw": 5372,
+    "gzip": 1236
    },
    "framework-Rw71HLQU.js": {
     "kind": "js",
@@ -839,7 +995,7 @@
     "raw": 55076,
     "gzip": 8626
    },
-   "home-BP-4-XQ5.js": {
+   "home-BXEwKaSA.js": {
     "kind": "js",
     "chunk": "home",
     "initial": false,
@@ -850,19 +1006,19 @@
      "home"
     ],
     "imports": [
-     "rg-_app-RUUwVdv0.js",
-     "Price-M20sQqwv.js",
-     "rg-home-product-CmYHGxKE.js"
+     "rg-_app-C9xaUZgR.js",
+     "rg-cart-home-product-B9Zku2Y1.js",
+     "rg-home-product-D2oMZktK.js"
     ],
     "dynamicImports": [],
     "css": [
      "home-BHOkn21T.css"
     ],
     "facade": "home",
-    "raw": 4834,
-    "gzip": 981
+    "raw": 4868,
+    "gzip": 987
    },
-   "product-DVPZ8gpP.js": {
+   "product-Dk9EkOh7.js": {
     "kind": "js",
     "chunk": "product",
     "initial": false,
@@ -874,33 +1030,35 @@
     ],
     "imports": [
      "rolldown-runtime-DK3Fl9T5.js",
-     "rg-_app-RUUwVdv0.js",
-     "Price-M20sQqwv.js",
-     "rg-home-product-CmYHGxKE.js",
-     "rg-product-CTVDkhTN.js",
-     "useCart-Dlllppmx.js",
-     "index-Zaa_o8kI.js"
+     "rg-_app-C9xaUZgR.js",
+     "rg-cart-home-product-B9Zku2Y1.js",
+     "rg-cart-product-CkVg40jd.js",
+     "rg-home-product-D2oMZktK.js",
+     "rg-product-CaSI3HGT.js",
+     "index-D-Bi4myG.js"
     ],
     "dynamicImports": [
-     "ReviewsDialog-DXtJBWdP.js",
-     "SizeGuide-CXTiqmVm.js"
+     "ReviewsDialog-x_KGIGB_.js",
+     "SizeGuide-CKW1smYj.js"
     ],
     "css": [
      "product-xJAEzo_d.css"
     ],
     "facade": "product",
-    "raw": 5727,
-    "gzip": 1338
+    "raw": 5891,
+    "gzip": 1367
    },
-   "rg-_app-RUUwVdv0.js": {
+   "rg-_app-C9xaUZgR.js": {
     "kind": "js",
     "chunk": "rg-_app",
     "initial": false,
     "modules": [
+     "styled",
      "Header",
      "Button"
     ],
     "sourceModules": [
+     "styled",
      "Button",
      "Header"
     ],
@@ -913,10 +1071,61 @@
      "rg-_app-aTLjW6Uk.css"
     ],
     "facade": null,
-    "raw": 9458,
-    "gzip": 1510
+    "raw": 12299,
+    "gzip": 1775
    },
-   "rg-home-product-CmYHGxKE.js": {
+   "rg-cart-home-product-B9Zku2Y1.js": {
+    "kind": "js",
+    "chunk": "rg-cart-home-product",
+    "initial": false,
+    "modules": [
+     "translate",
+     "Price"
+    ],
+    "sourceModules": [
+     "translate",
+     "Price"
+    ],
+    "imports": [
+     "rolldown-runtime-DK3Fl9T5.js",
+     "framework-Rw71HLQU.js",
+     "rg-_app-C9xaUZgR.js"
+    ],
+    "dynamicImports": [],
+    "css": [
+     "rg-cart-home-product-Bcfh0ai9.css"
+    ],
+    "facade": null,
+    "raw": 3072,
+    "gzip": 587
+   },
+   "rg-cart-product-CkVg40jd.js": {
+    "kind": "js",
+    "chunk": "rg-cart-product",
+    "initial": false,
+    "modules": [
+     "IconButton",
+     "useCart"
+    ],
+    "sourceModules": [
+     "useCart",
+     "IconButton"
+    ],
+    "imports": [
+     "rolldown-runtime-DK3Fl9T5.js",
+     "framework-Rw71HLQU.js",
+     "rg-_app-C9xaUZgR.js",
+     "rg-cart-home-product-B9Zku2Y1.js"
+    ],
+    "dynamicImports": [],
+    "css": [
+     "rg-cart-product-CSA85Zqp.css"
+    ],
+    "facade": null,
+    "raw": 3185,
+    "gzip": 660
+   },
+   "rg-home-product-D2oMZktK.js": {
     "kind": "js",
     "chunk": "rg-home-product",
     "initial": false,
@@ -930,17 +1139,19 @@
     ],
     "imports": [
      "rolldown-runtime-DK3Fl9T5.js",
-     "framework-Rw71HLQU.js"
+     "framework-Rw71HLQU.js",
+     "rg-_app-C9xaUZgR.js",
+     "rg-cart-home-product-B9Zku2Y1.js"
     ],
     "dynamicImports": [],
     "css": [
      "rg-home-product-DZGUhspq.css"
     ],
     "facade": null,
-    "raw": 25106,
-    "gzip": 3844
+    "raw": 25214,
+    "gzip": 3915
    },
-   "rg-product-CTVDkhTN.js": {
+   "rg-product-CaSI3HGT.js": {
     "kind": "js",
     "chunk": "rg-product",
     "initial": false,
@@ -954,15 +1165,16 @@
     ],
     "imports": [
      "rolldown-runtime-DK3Fl9T5.js",
-     "framework-Rw71HLQU.js"
+     "framework-Rw71HLQU.js",
+     "rg-_app-C9xaUZgR.js"
     ],
     "dynamicImports": [],
     "css": [
      "rg-product-JmPS4DtS.css"
     ],
     "facade": null,
-    "raw": 28382,
-    "gzip": 4434
+    "raw": 28431,
+    "gzip": 4461
    },
    "rolldown-runtime-DK3Fl9T5.js": {
     "kind": "js",
@@ -977,33 +1189,13 @@
     "raw": 158,
     "gzip": 154
    },
-   "useCart-Dlllppmx.js": {
-    "kind": "js",
-    "chunk": "useCart",
-    "initial": false,
-    "modules": [
-     "useCart"
-    ],
-    "sourceModules": [
-     "useCart"
-    ],
-    "imports": [
-     "rolldown-runtime-DK3Fl9T5.js",
-     "framework-Rw71HLQU.js"
-    ],
-    "dynamicImports": [],
-    "css": [],
-    "facade": null,
-    "raw": 2051,
-    "gzip": 494
-   },
-   "Price-Bcfh0ai9.css": {
+   "LoginDialog-CBbbKixx.css": {
     "kind": "css",
     "modules": [
-     "Price"
+     "LoginDialog"
     ],
-    "raw": 34,
-    "gzip": 54
+    "raw": 41,
+    "gzip": 61
    },
    "ReviewsDialog-CIwHDl2e.css": {
     "kind": "css",
@@ -1063,6 +1255,22 @@
     "raw": 43,
     "gzip": 63
    },
+   "rg-cart-home-product-Bcfh0ai9.css": {
+    "kind": "css",
+    "modules": [
+     "Price"
+    ],
+    "raw": 34,
+    "gzip": 54
+   },
+   "rg-cart-product-CSA85Zqp.css": {
+    "kind": "css",
+    "modules": [
+     "IconButton"
+    ],
+    "raw": 40,
+    "gzip": 60
+   },
    "rg-home-product-DZGUhspq.css": {
     "kind": "css",
     "modules": [
@@ -1084,71 +1292,102 @@
   "pages": {
    "home": {
     "start": [
-     "index-Zaa_o8kI.js",
-     "_app-9MN_52S_.js",
+     "index-D-Bi4myG.js",
+     "_app-CiR3yxJq.js",
      "framework-Rw71HLQU.js",
      "rolldown-runtime-DK3Fl9T5.js",
-     "rg-_app-RUUwVdv0.js",
-     "home-BP-4-XQ5.js",
-     "Price-M20sQqwv.js",
-     "rg-home-product-CmYHGxKE.js",
-     "_app-BDC_i7lW.css",
+     "rg-_app-C9xaUZgR.js",
+     "home-BXEwKaSA.js",
+     "rg-cart-home-product-B9Zku2Y1.js",
+     "rg-home-product-D2oMZktK.js",
      "rg-_app-aTLjW6Uk.css",
-     "home-BHOkn21T.css",
-     "Price-Bcfh0ai9.css",
-     "rg-home-product-DZGUhspq.css"
+     "_app-BDC_i7lW.css",
+     "rg-cart-home-product-Bcfh0ai9.css",
+     "rg-home-product-DZGUhspq.css",
+     "home-BHOkn21T.css"
     ],
+    "stylesheets": [
+     "rg-_app-aTLjW6Uk.css",
+     "_app-BDC_i7lW.css",
+     "rg-cart-home-product-Bcfh0ai9.css",
+     "rg-home-product-DZGUhspq.css",
+     "home-BHOkn21T.css"
+    ],
+    "copies": 0,
+    "cssOrderOk": null,
     "pageInManifest": true,
     "lazy": {}
    },
    "product": {
     "start": [
-     "index-Zaa_o8kI.js",
-     "_app-9MN_52S_.js",
+     "index-D-Bi4myG.js",
+     "_app-CiR3yxJq.js",
      "framework-Rw71HLQU.js",
      "rolldown-runtime-DK3Fl9T5.js",
-     "rg-_app-RUUwVdv0.js",
-     "product-DVPZ8gpP.js",
-     "Price-M20sQqwv.js",
-     "rg-home-product-CmYHGxKE.js",
-     "rg-product-CTVDkhTN.js",
-     "useCart-Dlllppmx.js",
-     "_app-BDC_i7lW.css",
+     "rg-_app-C9xaUZgR.js",
+     "product-Dk9EkOh7.js",
+     "rg-cart-home-product-B9Zku2Y1.js",
+     "rg-cart-product-CkVg40jd.js",
+     "rg-home-product-D2oMZktK.js",
+     "rg-product-CaSI3HGT.js",
      "rg-_app-aTLjW6Uk.css",
-     "product-xJAEzo_d.css",
-     "Price-Bcfh0ai9.css",
+     "_app-BDC_i7lW.css",
+     "rg-cart-home-product-Bcfh0ai9.css",
+     "rg-cart-product-CSA85Zqp.css",
      "rg-home-product-DZGUhspq.css",
-     "rg-product-JmPS4DtS.css"
+     "rg-product-JmPS4DtS.css",
+     "product-xJAEzo_d.css"
     ],
+    "stylesheets": [
+     "rg-_app-aTLjW6Uk.css",
+     "_app-BDC_i7lW.css",
+     "rg-cart-home-product-Bcfh0ai9.css",
+     "rg-cart-product-CSA85Zqp.css",
+     "rg-home-product-DZGUhspq.css",
+     "rg-product-JmPS4DtS.css",
+     "product-xJAEzo_d.css"
+    ],
+    "copies": 0,
+    "cssOrderOk": true,
     "pageInManifest": true,
     "lazy": {
      "ReviewsDialog": [
-      "ReviewsDialog-DXtJBWdP.js"
+      "ReviewsDialog-x_KGIGB_.js"
      ],
      "SizeGuide": [
-      "SizeGuide-CXTiqmVm.js"
+      "SizeGuide-CKW1smYj.js"
      ]
     }
    },
    "cart": {
     "start": [
-     "index-Zaa_o8kI.js",
-     "_app-9MN_52S_.js",
+     "index-D-Bi4myG.js",
+     "_app-CiR3yxJq.js",
      "framework-Rw71HLQU.js",
      "rolldown-runtime-DK3Fl9T5.js",
-     "rg-_app-RUUwVdv0.js",
-     "cart-BpB0P_4x.js",
-     "Price-M20sQqwv.js",
-     "useCart-Dlllppmx.js",
-     "_app-BDC_i7lW.css",
+     "rg-_app-C9xaUZgR.js",
+     "cart-DOgwFzYW.js",
+     "rg-cart-home-product-B9Zku2Y1.js",
+     "rg-cart-product-CkVg40jd.js",
      "rg-_app-aTLjW6Uk.css",
-     "cart-Brb4BWRu.css",
-     "Price-Bcfh0ai9.css"
+     "_app-BDC_i7lW.css",
+     "rg-cart-home-product-Bcfh0ai9.css",
+     "rg-cart-product-CSA85Zqp.css",
+     "cart-Brb4BWRu.css"
     ],
+    "stylesheets": [
+     "rg-_app-aTLjW6Uk.css",
+     "_app-BDC_i7lW.css",
+     "rg-cart-home-product-Bcfh0ai9.css",
+     "rg-cart-product-CSA85Zqp.css",
+     "cart-Brb4BWRu.css"
+    ],
+    "copies": 0,
+    "cssOrderOk": true,
     "pageInManifest": true,
     "lazy": {
      "SizeGuide": [
-      "SizeGuide-CXTiqmVm.js"
+      "SizeGuide-CKW1smYj.js"
      ]
     }
    }
@@ -1156,107 +1395,113 @@
  },
  "chunkGroups": {
   "files": {
-   "index-BQG6dnjd.js": {
+   "index-OzRomFz8.js": {
     "kind": "js",
     "chunk": "index",
     "initial": true,
     "modules": [
-     "Price",
-     "Rating",
-     "Carousel",
-     "useCart",
-     "home"
+     "Header",
+     "Gallery",
+     "formatDate",
+     "SizeTable",
+     "LoginDialog",
+     "SizeGuide",
+     "_app",
+     "product"
     ],
     "sourceModules": [
      "client-entry",
-     "useCart",
-     "Price",
-     "Rating",
-     "Carousel",
-     "home"
-    ],
-    "imports": [
-     "rolldown-runtime-DK3Fl9T5.js",
-     "framework-Rw71HLQU.js",
-     "app~_app~home~product~cart~SizeGuide-Tsyo__Or.js"
-    ],
-    "dynamicImports": [
-     "index-BQG6dnjd.js",
-     "app~product~ReviewsDialog~cart-C0oSKjIr.js",
-     "app~_app~home~product~cart~SizeGuide-Tsyo__Or.js"
-    ],
-    "css": [
-     "index-0HRBxIfX.css"
-    ],
-    "facade": "client-entry",
-    "raw": 35830,
-    "gzip": 6071
-   },
-   "app~_app~home~product~cart~SizeGuide-Tsyo__Or.js": {
-    "kind": "js",
-    "chunk": "app~_app~home~product~cart~SizeGuide",
-    "initial": false,
-    "modules": [
-     "Header",
-     "Button",
-     "SizeTable",
-     "SizeGuide",
-     "_app"
-    ],
-    "sourceModules": [
-     "Button",
+     "LoginDialog",
+     "formatDate",
      "SizeTable",
      "SizeGuide",
      "Header",
-     "_app"
-    ],
-    "imports": [
-     "rolldown-runtime-DK3Fl9T5.js",
-     "framework-Rw71HLQU.js",
-     "index-BQG6dnjd.js"
-    ],
-    "dynamicImports": [],
-    "css": [
-     "app~_app~home~product~cart~SizeGuide-DB-6sr1K.css"
-    ],
-    "facade": null,
-    "raw": 19045,
-    "gzip": 2418
-   },
-   "app~product~ReviewsDialog~cart-C0oSKjIr.js": {
-    "kind": "js",
-    "chunk": "app~product~ReviewsDialog~cart",
-    "initial": false,
-    "modules": [
-     "Gallery",
-     "formatDate",
-     "ReviewsDialog",
-     "product",
-     "cart"
-    ],
-    "sourceModules": [
-     "formatDate",
-     "ReviewsDialog",
-     "cart",
+     "_app",
      "Gallery",
      "product"
     ],
     "imports": [
      "rolldown-runtime-DK3Fl9T5.js",
-     "framework-Rw71HLQU.js",
-     "index-BQG6dnjd.js",
-     "app~_app~home~product~cart~SizeGuide-Tsyo__Or.js"
+     "app~home~product~cart~_app-RGBbiua0.js",
+     "app~home~product~ReviewsDialog~cart~LoginDialog-a9TYrRxw.js",
+     "framework-Rw71HLQU.js"
     ],
     "dynamicImports": [
-     "app~_app~home~product~cart~SizeGuide-Tsyo__Or.js",
-     "app~product~ReviewsDialog~cart-C0oSKjIr.js"
+     "app~home~product~ReviewsDialog~cart~LoginDialog-a9TYrRxw.js",
+     "index-OzRomFz8.js"
     ],
     "css": [
-     "app~product~ReviewsDialog~cart-B2eC0sPZ.css"
+     "index-CgGF1iRS.css"
+    ],
+    "facade": "client-entry",
+    "raw": 55994,
+    "gzip": 8300
+   },
+   "app~home~product~ReviewsDialog~cart~LoginDialog-a9TYrRxw.js": {
+    "kind": "js",
+    "chunk": "app~home~product~ReviewsDialog~cart~LoginDialog",
+    "initial": false,
+    "modules": [
+     "translate",
+     "IconButton",
+     "Price",
+     "Rating",
+     "Carousel",
+     "useCart",
+     "ReviewsDialog",
+     "home",
+     "cart"
+    ],
+    "sourceModules": [
+     "translate",
+     "ReviewsDialog",
+     "useCart",
+     "Price",
+     "IconButton",
+     "cart",
+     "Rating",
+     "Carousel",
+     "home"
+    ],
+    "imports": [
+     "rolldown-runtime-DK3Fl9T5.js",
+     "framework-Rw71HLQU.js",
+     "index-OzRomFz8.js",
+     "app~home~product~cart~_app-RGBbiua0.js"
+    ],
+    "dynamicImports": [
+     "index-OzRomFz8.js"
+    ],
+    "css": [
+     "app~home~product~ReviewsDialog~cart~LoginDialog-DA00Fexe.css"
     ],
     "facade": null,
-    "raw": 44254,
-    "gzip": 6349
+    "raw": 46583,
+    "gzip": 6168
+   },
+   "app~home~product~cart~_app-RGBbiua0.js": {
+    "kind": "js",
+    "chunk": "app~home~product~cart~_app",
+    "initial": false,
+    "modules": [
+     "styled",
+     "Button"
+    ],
+    "sourceModules": [
+     "styled",
+     "Button"
+    ],
+    "imports": [
+     "rolldown-runtime-DK3Fl9T5.js",
+     "framework-Rw71HLQU.js"
+    ],
+    "dynamicImports": [],
+    "css": [
+     "app~home~product~cart~_app-BQ5aMOdj.css"
+    ],
+    "facade": null,
+    "raw": 4844,
+    "gzip": 815
    },
    "framework-Rw71HLQU.js": {
     "kind": "js",
@@ -1290,75 +1535,83 @@
     "raw": 158,
     "gzip": 154
    },
-   "app~_app~home~product~cart~SizeGuide-DB-6sr1K.css": {
+   "app~home~product~ReviewsDialog~cart~LoginDialog-DA00Fexe.css": {
     "kind": "css",
     "modules": [
-     "Header",
-     "Button",
-     "SizeTable",
-     "SizeGuide",
-     "_app"
-    ],
-    "raw": 149,
-    "gzip": 112
-   },
-   "app~product~ReviewsDialog~cart-B2eC0sPZ.css": {
-    "kind": "css",
-    "modules": [
-     "Gallery",
-     "ReviewsDialog",
-     "product",
-     "cart"
-    ],
-    "raw": 119,
-    "gzip": 110
-   },
-   "index-0HRBxIfX.css": {
-    "kind": "css",
-    "modules": [
+     "IconButton",
      "Price",
      "Rating",
      "Carousel",
-     "home"
+     "ReviewsDialog",
+     "home",
+     "cart"
     ],
-    "raw": 136,
-    "gzip": 112
+    "raw": 249,
+    "gzip": 160
+   },
+   "app~home~product~cart~_app-BQ5aMOdj.css": {
+    "kind": "css",
+    "modules": [
+     "Button"
+    ],
+    "raw": 35,
+    "gzip": 55
+   },
+   "index-CgGF1iRS.css": {
+    "kind": "css",
+    "modules": [
+     "Header",
+     "Gallery",
+     "SizeTable",
+     "LoginDialog",
+     "SizeGuide",
+     "_app",
+     "product"
+    ],
+    "raw": 199,
+    "gzip": 151
    }
   },
   "pages": {
    "home": {
     "start": [
-     "index-BQG6dnjd.js",
+     "index-OzRomFz8.js",
      "rolldown-runtime-DK3Fl9T5.js",
+     "app~home~product~cart~_app-RGBbiua0.js",
      "framework-Rw71HLQU.js",
-     "app~_app~home~product~cart~SizeGuide-Tsyo__Or.js",
-     "index-0HRBxIfX.css",
-     "app~_app~home~product~cart~SizeGuide-DB-6sr1K.css"
+     "app~home~product~ReviewsDialog~cart~LoginDialog-a9TYrRxw.js"
     ],
+    "stylesheets": [],
+    "copies": 0,
+    "cssOrderOk": null,
     "pageInManifest": false,
     "lazy": {}
    },
    "product": {
     "start": [
-     "index-BQG6dnjd.js",
+     "index-OzRomFz8.js",
      "rolldown-runtime-DK3Fl9T5.js",
+     "app~home~product~cart~_app-RGBbiua0.js",
      "framework-Rw71HLQU.js",
-     "app~_app~home~product~cart~SizeGuide-Tsyo__Or.js",
-     "index-0HRBxIfX.css",
-     "app~_app~home~product~cart~SizeGuide-DB-6sr1K.css"
+     "app~home~product~ReviewsDialog~cart~LoginDialog-a9TYrRxw.js"
     ],
+    "stylesheets": [],
+    "copies": 0,
+    "cssOrderOk": null,
     "pageInManifest": false,
     "lazy": {}
    },
    "cart": {
     "start": [
-     "index-BQG6dnjd.js",
+     "index-OzRomFz8.js",
      "rolldown-runtime-DK3Fl9T5.js",
+     "app~home~product~cart~_app-RGBbiua0.js",
      "framework-Rw71HLQU.js",
-     "app~_app~home~product~cart~SizeGuide-Tsyo__Or.js",
-     "index-0HRBxIfX.css",
-     "app~_app~home~product~cart~SizeGuide-DB-6sr1K.css"
+     "app~home~product~ReviewsDialog~cart~LoginDialog-a9TYrRxw.js"
     ],
+    "stylesheets": [],
+    "copies": 0,
+    "cssOrderOk": null,
     "pageInManifest": false,
     "lazy": {}
    }
@@ -1366,14 +1619,14 @@
  },
  "inlineCommon": {
   "files": {
-   "index-DHiUQy6U.js": {
+   "index-gwc6EGnb.js": {
     "kind": "js",
     "chunk": "index",
     "initial": true,
     "modules": [],
     "sourceModules": [],
     "imports": [
-     "client-entry-BfGkITZs.js"
+     "client-entry-B1OEW50u.js"
     ],
     "dynamicImports": [],
     "css": [],
@@ -1381,17 +1634,23 @@
     "raw": 51,
     "gzip": 71
    },
-   "Carousel-kwIQ8Myo.js": {
+   "Carousel-DWb_-MMO.js": {
     "kind": "js",
     "chunk": "Carousel",
     "initial": false,
     "modules": [
+     "styled",
+     "translate",
+     "Button",
      "Rating",
      "Carousel"
     ],
     "sourceModules": [
      "Rating",
-     "Carousel"
+     "Carousel",
+     "styled",
+     "Button",
+     "translate"
     ],
     "imports": [
      "rolldown-runtime-CyFmcnh3.js",
@@ -1399,13 +1658,37 @@
     ],
     "dynamicImports": [],
     "css": [
-     "Carousel-DZGUhspq.css"
+     "Carousel-BPdrwizc.css"
     ],
     "facade": null,
-    "raw": 25226,
-    "gzip": 3899
+    "raw": 31778,
+    "gzip": 4683
    },
-   "ReviewsDialog-DcFxmgQV.js": {
+   "LoginDialog-Cd-bPVrh.js": {
+    "kind": "js",
+    "chunk": "LoginDialog",
+    "initial": false,
+    "modules": [
+     "translate",
+     "LoginDialog"
+    ],
+    "sourceModules": [
+     "LoginDialog",
+     "translate"
+    ],
+    "imports": [
+     "rolldown-runtime-CyFmcnh3.js",
+     "framework-CYQSzyXs.js"
+    ],
+    "dynamicImports": [],
+    "css": [
+     "LoginDialog-CBbbKixx.css"
+    ],
+    "facade": "LoginDialog",
+    "raw": 4630,
+    "gzip": 885
+   },
+   "ReviewsDialog-BJK2i0QU.js": {
     "kind": "js",
     "chunk": "ReviewsDialog",
     "initial": false,
@@ -1424,10 +1707,10 @@
      "ReviewsDialog-CIwHDl2e.css"
     ],
     "facade": "ReviewsDialog",
-    "raw": 5830,
-    "gzip": 1049
+    "raw": 5876,
+    "gzip": 1083
    },
-   "SizeGuide-zljDPRF1.js": {
+   "SizeGuide-LR-joIfC.js": {
     "kind": "js",
     "chunk": "SizeGuide",
     "initial": false,
@@ -1448,14 +1731,15 @@
      "SizeGuide-B8STsB-e.css"
     ],
     "facade": "SizeGuide",
-    "raw": 6926,
-    "gzip": 1101
+    "raw": 6949,
+    "gzip": 1111
    },
-   "_app-emqtxuDv.js": {
+   "_app-CV4EakJ1.js": {
     "kind": "js",
     "chunk": "_app",
     "initial": false,
     "modules": [
+     "styled",
      "Header",
      "Button",
      "_app"
@@ -1463,52 +1747,62 @@
     "sourceModules": [
      "Header",
      "_app",
+     "styled",
      "Button"
     ],
     "imports": [
      "rolldown-runtime-CyFmcnh3.js",
-     "framework-CYQSzyXs.js"
+     "framework-CYQSzyXs.js",
+     "client-entry-B1OEW50u.js"
     ],
-    "dynamicImports": [],
+    "dynamicImports": [
+     "LoginDialog-Cd-bPVrh.js"
+    ],
     "css": [
      "_app-CjYNBkEp.css"
     ],
     "facade": "_app",
-    "raw": 12576,
-    "gzip": 1953
+    "raw": 15832,
+    "gzip": 2407
    },
-   "cart-Ci8Zmyci.js": {
+   "cart-DnURbzRS.js": {
     "kind": "js",
     "chunk": "cart",
     "initial": false,
     "modules": [
+     "styled",
+     "translate",
      "Button",
+     "IconButton",
      "Price",
      "useCart",
      "cart"
     ],
     "sourceModules": [
      "cart",
+     "styled",
      "Button",
+     "translate",
      "useCart",
+     "IconButton",
      "Price"
     ],
     "imports": [
      "rolldown-runtime-CyFmcnh3.js",
-     "client-entry-BfGkITZs.js",
+     "client-entry-B1OEW50u.js",
      "framework-CYQSzyXs.js"
     ],
     "dynamicImports": [
-     "SizeGuide-zljDPRF1.js"
+     "SizeGuide-LR-joIfC.js"
     ],
     "css": [
-     "cart-rWmK4I7T.css"
+     "cart-8X1YKpGm.css"
     ],
     "facade": "cart",
-    "raw": 10902,
-    "gzip": 1748
+    "raw": 16606,
+    "gzip": 2398
    },
-   "client-entry-BfGkITZs.js": {
+   "client-entry-B1OEW50u.js": {
     "kind": "js",
     "chunk": "client-entry",
     "initial": false,
@@ -1520,15 +1814,15 @@
      "rolldown-runtime-CyFmcnh3.js"
     ],
     "dynamicImports": [
-     "home-Jk9cdqQQ.js",
-     "product-YJFGRYe3.js",
-     "cart-Ci8Zmyci.js",
-     "_app-emqtxuDv.js"
+     "home-C5aRiEnK.js",
+     "product-cAFH8wEo.js",
+     "cart-DnURbzRS.js",
+     "_app-CV4EakJ1.js"
     ],
     "css": [],
     "facade": null,
     "raw": 2618,
-    "gzip": 1285
+    "gzip": 1283
    },
    "framework-CYQSzyXs.js": {
     "kind": "js",
@@ -1549,39 +1843,37 @@
     "raw": 55127,
     "gzip": 8658
    },
-   "home-Jk9cdqQQ.js": {
+   "home-C5aRiEnK.js": {
     "kind": "js",
     "chunk": "home",
     "initial": false,
     "modules": [
-     "Button",
      "Price",
      "home"
     ],
     "sourceModules": [
      "home",
-     "Button",
      "Price"
     ],
     "imports": [
      "rolldown-runtime-CyFmcnh3.js",
      "framework-CYQSzyXs.js",
-     "Carousel-kwIQ8Myo.js"
+     "Carousel-DWb_-MMO.js"
     ],
     "dynamicImports": [],
     "css": [
-     "home-A2m-ZOdd.css"
+     "home-CsF_5t2P.css"
     ],
     "facade": "home",
-    "raw": 8565,
-    "gzip": 1450
+    "raw": 6637,
+    "gzip": 1333
    },
-   "product-YJFGRYe3.js": {
+   "product-cAFH8wEo.js": {
     "kind": "js",
     "chunk": "product",
     "initial": false,
     "modules": [
-     "Button",
+     "IconButton",
      "Price",
      "Gallery",
      "useCart",
@@ -1592,26 +1884,26 @@
      "Gallery",
      "product",
      "formatDate",
-     "Button",
      "useCart",
+     "IconButton",
      "Price"
     ],
     "imports": [
      "rolldown-runtime-CyFmcnh3.js",
      "framework-CYQSzyXs.js",
-     "client-entry-BfGkITZs.js",
-     "Carousel-kwIQ8Myo.js"
+     "client-entry-B1OEW50u.js",
+     "Carousel-DWb_-MMO.js"
     ],
     "dynamicImports": [
-     "ReviewsDialog-DcFxmgQV.js",
-     "SizeGuide-zljDPRF1.js"
+     "ReviewsDialog-BJK2i0QU.js",
+     "SizeGuide-LR-joIfC.js"
     ],
     "css": [
-     "product-w7Mvvt7o.css"
+     "product-CPD0-bB8.css"
     ],
     "facade": "product",
-    "raw": 39649,
-    "gzip": 6064
+    "raw": 38911,
+    "gzip": 6135
    },
    "rolldown-runtime-CyFmcnh3.js": {
     "kind": "js",
@@ -1626,14 +1918,23 @@
     "raw": 676,
     "gzip": 410
    },
-   "Carousel-DZGUhspq.css": {
+   "Carousel-BPdrwizc.css": {
     "kind": "css",
     "modules": [
+     "Button",
      "Rating",
      "Carousel"
     ],
-    "raw": 71,
-    "gzip": 78
+    "raw": 79,
+    "gzip": 86
+   },
+   "LoginDialog-CBbbKixx.css": {
+    "kind": "css",
+    "modules": [
+     "LoginDialog"
+    ],
+    "raw": 41,
+    "gzip": 61
    },
    "ReviewsDialog-CIwHDl2e.css": {
     "kind": "css",
@@ -1662,93 +1963,113 @@
     "raw": 75,
     "gzip": 81
    },
-   "cart-rWmK4I7T.css": {
+   "cart-8X1YKpGm.css": {
     "kind": "css",
     "modules": [
      "Button",
+     "IconButton",
      "Price",
      "cart"
     ],
-    "raw": 100,
-    "gzip": 91
+    "raw": 139,
+    "gzip": 110
    },
-   "home-A2m-ZOdd.css": {
+   "home-CsF_5t2P.css": {
     "kind": "css",
     "modules": [
-     "Button",
      "Price",
      "home"
     ],
-    "raw": 100,
-    "gzip": 90
+    "raw": 66,
+    "gzip": 71
    },
-   "product-w7Mvvt7o.css": {
+   "product-CPD0-bB8.css": {
     "kind": "css",
     "modules": [
-     "Button",
+     "IconButton",
      "Price",
      "Gallery",
      "product"
     ],
-    "raw": 112,
-    "gzip": 104
+    "raw": 117,
+    "gzip": 109
    }
   },
   "pages": {
    "home": {
     "start": [
-     "index-DHiUQy6U.js",
-     "client-entry-BfGkITZs.js",
+     "index-gwc6EGnb.js",
+     "client-entry-B1OEW50u.js",
      "rolldown-runtime-CyFmcnh3.js",
-     "_app-emqtxuDv.js",
+     "_app-CV4EakJ1.js",
      "framework-CYQSzyXs.js",
-     "home-Jk9cdqQQ.js",
-     "Carousel-kwIQ8Myo.js",
+     "home-C5aRiEnK.js",
+     "Carousel-DWb_-MMO.js",
      "_app-CjYNBkEp.css",
-     "home-A2m-ZOdd.css",
-     "Carousel-DZGUhspq.css"
+     "Carousel-BPdrwizc.css",
+     "home-CsF_5t2P.css"
     ],
+    "stylesheets": [
+     "_app-CjYNBkEp.css",
+     "Carousel-BPdrwizc.css",
+     "home-CsF_5t2P.css"
+    ],
+    "copies": 2,
+    "cssOrderOk": null,
     "pageInManifest": true,
     "lazy": {}
    },
    "product": {
     "start": [
-     "index-DHiUQy6U.js",
-     "client-entry-BfGkITZs.js",
+     "index-gwc6EGnb.js",
+     "client-entry-B1OEW50u.js",
      "rolldown-runtime-CyFmcnh3.js",
-     "_app-emqtxuDv.js",
+     "_app-CV4EakJ1.js",
      "framework-CYQSzyXs.js",
-     "product-YJFGRYe3.js",
-     "Carousel-kwIQ8Myo.js",
+     "product-cAFH8wEo.js",
+     "Carousel-DWb_-MMO.js",
      "_app-CjYNBkEp.css",
-     "product-w7Mvvt7o.css",
-     "Carousel-DZGUhspq.css"
+     "Carousel-BPdrwizc.css",
+     "product-CPD0-bB8.css"
     ],
+    "stylesheets": [
+     "_app-CjYNBkEp.css",
+     "Carousel-BPdrwizc.css",
+     "product-CPD0-bB8.css"
+    ],
+    "copies": 2,
+    "cssOrderOk": true,
     "pageInManifest": true,
     "lazy": {
      "ReviewsDialog": [
-      "ReviewsDialog-DcFxmgQV.js"
+      "ReviewsDialog-BJK2i0QU.js"
      ],
      "SizeGuide": [
-      "SizeGuide-zljDPRF1.js"
+      "SizeGuide-LR-joIfC.js"
      ]
     }
    },
    "cart": {
     "start": [
-     "index-DHiUQy6U.js",
-     "client-entry-BfGkITZs.js",
+     "index-gwc6EGnb.js",
+     "client-entry-B1OEW50u.js",
      "rolldown-runtime-CyFmcnh3.js",
-     "_app-emqtxuDv.js",
+     "_app-CV4EakJ1.js",
      "framework-CYQSzyXs.js",
-     "cart-Ci8Zmyci.js",
+     "cart-DnURbzRS.js",
      "_app-CjYNBkEp.css",
-     "cart-rWmK4I7T.css"
+     "cart-8X1YKpGm.css"
     ],
+    "stylesheets": [
+     "_app-CjYNBkEp.css",
+     "cart-8X1YKpGm.css"
+    ],
+    "copies": 2,
+    "cssOrderOk": true,
     "pageInManifest": true,
     "lazy": {
      "SizeGuide": [
-      "SizeGuide-zljDPRF1.js"
+      "SizeGuide-LR-joIfC.js"
      ]
     }
    }
