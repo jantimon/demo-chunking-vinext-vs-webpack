@@ -113,11 +113,11 @@
   <figure class="wf wide" id="wf" aria-label="Download waterfall of the product page, webpack and vinext on one time axis">
     <div class="wf-head"><p class="wf-cap">Product page, iPhone 13 profile over emulated 4G, server sends by Chrome's priorities · every line is one request</p><p class="wf-clock" id="wfClock">0.00 s</p></div>
     <div class="wf-lane" data-side="webpack"><p class="wf-name"><i class="tok wp"></i><svg class="bi webpack" aria-hidden="true"><use href="#bi-webpack"/></svg>webpack</p><svg class="wf-svg" aria-hidden="true"></svg></div>
-    <div class="wf-lane" data-side="vinext"><p class="wf-name"><i class="tok rd"></i><svg class="bi vite" aria-hidden="true"><use href="#bi-vite"/></svg>vinext</p><svg class="wf-svg" aria-hidden="true"></svg></div>
+    <div class="wf-lane" data-side="vinext"><p class="wf-name"><i class="tok rd"></i><svg class="bi vite" aria-hidden="true"><use href="#bi-vite"/></svg>vinext with <svg class="bi github" aria-hidden="true"><use href="#bi-github"/></svg>PR #4726</p><svg class="wf-svg" aria-hidden="true"></svg></div>
     <div class="wf-legend"><span><i class="wf-k lcp"></i>product image</span><span><i class="wf-k css"></i>CSS</span><span><i class="wf-k js-wp"></i>scripts, <svg class="bi webpack" aria-hidden="true"><use href="#bi-webpack"/></svg>webpack</span><span><i class="wf-k js-rd"></i>scripts, <svg class="bi vite" aria-hidden="true"><use href="#bi-vite"/></svg>vinext</span><span><i class="wf-k other"></i>other</span><span class="wf-k-line">│ first paint · ┊ largest paint</span><button type="button" class="wf-replay" id="wfReplay">Replay</button></div>
   </figure>
-  <p>Both ask for the product image at about 0.47 s. webpack has it at 1.11 s, vinext at 1.01 s, and the largest paint follows right after. The image does not wait behind vinext's 641 scripts.</p>
-  <p>What still differs is when the page answers a tap. React hydrates only after every script the HTML lists has arrived: 55 for webpack, 576 for vinext. A tap works at 1.76 s with webpack and at 2.33 s with vinext.</p>
+  <p>Both ask for the product image at about 0.45 s. webpack has it at 1.07 s, vinext with PR #4726 at 0.94 s, and the largest paint follows right after. The image does not wait behind the 209 scripts in vinext's lane.</p>
+  <p>What still differs is when the page answers a tap. React hydrates only after every script the HTML lists has arrived. A tap works at 1.76 s with webpack and at 2.26 s with PR #4726, against 2.33 s with vinext 1.4.5 in section 04. Medians of 20 runs.</p>
 </section>
 
 <section id="s5">
