@@ -1,5 +1,6 @@
 // Writes the toy shop into src/: three pages, _app, two lazy dialogs and shared modules
-// with fixed source sizes, so both bundlers see the same graph.
+// with fixed source sizes, so both bundlers see the same graph. Every component imports its own
+// stylesheet and the styling runtime, as components built with a CSS-in-JS compiler like yak do.
 //   node make-app.mjs
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -21,24 +22,31 @@ const filler = (name, bytes) => {
 
 const MODULES = {
   // name: [path, source bytes, imports, has css]
+  // A module with CSS also imports the styling runtime (added below).
   react: ["node_modules/react/index.js", 60_000, [], false],
+  styled: ["lib/styled.js", 3_000, ["react"], false],
+  translate: ["lib/translate.js", 1_500, [], false],
   Header: ["components/Header.js", 8_000, ["Button"], true],
   Button: ["components/Button.js", 2_000, ["react"], true],
-  Price: ["components/Price.js", 1_500, ["react"], true],
+  // styled(Button): its CSS must come after Button's.
+  IconButton: ["components/IconButton.js", 1_000, ["Button", "translate"], true],
+  Price: ["components/Price.js", 1_500, ["react", "translate"], true],
   Rating: ["components/Rating.js", 1_000, ["react"], true],
-  Carousel: ["components/Carousel.js", 26_000, ["react"], true],
+  Carousel: ["components/Carousel.js", 26_000, ["react", "translate"], true],
   Gallery: ["components/Gallery.js", 30_000, ["react"], true],
   useCart: ["lib/useCart.js", 2_000, ["react"], false],
   formatDate: ["lib/formatDate.js", 600, [], false],
   SizeTable: ["components/SizeTable.js", 3_000, ["react"], true],
-  ReviewsDialog: ["dialogs/ReviewsDialog.js", 6_000, ["formatDate", "Button"], true],
+  LoginDialog: ["dialogs/LoginDialog.js", 3_000, ["Button", "translate"], true],
+  ReviewsDialog: ["dialogs/ReviewsDialog.js", 6_000, ["formatDate", "Button", "translate"], true],
   SizeGuide: ["dialogs/SizeGuide.js", 4_000, ["SizeTable", "useCart", "Button"], true],
   _app: ["pages/_app.js", 3_000, ["react", "Header"], true],
   home: ["pages/home.js", 5_000, ["Button", "Price", "Rating", "Carousel"], true],
-  product: ["pages/product.js", 5_000, ["Button", "Price", "Rating", "Carousel", "Gallery", "useCart", "formatDate"], true],
-  cart: ["pages/cart.js", 5_000, ["Button", "Price", "useCart"], true],
+  product: ["pages/product.js", 5_000, ["Button", "Price", "IconButton", "Rating", "Carousel", "Gallery", "useCart", "formatDate"], true],
+  cart: ["pages/cart.js", 5_000, ["Button", "Price", "IconButton", "useCart"], true],
 };
-const LAZY = { product: ["ReviewsDialog", "SizeGuide"], cart: ["SizeGuide"] };
+for (const item of Object.values(MODULES)) if (item[3]) item[2].push("styled");
+const LAZY = { _app: ["LoginDialog"], product: ["ReviewsDialog", "SizeGuide"], cart: ["SizeGuide"] };
 
 const rel = (from, to) => {
   const path = MODULES[to][0];

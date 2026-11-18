@@ -23,7 +23,7 @@ const MiniCssExtractPlugin = fromWebpack("next/dist/compiled/mini-css-extract-pl
 const { build: viteBuild } = await import(createRequire(join(VITE_ROOT, "package.json")).resolve("vite"));
 
 const PAGES = ["home", "product", "cart"];
-const TOY_MODULES = ["react", "Header", "Button", "Price", "Rating", "Carousel", "Gallery", "useCart", "formatDate", "SizeTable", "ReviewsDialog", "SizeGuide", "_app", "home", "product", "cart"];
+const TOY_MODULES = ["react", "styled", "translate", "Header", "Button", "IconButton", "Price", "Rating", "Carousel", "Gallery", "useCart", "formatDate", "SizeTable", "LoginDialog", "ReviewsDialog", "SizeGuide", "_app", "home", "product", "cart"];
 /** Which toy stylesheets a CSS file contains: each one styles a class named after its module. */
 const cssModules = (file) => {
   const text = readFileSync(file, "utf8");
@@ -35,6 +35,18 @@ const modulesInFile = (file) => {
   return TOY_MODULES.filter((name) => ['"', "'", "`"].some((quote) => text.includes(`${quote}${name}-0${quote}`)));
 };
 const gz = (file) => gzipSync(readFileSync(file)).length;
+/** Extra copies of toy modules among a page's start files: a module in three files counts 2. */
+const extraCopies = (files, start) => {
+  const count = new Map();
+  for (const file of start) if (files[file].kind === "js") for (const name of files[file].modules) count.set(name, (count.get(name) ?? 0) + 1);
+  return [...count.values()].reduce((sum, value) => sum + value - 1, 0);
+};
+/** IconButton extends Button: its last rule must come after Button's last rule in the page's stylesheets, in link order. */
+const iconButtonWins = (dir, stylesheets) => {
+  const text = stylesheets.map((file) => readFileSync(join(dir, file), "utf8")).join("\n");
+  const last = (name) => Math.max(-1, ...[...text.matchAll(new RegExp(`\\.${name}[\\s,{]`, "g"))].map((match) => match.index));
+  return last("IconButton") === -1 ? null : last("Button") < last("IconButton");
+};
 const moduleName = (id) => {
   const rel = relative(src, id.replace(/^\0/, "").split("?")[0]);
   if (rel.startsWith("node_modules/react")) return "react";
@@ -93,7 +105,9 @@ async function buildWebpack() {
   for (const page of PAGES) {
     const startFiles = new Set();
     for (const entryName of ["main", "pages/_app", `pages/${page}`]) for (const asset of json.entrypoints[entryName].assets) startFiles.add(asset.name);
-    pages[page] = { start: [...startFiles], lazy: lazyFilesWebpack(json, page) };
+    const start = [...startFiles];
+    const stylesheets = start.filter((file) => file.endsWith(".css"));
+    pages[page] = { start, stylesheets, copies: extraCopies(files, start), cssOrderOk: iconButtonWins(dir, stylesheets), lazy: lazyFilesWebpack(json, page) };
   }
   return { files, pages };
 }
@@ -160,13 +174,24 @@ async function buildVite(variant, codeSplitting, extraRolldown = {}, extraPlugin
   for (const page of PAGES) {
     const keys = new Set([...closure(keyOf("client-entry.js")), ...closure(keyOf("pages/_app.js")), ...closure(keyOf(`pages/${page}.js`))]);
     const js = [...keys].map((key) => manifest[key].file);
-    const css = [...new Set([...keys].flatMap((key) => manifest[key].css ?? []))];
+    // vinext lists stylesheets in module-graph order, dependencies first, from _app and the page file.
+    const css = [];
+    const visited = new Set();
+    const visit = (key) => {
+      if (!manifest[key] || visited.has(key)) return;
+      visited.add(key);
+      for (const next of manifest[key].imports ?? []) visit(next);
+      for (const file of manifest[key].css ?? []) if (!css.includes(file)) css.push(file);
+    };
+    visit(keyOf("pages/_app.js"));
+    visit(keyOf(`pages/${page}.js`));
     const lazy = {};
     for (const dialog of ["ReviewsDialog", "SizeGuide"]) {
       const key = keyOf(`dialogs/${dialog}.js`);
       if (manifest[key] && (manifest[keyOf(`pages/${page}.js`)]?.dynamicImports ?? []).includes(key)) lazy[dialog] = [...closure(key)].map((k) => manifest[k].file).filter((file) => !js.includes(file));
     }
-    pages[page] = { start: [...js, ...css], pageInManifest: Boolean(manifest[keyOf(`pages/${page}.js`)]), lazy };
+    const start = [...js, ...css];
+    pages[page] = { start, stylesheets: css, copies: extraCopies(files, start), cssOrderOk: iconButtonWins(dir, css), pageInManifest: Boolean(manifest[keyOf(`pages/${page}.js`)]), lazy };
   }
   return { files, pages };
 }
@@ -268,5 +293,5 @@ result.pr4726 = await buildVite(
 writeFileSync(join(here, "result.json"), JSON.stringify(result, null, 1));
 for (const [name, item] of Object.entries(result)) {
   const product = item.pages.product;
-  console.log(`${name.padEnd(14)} files ${String(Object.keys(item.files).length).padStart(3)}  product start ${product.start.length} (${product.start.filter((f) => f.endsWith(".css")).length} css)${product.pageInManifest === false ? "  page missing from manifest" : ""}  lazy ${JSON.stringify(Object.fromEntries(Object.entries(product.lazy).map(([k, v]) => [k, v.length])))}`);
+  console.log(`${name.padEnd(14)} files ${String(Object.keys(item.files).length).padStart(3)}  product start ${product.start.length} (${product.stylesheets.length} css)  copies ${product.copies}  css order ${{ true: "ok", false: "INVERTED", null: "no CSS" }[product.cssOrderOk]}${product.pageInManifest === false ? "  page missing from manifest" : ""}  lazy ${JSON.stringify(Object.fromEntries(Object.entries(product.lazy).map(([k, v]) => [k, v.length])))}`);
 }

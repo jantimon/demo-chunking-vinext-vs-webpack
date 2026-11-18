@@ -1,6 +1,8 @@
 import * as dep0 from "../components/Button.js";
 import * as dep1 from "../components/Price.js";
-import * as dep2 from "../lib/useCart.js";
+import * as dep2 from "../components/IconButton.js";
+import * as dep3 from "../lib/useCart.js";
+import * as dep4 from "../lib/styled.js";
 import "./cart.css";
 export const openSizeGuide = () => import("../dialogs/SizeGuide.js");
 const TABLE = [
@@ -96,6 +98,6 @@ const TABLE = [
 ];
 
 export default function cart() {
-  return [dep0, dep1, dep2, TABLE.length, "cart"];
+  return [dep0, dep1, dep2, dep3, dep4, TABLE.length, "cart"];
 }
 (window.__NEXT_P = window.__NEXT_P || []).push(["/cart", () => cart]);

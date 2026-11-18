@@ -1,4 +1,5 @@
 import * as dep0 from "../components/Button.js";
+import * as dep1 from "../lib/styled.js";
 import "./Header.css";
 const TABLE = [
   ["Header-0", 0, "abcdefghijabcdefghijabcdefghij0"],
@@ -141,5 +142,5 @@ const TABLE = [
 ];
 
 export default function Header() {
-  return [dep0, TABLE.length, "Header"];
+  return [dep0, dep1, TABLE.length, "Header"];
 }

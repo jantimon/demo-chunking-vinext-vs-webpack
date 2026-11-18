@@ -1,4 +1,5 @@
 import * as dep0 from "react";
+import * as dep1 from "../lib/styled.js";
 import "./Gallery.css";
 const TABLE = [
   ["Gallery-0", 0, "abcdefghijabcdefghijabcdefghij0"],
@@ -500,5 +501,5 @@ const TABLE = [
 ];
 
 export default function Gallery() {
-  return [dep0, TABLE.length, "Gallery"];
+  return [dep0, dep1, TABLE.length, "Gallery"];
 }

@@ -1,4 +1,5 @@
 import * as dep0 from "react";
+import * as dep1 from "../lib/styled.js";
 import "./Rating.css";
 const TABLE = [
   ["Rating-0", 0, "abcdefghijabcdefghijabcdefghij0"],
@@ -22,5 +23,5 @@ const TABLE = [
 ];
 
 export default function Rating() {
-  return [dep0, TABLE.length, "Rating"];
+  return [dep0, dep1, TABLE.length, "Rating"];
 }

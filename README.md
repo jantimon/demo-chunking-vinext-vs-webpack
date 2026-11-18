@@ -26,7 +26,7 @@ Open `index.html` in a browser. No build step.
 
 ```sh
 cd demo
-node make-app.mjs    # writes src/: 3 pages, _app, 2 lazy dialogs, shared modules
+node make-app.mjs    # writes src/: 3 pages, _app, 3 lazy dialogs, shared modules; each component imports its own CSS and the styled runtime
 node build.mjs       # builds it with webpack and 5 Vite/Rolldown setups, writes result.json
 node page-data.mjs   # writes ../data.js for the page
 ```

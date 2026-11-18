@@ -20,4 +20,4 @@ Static explainer page, dark theme. No build step for the page; `demo/` builds th
 | `#wf` | animated download waterfall, both builds on one time axis, rows grouped by priority | `waterfall.js`: median runs of the real app, iPhone 13 profile, 4G (type and timing only) |
 | `#rg` | route-grouping outcome | real app |
 
-`?step=N` opens `#pack` at step N (0–12); arrows step, space plays.
+`?step=N` opens `#pack` at step N (0–15); arrows step, space plays.

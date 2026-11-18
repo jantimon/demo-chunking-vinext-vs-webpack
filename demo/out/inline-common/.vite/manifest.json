@@ -1,21 +1,21 @@
 {
-  "_Carousel-DZGUhspq.css": {
-    "file": "Carousel-DZGUhspq.css",
-    "src": "_Carousel-DZGUhspq.css"
+  "_Carousel-BPdrwizc.css": {
+    "file": "Carousel-BPdrwizc.css",
+    "src": "_Carousel-BPdrwizc.css"
   },
-  "_Carousel-kwIQ8Myo.js": {
-    "file": "Carousel-kwIQ8Myo.js",
+  "_Carousel-DWb_-MMO.js": {
+    "file": "Carousel-DWb_-MMO.js",
     "name": "Carousel",
     "imports": [
       "_rolldown-runtime-CyFmcnh3.js",
       "_framework-CYQSzyXs.js"
     ],
     "css": [
-      "Carousel-DZGUhspq.css"
+      "Carousel-BPdrwizc.css"
     ]
   },
-  "_client-entry-BfGkITZs.js": {
-    "file": "client-entry-BfGkITZs.js",
+  "_client-entry-B1OEW50u.js": {
+    "file": "client-entry-B1OEW50u.js",
     "name": "client-entry",
     "imports": [
       "_rolldown-runtime-CyFmcnh3.js"
@@ -39,16 +39,29 @@
     "name": "rolldown-runtime"
   },
   "src/client-entry.js": {
-    "file": "index-DHiUQy6U.js",
+    "file": "index-gwc6EGnb.js",
     "name": "index",
     "src": "src/client-entry.js",
     "isEntry": true,
     "imports": [
-      "_client-entry-BfGkITZs.js"
+      "_client-entry-B1OEW50u.js"
+    ]
+  },
+  "src/dialogs/LoginDialog.js": {
+    "file": "LoginDialog-Cd-bPVrh.js",
+    "name": "LoginDialog",
+    "src": "src/dialogs/LoginDialog.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-CyFmcnh3.js",
+      "_framework-CYQSzyXs.js"
+    ],
+    "css": [
+      "LoginDialog-CBbbKixx.css"
     ]
   },
   "src/dialogs/ReviewsDialog.js": {
-    "file": "ReviewsDialog-DcFxmgQV.js",
+    "file": "ReviewsDialog-BJK2i0QU.js",
     "name": "ReviewsDialog",
     "src": "src/dialogs/ReviewsDialog.js",
     "isDynamicEntry": true,
@@ -61,7 +74,7 @@
     ]
   },
   "src/dialogs/SizeGuide.js": {
-    "file": "SizeGuide-zljDPRF1.js",
+    "file": "SizeGuide-LR-joIfC.js",
     "name": "SizeGuide",
     "src": "src/dialogs/SizeGuide.js",
     "isDynamicEntry": true,
@@ -74,66 +87,70 @@
     ]
   },
   "src/pages/_app.js": {
-    "file": "_app-emqtxuDv.js",
+    "file": "_app-CV4EakJ1.js",
     "name": "_app",
     "src": "src/pages/_app.js",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-CyFmcnh3.js",
-      "_framework-CYQSzyXs.js"
+      "_framework-CYQSzyXs.js",
+      "_client-entry-B1OEW50u.js"
+    ],
+    "dynamicImports": [
+      "src/dialogs/LoginDialog.js"
     ],
     "css": [
       "_app-CjYNBkEp.css"
     ]
   },
   "src/pages/cart.js": {
-    "file": "cart-Ci8Zmyci.js",
+    "file": "cart-DnURbzRS.js",
     "name": "cart",
     "src": "src/pages/cart.js",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-CyFmcnh3.js",
-      "_client-entry-BfGkITZs.js",
+      "_client-entry-B1OEW50u.js",
       "_framework-CYQSzyXs.js"
     ],
     "dynamicImports": [
       "src/dialogs/SizeGuide.js"
     ],
     "css": [
-      "cart-rWmK4I7T.css"
+      "cart-8X1YKpGm.css"
     ]
   },
   "src/pages/home.js": {
-    "file": "home-Jk9cdqQQ.js",
+    "file": "home-C5aRiEnK.js",
     "name": "home",
     "src": "src/pages/home.js",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-CyFmcnh3.js",
       "_framework-CYQSzyXs.js",
-      "_Carousel-kwIQ8Myo.js"
+      "_Carousel-DWb_-MMO.js"
     ],
     "css": [
-      "home-A2m-ZOdd.css"
+      "home-CsF_5t2P.css"
     ]
   },
   "src/pages/product.js": {
-    "file": "product-YJFGRYe3.js",
+    "file": "product-cAFH8wEo.js",
     "name": "product",
     "src": "src/pages/product.js",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-CyFmcnh3.js",
       "_framework-CYQSzyXs.js",
-      "_client-entry-BfGkITZs.js",
-      "_Carousel-kwIQ8Myo.js"
+      "_client-entry-B1OEW50u.js",
+      "_Carousel-DWb_-MMO.js"
     ],
     "dynamicImports": [
       "src/dialogs/ReviewsDialog.js",
       "src/dialogs/SizeGuide.js"
     ],
     "css": [
-      "product-w7Mvvt7o.css"
+      "product-CPD0-bB8.css"
     ]
   }
 }

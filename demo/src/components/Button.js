@@ -1,4 +1,5 @@
 import * as dep0 from "react";
+import * as dep1 from "../lib/styled.js";
 import "./Button.css";
 const TABLE = [
   ["Button-0", 0, "abcdefghijabcdefghijabcdefghij0"],
@@ -39,5 +40,5 @@ const TABLE = [
 ];
 
 export default function Button() {
-  return [dep0, TABLE.length, "Button"];
+  return [dep0, dep1, TABLE.length, "Button"];
 }

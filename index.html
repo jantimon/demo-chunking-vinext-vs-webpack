@@ -48,8 +48,9 @@
 
 <section id="s2">
   <h2><span class="num">02</span>A small <span class="hi">shop</span></h2>
-  <p>Three pages, an <code>_app</code> that wraps every page, and two dialogs that load on demand. Each module shows its size and which of them import it. The color marks the set of importers.</p>
+  <p>Three pages, an <code>_app</code> that wraps every page, and three dialogs that load on demand. Each module shows its size and which of them import it. The color marks the set of importers.</p>
   <figure class="graph wide" id="graph" aria-label="The toy shop's modules and their importers"></figure>
+  <p>As with CSS Modules or a compile-time CSS-in-JS library, every component imports its own stylesheet, and here also a small styling runtime, <code>styled</code>. <code>IconButton</code> extends <code>Button</code>, so its CSS has to load after Button's.</p>
   <p class="small">The app is real and has one set of source files. <a href="demo/">The demo</a> builds it with webpack 5 using Next.js 16.4's chunk settings, and with Vite 8 / Rolldown the way vinext 1.4 loads Pages Router pages. Only the entry and the bundler settings differ. Every chunk in the next figure is a file from those builds.</p>
 </section>
 
@@ -69,11 +70,11 @@
   </figure>
   <p>With <a href="https://github.com/cloudflare/vinext/pull/4726">vinext PR #4726</a>, Rolldown copies small shared code too, but not all of it:</p>
   <ul class="diff">
-    <li><b class="rd-t">Both copy <code>useCart</code>.</b> It is small, has no CSS, and sits a second time in the cart page's file.</li>
-    <li><b class="wp-t">Only webpack copies <code>Price</code>.</b> The PR never copies a shared chunk that holds CSS, so <code>Price</code> keeps its own chunk and its own stylesheet.</li>
-    <li><b class="rd-t"><code>Button</code> joins <code>_app</code>'s group.</b> The PR groups everything <code>_app</code> imports, so it no longer gets a file of its own.</li>
+    <li><b class="rd-t">Rolldown copies <code>translate</code> three times into one page.</b> It is small and has no CSS, so the PR copies it into every chunk that imports it. The product page loads three of those chunks together and runs <code>translate</code> three times. webpack copies only into files of different pages.</li>
+    <li><b class="wp-t">Only webpack copies <code>Price</code> and <code>IconButton</code>.</b> The PR never copies a shared chunk that holds CSS, so each keeps its own chunk and its own stylesheet.</li>
+    <li><b class="rd-t"><code>Button</code> and <code>styled</code> join <code>_app</code>'s group.</b> The PR groups everything <code>_app</code> imports, so they no longer get a file of their own.</li>
   </ul>
-  <p>The product page loads 13 files instead of 14 without the PR, and webpack's 8. One of the 13 is new: a 71-byte entry file that only starts the real entry chunk.</p>
+  <p>The product page loads 15 files instead of 16 without the PR, and webpack's 8. One of the 15 is new: a 51-byte entry file that only starts the real entry chunk.</p>
 </section>
 
 <section id="s4">
@@ -139,7 +140,7 @@
     </li>
     <li class="fix">
       <p class="fix-k">5 · Copy small chunks, but leave CSS alone</p>
-      <p><a href="https://github.com/cloudflare/vinext/pull/4726">vinext PR #4726</a> copies like option 4 and excludes stylesheets, so CSS is never duplicated. Rolldown applies the exclude to a whole chunk: <a href="https://rolldown.rs/in-depth/inline-common-chunks">"Matching any module with exclude prevents its entire common chunk from being inlined."</a> In an app where every component imports its own CSS, almost every shared chunk holds CSS, so its JavaScript stays a separate file too. In the toy shop that is <code>Price</code>.</p>
+      <p><a href="https://github.com/cloudflare/vinext/pull/4726">vinext PR #4726</a> copies like option 4 and excludes stylesheets, so CSS is never duplicated. Rolldown applies the exclude to a whole chunk: <a href="https://rolldown.rs/in-depth/inline-common-chunks">"Matching any module with exclude prevents its entire common chunk from being inlined."</a> In an app where every component imports its own CSS, almost every shared chunk holds CSS, so its JavaScript stays a separate file too. In the toy shop that is <code>Price</code> and <code>IconButton</code>.</p>
       <p class="pending">The large app's numbers from the overnight run follow here.</p>
     </li>
   </ol>

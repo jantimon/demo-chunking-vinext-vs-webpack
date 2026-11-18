@@ -1,6 +1,8 @@
 import * as dep0 from "react";
 import * as dep1 from "../components/Header.js";
+import * as dep2 from "../lib/styled.js";
 import "./_app.css";
+export const openLoginDialog = () => import("../dialogs/LoginDialog.js");
 const TABLE = [
   ["_app-0", 0, "abcdefghijabcdefghijabcdefghij0"],
   ["_app-1", 7919, "abcdefghijabcdefghijabcdefghij1"],
@@ -59,6 +61,6 @@ const TABLE = [
 ];
 
 export default function Appapp() {
-  return [dep0, dep1, TABLE.length, "_app"];
+  return [dep0, dep1, dep2, TABLE.length, "_app"];
 }
 (window.__NEXT_P = window.__NEXT_P || []).push(["/_app", () => Appapp]);

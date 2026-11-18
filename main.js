@@ -2,20 +2,25 @@ const $ = (selector, root = document) => root.querySelector(selector);
 const TOY = window.TOY;
 
 /** The toy shop (demo/make-app.mjs): source size in KB, direct importers, importer-set color. */
+const ALL = ["_app", "home", "product", "cart", "login", "reviews", "size guide"];
 const MODULES = {
   react: { kb: 60, by: ["everything"], set: "fw" },
   _app: { kb: 3, by: ["every page"], set: "app" },
   Header: { kb: 8, by: ["_app"], set: "app" },
-  Button: { kb: 2, by: ["_app", "home", "product", "cart", "reviews", "size guide"], set: "all" },
+  Button: { kb: 2, by: ALL, set: "all" },
+  styled: { kb: 3, by: ["every component with CSS"], set: "all" },
   Carousel: { kb: 26, by: ["home", "product"], set: "hp" },
   Rating: { kb: 1, by: ["home", "product"], set: "hp" },
   Price: { kb: 1.5, by: ["home", "product", "cart"], set: "hpc" },
+  translate: { kb: 1.5, by: ["home", "product", "cart", "login", "reviews", "size guide"], set: "tr" },
+  IconButton: { kb: 1, by: ["product", "cart", "size guide"], set: "pc" },
   useCart: { kb: 2, by: ["product", "cart", "size guide"], set: "pc" },
   Gallery: { kb: 30, by: ["product"], set: "p" },
   formatDate: { kb: 0.6, by: ["product", "reviews"], set: "p" },
   product: { kb: 5, by: ["page"], set: "p" },
   home: { kb: 5, by: ["page"], set: "app" },
   cart: { kb: 5, by: ["page"], set: "app" },
+  LoginDialog: { kb: 3, by: ["_app, lazy"], set: "dlg" },
   ReviewsDialog: { kb: 6, by: ["product, lazy"], set: "dlg" },
   SizeGuide: { kb: 4, by: ["product + cart, lazy"], set: "dlg" },
   SizeTable: { kb: 3, by: ["size guide"], set: "dlg" },
@@ -30,12 +35,13 @@ const GRAPH_ROOTS = [
   ["home", "page"],
   ["product", "page"],
   ["cart", "page"],
+  ["LoginDialog", "lazy, from _app"],
   ["ReviewsDialog", "lazy, from product"],
   ["SizeGuide", "lazy, from product + cart"],
 ];
-const BY_TO_ROOT = { _app: ["_app"], home: ["home"], product: ["product"], cart: ["cart"], reviews: ["ReviewsDialog"], "size guide": ["SizeGuide"], everything: GRAPH_ROOTS.map(([id]) => id) };
+const BY_TO_ROOT = { _app: ["_app"], home: ["home"], product: ["product"], cart: ["cart"], login: ["LoginDialog"], reviews: ["ReviewsDialog"], "size guide": ["SizeGuide"], everything: GRAPH_ROOTS.map(([id]) => id), "every component with CSS": GRAPH_ROOTS.map(([id]) => id) };
 function graph() {
-  const shared = ["react", "Header", "Button", "Carousel", "Rating", "Price", "useCart", "Gallery", "formatDate", "SizeTable"];
+  const shared = ["react", "styled", "Header", "Button", "IconButton", "Carousel", "Rating", "Price", "translate", "useCart", "Gallery", "formatDate", "SizeTable"];
   const rootsOf = (name) => [...new Set(MODULES[name].by.flatMap((by) => BY_TO_ROOT[by] ?? []))];
   const host = $("#graph");
   host.innerHTML = `<div class="g-roots">${GRAPH_ROOTS.map(([name, note]) => `<div class="g-root" tabindex="0" data-root="${name}">${name}<small>${note}</small></div>`).join("")}</div>
@@ -66,11 +72,14 @@ const STEPS = [
   { cap: "React · every page", mod: "react", wp: "Into the <b>framework</b> chunk, as Next.js configures it.", rd: "Into the <b>framework</b> chunk, as vinext configures it." },
   { cap: "_app · wraps every page", mod: "_app", wp: "Its own entry file.", rd: "Its own chunk." },
   { cap: "Header · only _app uses it", mod: "Header", wp: "Into <code>_app</code>.", rd: "<code>_app</code> imports it: into the <b>pages-app</b> group." },
-  { cap: "Button · 2 KB · _app, every page, both dialogs", mod: "Button", wp: "Already in <code>_app</code>, and every page loads <code>_app</code> first: <b>stays there</b>.", rd: "Header uses it, so it <b>joins the pages-app group</b>. Pages and dialogs load it from there." },
+  { cap: "Button · 2 KB · _app, every page, every dialog", mod: "Button", wp: "Already in <code>_app</code>, and every page loads <code>_app</code> first: <b>stays there</b>.", rd: "Header uses it, so it <b>joins the pages-app group</b>. Pages and dialogs load it from there." },
+  { cap: "styled · 3 KB · every component with CSS", mod: "styled", wp: "<code>Header</code> uses it, so it is in <code>_app</code> already: <b>stays there</b>.", rd: "Header uses it, so it <b>joins the pages-app group</b> too." },
   { cap: "Carousel · 26 KB · home + product", mod: "Carousel", wp: "Shared and over 20 KB: <b>a shared chunk</b>.", rd: "Set home + product: <b>a new chunk</b>." },
   { cap: "Rating · 1 KB · home + product", mod: "Rating", wp: "Same pages as Carousel: joins its chunk.", rd: "Same set as Carousel: joins its chunk." },
   { cap: "Price · 1.5 KB · home + product + cart", mod: "Price", wp: "Joins the home + product chunk and is <b>copied</b> into the cart page's file.", rd: "Under 20 KB, but it carries CSS: <b>a new chunk</b>, no copy." },
-  { cap: "useCart · 2 KB · product + cart + size guide", mod: "useCart", wp: "Under 20 KB: <b>copied</b> into the product and cart files.", rd: "Under 20 KB, no CSS: <b>copied</b> into the product and cart chunks." },
+  { cap: "translate · 1.5 KB · home, product, cart, three dialogs", mod: "translate", wp: "Joins the home + product chunk and is <b>copied</b> into the cart and login dialog files.", rd: "Under 20 KB, no CSS: <b>copied</b> into every chunk that imports it, three of them on this page." },
+  { cap: "IconButton · 1 KB · product + cart + size guide", mod: "IconButton", wp: "Under 20 KB: into the product file, <b>copied</b> into the cart file.", rd: "Under 20 KB, but it carries CSS: <b>a new chunk</b> for product + cart." },
+  { cap: "useCart · 2 KB · product + cart + size guide", mod: "useCart", wp: "Under 20 KB: <b>copied</b> into the product and cart files.", rd: "Same set as <code>IconButton</code>: joins its chunk, so no copy." },
   { cap: "Gallery · 30 KB · only product", mod: "Gallery", wp: "Into the product page's file.", rd: "Into the product page's chunk." },
   { cap: "formatDate · 0.6 KB · product + reviews dialog", mod: "formatDate", wp: "The dialog only opens from product, which has it already: stays in product.", rd: "Same decision: the product page's chunk." },
   { cap: "The product page itself", mod: "product", wp: "Its own entry file.", rd: "Its own chunk." },
@@ -128,16 +137,20 @@ function buildLane(key) {
 }
 
 /** The decision shown next to the module: who imports it, then one line per bundler. */
-const ROOTS = [["_app", "_app"], ["home", "home"], ["product", "product"], ["cart", "cart"], ["reviews", "reviews dialog"], ["sizeGuide", "size guide"]];
+const ROOTS = [["_app", "_app"], ["home", "home"], ["product", "product"], ["cart", "cart"], ["login", "login dialog"], ["reviews", "reviews dialog"], ["sizeGuide", "size guide"]];
+const EVERY_ROOT = ROOTS.map(([id]) => id);
 const DECIDE = {
-  react: [["_app", "home", "product", "cart", "reviews", "sizeGuide"], "framework chunk", "framework chunk"],
+  react: [EVERY_ROOT, "framework chunk", "framework chunk"],
   _app: [["_app"], "its own entry file", "its own chunk"],
   Header: [["_app"], "into _app", "pages-app group · _app imports it"],
-  Button: [["_app", "home", "product", "cart", "reviews", "sizeGuide"], "stays in _app · pages load _app first", "pages-app group · Header uses it"],
+  Button: [EVERY_ROOT, "stays in _app · pages load _app first", "pages-app group · Header uses it"],
+  styled: [EVERY_ROOT, "stays in _app · Header uses it", "pages-app group · Header uses it"],
   Carousel: [["home", "product"], "shared chunk · shared and over 20 KB", "new chunk for home + product"],
   Rating: [["home", "product"], "Carousel's chunk · same pages", "Carousel's chunk · same set"],
   Price: [["home", "product", "cart"], "home + product chunk, COPY in cart", "new chunk · has CSS, so no copy"],
-  useCart: [["product", "cart", "sizeGuide"], "COPY into product and cart · under 20 KB", "COPY into product and cart · under 20 KB, no CSS"],
+  translate: [["home", "product", "cart", "login", "reviews", "sizeGuide"], "home + product chunk, COPY in cart and login", "COPY into each importing chunk · no CSS"],
+  IconButton: [["product", "cart", "sizeGuide"], "into product, COPY in cart · under 20 KB", "new chunk · has CSS, so no copy"],
+  useCart: [["product", "cart", "sizeGuide"], "COPY into product and cart · under 20 KB", "IconButton's chunk · same set"],
   Gallery: [["product"], "into product", "into product"],
   formatDate: [["product", "reviews"], "into product · the dialog opens only there", "into product · same decision"],
   product: [["product"], "its own entry file", "its own chunk"],
