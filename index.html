@@ -79,10 +79,10 @@
 <section id="s4">
   <h2><span class="num">04</span>The same rule in a <span class="hi">large</span> app</h2>
   <p>A real Next.js Pages Router app with 225 pages, built both ways. Every page and every lazy import is a root, and almost every module is reached by its own mix of roots. The product page alone touches 536 different importer sets.</p>
-  <figure class="scale wide" id="scale" aria-label="JavaScript files the product page loads at start">
+  <figure class="scale wide" id="scale" aria-label="JavaScript files the product page's HTML lists at start">
     <div class="scale-row"><p class="scale-name"><i class="tok wp"></i>webpack</p><div class="squares" data-n="55" data-kind="wp"></div><p class="scale-num"><b>55</b> files</p></div>
     <div class="scale-row"><p class="scale-name"><i class="tok rd"></i>Rolldown</p><div class="squares" data-n="576" data-kind="rd"></div><p class="scale-num"><b>576</b> files</p></div>
-    <figcaption>JavaScript files the product page loads at start. 385 of Rolldown's are under 1 KB; none of webpack's are.</figcaption>
+    <figcaption>JavaScript files the product page's HTML lists at start. 385 of Rolldown's are under 1 KB; none of webpack's are.</figcaption>
   </figure>
   <div class="facts wide">
     <div class="fact"><p class="fact-k">Code shipped, joined into one file</p><p class="fact-v"><span class="wp-t">837 KB</span> vs <span class="rd-t">850 KB</span></p><p>Nearly the same code. Both builds gzipped as one file.</p></div>
