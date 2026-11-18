@@ -157,6 +157,9 @@ const DECIDE = {
   css: [[], "one stylesheet per entry", "one stylesheet per chunk"],
 };
 
+/** Steps whose decision repeats an earlier pattern: autoplay runs them at about twice the speed. */
+const FAST = new Set(["Header", "styled", "Rating", "IconButton", "useCart", "Gallery", "formatDate", "product"]);
+let pace = 1;
 let step = 0;
 let playing = false;
 let timers = [];
@@ -297,8 +300,8 @@ function openDecider() {
   const mod = STEPS[step].mod;
   const [by, wp, rd] = DECIDE[mod];
   decider.innerHTML = `<div class="dc-head">${mod === "css" ? '<span class="chip" style="--c:#e86bd0">stylesheets</span>' : chipHtml(mod)}<span class="dc-by">${by.length ? "used by" : ""}</span>${by.map((root) => `<span class="root-pill slot" data-root="${root}">${ROOTS.find(([id]) => id === root)[1]}</span>`).join("")}</div>
-    <div class="dc-row wp"><i class="tok wp"></i><b>webpack</b><span>→ ${wp}</span></div>
-    <div class="dc-row rd"><i class="tok rd"></i><b>Rolldown</b><span>→ ${rd}</span></div>`;
+    <div class="dc-row wp"><i class="tok wp"></i><svg class="bi webpack" aria-hidden="true"><use href="#bi-webpack"/></svg><b>webpack</b><span>→ ${wp}</span></div>
+    <div class="dc-row rd"><i class="tok rd"></i><svg class="bi rolldown" aria-hidden="true"><use href="#bi-rolldown"/></svg><b>Rolldown</b><span>→ ${rd}</span></div>`;
   const anchor = mod === "css" ? tray : tray.querySelector(`[data-mod="${mod}"]`);
   const box = stage.getBoundingClientRect();
   const at = anchor.getBoundingClientRect();
@@ -316,11 +319,11 @@ function closeDecider() {
 /** Each root that imports the module flies from the roots row into the card, one after the other. */
 function flyUsages() {
   [...decider.querySelectorAll(".root-pill.slot")].forEach((slot, index) => {
-    later(index * 220, () => {
+    later(index * 220 * pace, () => {
       const source = $(`#roots [data-root="${slot.dataset.root}"]`);
       source.classList.add("ping");
-      later(700, () => source.classList.remove("ping"));
-      flip(slot, source.getBoundingClientRect(), 650, 14, () => slot.classList.add("in"));
+      later(700 * pace, () => source.classList.remove("ping"));
+      flip(slot, source.getBoundingClientRect(), 650 * pace, 14, () => slot.classList.add("in"));
     });
   });
 }
@@ -356,15 +359,15 @@ function fly(key) {
   const from = decider.querySelector(`.dc-row.${key} span`).getBoundingClientRect();
   for (const chip of laneEl(key).querySelectorAll(`.chip[data-mod="${mod}"]`)) {
     const fileEl = chip.closest(".file");
-    flip(chip, from, 1000, 24, () => {
+    flip(chip, from, 1000 * pace, 24, () => {
       chip.classList.remove("land");
       chip.style.display = "";
       fileEl.classList.add("has");
     });
     fileEl.classList.remove("glow");
-    later(950, () => { void fileEl.offsetWidth; fileEl.classList.add("glow"); });
+    later(950 * pace, () => { void fileEl.offsetWidth; fileEl.classList.add("glow"); });
   }
-  later(1000, () => { landed[key] = true; render(false); });
+  later(1000 * pace, () => { landed[key] = true; render(false); });
 }
 
 /** One step in sub-steps: lift the module, decide for webpack, fly, decide for Rolldown, fly. */
@@ -378,17 +381,19 @@ function animateStep() {
     return;
   }
   landed = { wp: false, rd: false };
+  pace = playing && FAST.has(STEPS[step].mod) ? 0.45 : 1;
+  stage.classList.toggle("fast", pace < 1);
   render(false);
   const usages = DECIDE[STEPS[step].mod][0].length;
-  const t = 700 + usages * 220;
-  later(300, () => { openDecider(); render(false); });
-  later(650, flyUsages);
-  later(t + 600, () => decider.querySelector(".dc-row.wp").classList.add("show"));
-  later(t + 1500, () => fly("wp"));
-  later(t + 3000, () => decider.querySelector(".dc-row.rd").classList.add("show"));
-  later(t + 3900, () => fly("rd"));
-  later(t + 5900, () => { closeDecider(); render(false); });
-  if (playing) later(t + 6700, advance);
+  const t = (700 + usages * 220) * pace;
+  later(300 * pace, () => { openDecider(); render(false); });
+  later(650 * pace, flyUsages);
+  later(t + 600 * pace, () => decider.querySelector(".dc-row.wp").classList.add("show"));
+  later(t + 1500 * pace, () => fly("wp"));
+  later(t + 3000 * pace, () => decider.querySelector(".dc-row.rd").classList.add("show"));
+  later(t + 3900 * pace, () => fly("rd"));
+  later(t + 5900 * pace, () => { closeDecider(); render(false); });
+  if (playing) later(t + 6700 * pace, advance);
 }
 function advance() {
   if (step >= STEPS.length - 1) {
@@ -402,6 +407,8 @@ function advance() {
 /** Back, dots and ?step=N show a step in its end state, without the sub-steps. */
 function jump(target) {
   stopTimers();
+  pace = 1;
+  stage.classList.remove("fast");
   closeDecider();
   step = Math.max(0, Math.min(STEPS.length - 1, target));
   landed = { wp: true, rd: true };
@@ -413,6 +420,8 @@ function setPlaying(value) {
   playing = value;
   if (!playing) {
     stopTimers();
+    pace = 1;
+    stage.classList.remove("fast");
     closeDecider();
     landed = { wp: true, rd: true };
     render(false);
