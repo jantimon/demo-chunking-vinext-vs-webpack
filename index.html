@@ -135,7 +135,7 @@
     <li class="fix">
       <p class="fix-k">4 · Copy small chunks, like webpack</p>
       <p>Rolldown 1.2 can copy small automatic chunks into the chunks that use them: <code>experimentalInlineCommonChunks: { maxSize: 20000 }</code>, webpack's floor. The build drops from 1,618 to 457 files, the product page loads 72 scripts and 33 stylesheets. But copied modules bring their CSS twice, the cascade order changes, and the header logo rendered twice.</p>
-      <p class="pending">Speed results from the overnight run follow here.</p>
+      <p class="pending">Load-time measurements for this option follow.</p>
     </li>
   </ol>
 </section>
