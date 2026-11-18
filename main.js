@@ -297,8 +297,8 @@ function openDecider() {
   const mod = STEPS[step].mod;
   const [by, wp, rd] = DECIDE[mod];
   decider.innerHTML = `<div class="dc-head">${mod === "css" ? '<span class="chip" style="--c:#e86bd0">stylesheets</span>' : chipHtml(mod)}<span class="dc-by">${by.length ? "used by" : ""}</span>${by.map((root) => `<span class="root-pill slot" data-root="${root}">${ROOTS.find(([id]) => id === root)[1]}</span>`).join("")}</div>
-    <div class="dc-row wp"><i class="tok wp"></i><b>webpack</b><span>→ ${wp}</span></div>
-    <div class="dc-row rd"><i class="tok rd"></i><b>Rolldown</b><span>→ ${rd}</span></div>`;
+    <div class="dc-row wp"><i class="tok wp"></i><svg class="bi webpack" aria-hidden="true"><use href="#bi-webpack"/></svg><b>webpack</b><span>→ ${wp}</span></div>
+    <div class="dc-row rd"><i class="tok rd"></i><svg class="bi rolldown" aria-hidden="true"><use href="#bi-rolldown"/></svg><b>Rolldown</b><span>→ ${rd}</span></div>`;
   const anchor = mod === "css" ? tray : tray.querySelector(`[data-mod="${mod}"]`);
   const box = stage.getBoundingClientRect();
   const at = anchor.getBoundingClientRect();
