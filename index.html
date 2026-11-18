@@ -49,7 +49,8 @@
 <section id="s2">
   <h2><span class="num">02</span>A small <span class="hi">shop</span></h2>
   <p>Three pages, an <code>_app</code> that wraps every page, and three dialogs that load on demand. Each module shows its size and which of them import it. The color marks the set of importers.</p>
-  <figure class="graph wide" id="graph" aria-label="The toy shop's modules and their importers"></figure>
+  <p class="frame-tag toy wide">Toy shop · 20 modules, built to show the mechanism</p>
+  <figure class="graph wide is-toy" id="graph" aria-label="The toy shop's modules and their importers"></figure>
   <p>As with CSS Modules or a compile-time CSS-in-JS library, every component imports its own stylesheet, and here also a small styling runtime, <code>styled</code>. <code>IconButton</code> extends <code>Button</code>, so its CSS has to load after Button's.</p>
   <p class="small">The app is real and has one set of source files. <a href="demo/">The demo</a> builds it with webpack 5 using Next.js 16.4's chunk settings, and with Vite 8 / Rolldown the way vinext 1.4 loads Pages Router pages. Only the entry and the bundler settings differ. Every chunk in the next figure is a file from those builds.</p>
 </section>
@@ -57,7 +58,8 @@
 <section id="s3">
   <h2><span class="num">03</span>Watch both <span class="hi">pack</span> the product page</h2>
   <p>One module per step, for everything the product page loads.</p>
-  <figure class="stage wide" id="pack" aria-label="Step by step: where each module of the product page lands">
+  <p class="frame-tag toy wide">Toy shop · 20 modules, built to show the mechanism</p>
+  <figure class="stage wide is-toy" id="pack" aria-label="Step by step: where each module of the product page lands">
     <div class="stage-head"><p class="cap" id="packCap">The product page's modules</p><p class="keys">← → step · space play</p></div>
     <div class="roots" id="roots" aria-label="Roots: what can import a module"></div>
     <div class="tray" id="tray"></div>
@@ -80,6 +82,7 @@
 <section id="s4">
   <h2><span class="num">04</span>The same rule in a <span class="hi">large</span> app</h2>
   <p>A real Next.js Pages Router app with 225 pages, built both ways. Every page and every lazy import is a root, and almost every module is reached by its own mix of roots. The product page alone touches 536 different importer sets.</p>
+  <p class="frame-tag real wide">Real app · Next.js Pages Router, 225 pages</p>
   <figure class="scale wide" id="scale" aria-label="JavaScript files the product page's HTML lists at start">
     <div class="scale-row"><p class="scale-name"><i class="tok wp"></i>webpack</p><div class="squares" data-n="55" data-kind="wp"></div><p class="scale-num"><b>55</b> files</p></div>
     <div class="scale-row"><p class="scale-name"><i class="tok rd"></i>Rolldown</p><div class="squares" data-n="576" data-kind="rd"></div><p class="scale-num"><b>576</b> files</p></div>
@@ -93,6 +96,7 @@
   </div>
   <h3>What a customer notices</h3>
   <p>iPhone 13 profile over emulated 4G, median of 5 runs. The tap test taps a line every 100 ms until its dialog opens.</p>
+  <p class="frame-tag real wide">Real app · Next.js Pages Router, 225 pages</p>
   <figure class="race wide" id="race" aria-label="First paint and first working tap">
     <div class="race-row"><p>First paint</p><div class="bar-pair"><span class="bar wp" style="--v:832"><b>0.83 s</b></span><span class="bar rd" style="--v:1576"><b>1.58 s</b></span></div></div>
     <div class="race-row"><p>First tap works</p><div class="bar-pair"><span class="bar wp" style="--v:1430"><b>1.43 s</b></span><span class="bar rd" style="--v:2167"><b>2.17 s</b></span></div></div>
@@ -103,6 +107,7 @@
 <section id="sprio">
   <h2><span class="num">05</span>Who gets the connection <span class="hi">first</span></h2>
   <p>Chrome tells the server how urgent each file is. Render-blocking CSS is Highest. webpack's scripts load with <code>defer</code> and are Low. vinext's are module scripts and are High from the start. The product image starts at Medium and becomes High only once layout shows it on screen.</p>
+  <p class="frame-tag real wide">Real app · Next.js Pages Router, 225 pages</p>
   <figure class="wf wide" id="wf" aria-label="Download waterfall of the product page, webpack and vinext on one time axis">
     <div class="wf-head"><p class="wf-cap">Product page, iPhone 13 profile over emulated 4G · every line is one request</p><p class="wf-clock" id="wfClock">0.00 s</p></div>
     <div class="wf-lane" data-side="webpack"><p class="wf-name"><i class="tok wp"></i>webpack</p><svg class="wf-svg" aria-hidden="true"></svg></div>
@@ -148,34 +153,44 @@
 
 <section id="spatch">
   <h2><span class="num">07</span>A patched Rolldown, <span class="hi">tested</span></h2>
-  <p>This version of the page builds the toy shop with a Rolldown that I patched myself and with build plugins that copy what a change to vinext would do. None of it is released. It shows what it takes to get close to webpack's file count without breaking the CSS order. Four changes on top of <a href="https://github.com/cloudflare/vinext/pull/4726">vinext PR #4726</a>:</p>
-  <ol class="fixes wide">
-    <li class="fix"><p class="fix-k">R1 · Later chunks reuse an earlier chunk's copy</p><p>A patch to Rolldown 1.2.19. When a file imports several shared chunks one after the other, the browser runs them in that order, so a later chunk can use a module that an earlier one brought along. Rolldown copies the module into each of them instead. The patch drops the copy wherever an earlier chunk is sure to have run first. In the toy, <code>translate</code> drops from three of the product page's files to two. <a href="demo/patches/rolldown-r1-sibling-order.patch">The patch</a>.</p></li>
-    <li class="fix"><p class="fix-k">R2o · Move stylesheets into chunks of their own, in order</p><p>A build plugin. A first build records every chunk that holds CSS. The second build puts each of those chunks' stylesheets into a CSS-only chunk, ranked so that a chunk's stylesheet comes after those of the chunks it imports. The JavaScript chunks then hold no CSS, so PR #4726 can copy the small ones into the files that use them.</p></li>
-    <li class="fix"><p class="fix-k">R3 · No empty script files</p><p>A build plugin. Vite drops the JavaScript file of a CSS-only chunk only when that file exports nothing, and Rolldown leaves unused exports in it. The plugin hides them. Without it, the toy's product page loads 4 more scripts of 98 to 147 bytes that do nothing.</p></li>
-    <li class="fix"><p class="fix-k">R4 · Stylesheet links in that order</p><p>A change to vinext's server: it writes a page's stylesheet links sorted by the rank from R2o, so <code>IconButton</code>'s CSS lands after <code>Button</code>'s.</p></li>
-  </ol>
-  <figure class="ptab wide" id="patch" aria-label="The toy shop's product page in each build">
-    <table>
-      <thead><tr><th>Toy shop, product page</th><th>Scripts</th><th>CSS files</th><th>Extra copies</th><th>CSS order</th></tr></thead>
-      <tbody>
-        <tr><td><i class="tok wp"></i>webpack, Next.js 16.4 settings</td><td>6</td><td>2</td><td>0</td><td>kept</td></tr>
-        <tr><td><i class="tok rd"></i>vinext 1.4.5</td><td>10</td><td>6</td><td>0</td><td>kept</td></tr>
-        <tr><td><i class="tok rd"></i>vinext with PR #4726</td><td>10</td><td>5</td><td>2</td><td>kept</td></tr>
-        <tr><td><i class="tok rd"></i>PR #4726 + R1</td><td>10</td><td>5</td><td>1</td><td>kept</td></tr>
-        <tr class="ptab-best"><td><i class="tok rd"></i>PR #4726 + R1, R2o, R3, R4</td><td>8</td><td>5</td><td>0</td><td>kept</td></tr>
-      </tbody>
-    </table>
-    <figcaption>Files the product page's HTML lists at start. A module counts as an extra copy for every file of the page it sits in beyond the first. CSS order kept: <code>IconButton</code>'s rules come after <code>Button</code>'s. webpack copies too, but into files of different pages, so no single page loads a module twice.</figcaption>
+  <p>This version of the page adds four changes on top of <a href="https://github.com/cloudflare/vinext/pull/4726">vinext PR #4726</a>: a patch to Rolldown, two build plugins and a change to vinext's server. I wrote them to test the idea. None of them is released.</p>
+  <p class="frame-tag toy wide">Toy shop · 20 modules, built to show the mechanism</p>
+  <figure class="gb wide is-toy" id="patch" aria-label="The toy shop's product page after each change">
+    <figcaption class="gb-title">Product page of the toy shop: files its HTML lists at start</figcaption>
+    <ol class="gb-line">
+      <li class="gb-pt" style="--i:0"><span class="gb-node" aria-hidden="true"></span><div class="gb-body"><p class="gb-name">vinext 1.4.5</p><p class="gb-say">One chunk for every set of importers, nothing copied.</p><p class="gb-chips"><span class="gb-chip"><b>10</b> scripts</span><span class="gb-chip"><b>6</b> CSS files</span><span class="gb-chip"><b>0</b> extra copies</span></p></div></li>
+      <li class="gb-pt" style="--i:1"><span class="gb-node" aria-hidden="true"></span><div class="gb-body"><p class="gb-name">+ PR #4726: copy small shared chunks into the files that use them</p><p class="gb-say">Only chunks without CSS are copied, so <code>translate</code> now sits in three of the page's files.</p><p class="gb-chips"><span class="gb-chip"><b>10</b> scripts</span><span class="gb-chip chg"><b>5</b> CSS files</span><span class="gb-chip chg"><b>2</b> extra copies</span></p></div></li>
+      <li class="gb-pt" style="--i:2"><span class="gb-node" aria-hidden="true"></span><div class="gb-body"><p class="gb-name">+ Rolldown patch: reuse the copy that an earlier file already brought along<span class="gb-tag">R1</span></p><p class="gb-say">A file that runs after its sibling uses the sibling's copy.</p><p class="gb-chips"><span class="gb-chip"><b>10</b> scripts</span><span class="gb-chip"><b>5</b> CSS files</span><span class="gb-chip chg"><b>1</b> extra copy</span></p></div></li>
+      <li class="gb-pt hollow" style="--i:3"><span class="gb-node" aria-hidden="true"></span><div class="gb-body"><p class="gb-name">+ build plugin: move stylesheets into CSS-only chunks, in their original order<span class="gb-tag">R2o</span></p><p class="gb-say">Script chunks lose their CSS, so the copying reaches them. It pays off only with the next step.</p><p class="gb-none">not measured on its own</p></div></li>
+      <li class="gb-pt" style="--i:4"><span class="gb-node" aria-hidden="true"></span><div class="gb-body"><p class="gb-name">+ build plugin: drop the empty script files left behind<span class="gb-tag">R3</span></p><p class="gb-say">Small script chunks are copied into the page, and their empty shells disappear.</p><p class="gb-chips"><span class="gb-chip chg"><b>8</b> scripts</span><span class="gb-chip"><b>5</b> CSS files</span><span class="gb-chip chg"><b>0</b> extra copies</span></p></div></li>
+      <li class="gb-pt" style="--i:5"><span class="gb-node" aria-hidden="true"></span><div class="gb-body"><p class="gb-name">+ vinext: write the stylesheet links in that order<span class="gb-tag">R4</span></p><p class="gb-say">The page lists each stylesheet after the ones it builds on.</p><p class="gb-chips"><span class="gb-chip chg ok"><code>Button</code> → <code>IconButton</code> ✓ CSS order kept</span></p></div></li>
+    </ol>
+    <p class="gb-ref"><span class="gb-ref-line" aria-hidden="true"></span><span><b>webpack</b>, Next.js 16.4 settings, for reference</span><span class="gb-chips"><span class="gb-chip"><b>6</b> scripts</span><span class="gb-chip"><b>2</b> CSS files</span><span class="gb-chip"><b>0</b> extra copies</span></span></p>
+    <p class="gb-foot">An extra copy is a module that sits in one more of the page's files than it needs to. webpack copies too, but into files of different pages, so no page loads a module twice.</p>
   </figure>
-  <p>The stylesheet count stays where it was: R2o keeps one stylesheet for every chunk that held CSS. In the toy, a simpler split that groups stylesheets by the pages that load them, without a rank, also keeps the one <code>Button</code>/<code>IconButton</code> pair in order.</p>
-  <p>The large app shows the difference. On its product page, there are 321 pairs of a component and one that extends it. The simple split put the extension's CSS first in 19 of them; the patched build in none. JavaScript files the browser loaded on the product page until the load event, on an iPhone 13 profile. This count includes chunks fetched right after start, so it is higher than section 04's count of files the HTML lists at start (55 for webpack, 576 for vinext 1.4.5):</p>
-  <div class="facts wide">
-    <div class="fact"><p class="fact-k">webpack</p><p class="fact-v"><span class="wp-t">71</span></p><p>6 stylesheets</p></div>
-    <div class="fact"><p class="fact-k">vinext 1.4.5</p><p class="fact-v"><span class="rd-t">637</span></p><p>145 stylesheets</p></div>
-    <div class="fact"><p class="fact-k">vinext with PR #4726</p><p class="fact-v"><span class="rd-t">189</span></p><p>210 counting lazy chunks · 169 stylesheets</p></div>
-    <div class="fact"><p class="fact-k">PR #4726 + R1, R2o, R3, R4</p><p class="fact-v"><span class="rd-t">52</span></p><p>169 stylesheets, in the right order</p></div>
-  </div>
+  <details class="how wide">
+    <summary>How each step works</summary>
+    <dl>
+      <dt>PR #4726</dt><dd>Puts everything <code>_app</code> imports into one group and copies shared chunks under 20 KB into the files that use them, except chunks that hold CSS. With one stylesheet per component, almost every shared chunk holds CSS. <code>Button</code> joins <code>_app</code>'s group, so its stylesheet merges with <code>_app</code>'s: one CSS file fewer.</dd>
+      <dt>R1 · Rolldown patch</dt><dd>When a file imports several shared chunks one after the other, the browser runs them in that order. Rolldown 1.2.19 still copies a module into each of them. The patch drops the copy wherever an earlier chunk is sure to have run first. <a href="demo/patches/rolldown-r1-sibling-order.patch">The patch</a>.</dd>
+      <dt>R2o · build plugin</dt><dd>A first build records every chunk that holds CSS. The second build moves those stylesheets into one CSS-only chunk each, ranked so a chunk's stylesheet comes after those of the chunks it imports. The script chunks then hold no CSS, and PR #4726 can copy the small ones.</dd>
+      <dt>R3 · build plugin</dt><dd>Vite drops the script file of a CSS-only chunk only when it exports nothing, and Rolldown leaves unused exports in it. The plugin hides them. Without it, the toy's product page lists 4 more scripts of 98 to 147 bytes that do nothing.</dd>
+      <dt>R4 · vinext change</dt><dd>vinext's server sorts a page's stylesheet links by the rank from R2o. In the toy the one <code>Button</code>/<code>IconButton</code> pair stays in order even without the rank. The real app has 321 such pairs of a component and one that extends it: a split without the rank put the extension's CSS first in 19 of them.</dd>
+    </dl>
+  </details>
+  <p>On the real app, the four changes take the product page from 358 files with PR #4726 to 221, and keep all 321 pairs of a component and one that extends it in order.</p>
+  <p class="frame-tag real wide">Real app · Next.js Pages Router, 225 pages</p>
+  <figure class="rb wide" id="realbars" aria-label="Files the browser loaded on the real app's product page, per build">
+    <figcaption class="rb-title">Product page of the real app: files the browser loaded until the load event, iPhone 13 profile</figcaption>
+    <div class="rb-rows">
+      <div class="rb-row" style="--i:0"><p class="rb-name"><i class="tok wp"></i>webpack, Next.js 16.4 settings<span>71 JS + 6 CSS</span></p><div class="rb-bar"><span class="rb-js wp" style="--n:71"></span><span class="rb-css wp" style="--n:6"></span><b class="rb-total">77</b></div></div>
+      <div class="rb-row" style="--i:1"><p class="rb-name"><i class="tok rd"></i>vinext 1.4.5<span>637 JS + 145 CSS</span></p><div class="rb-bar"><span class="rb-js rd" style="--n:637"></span><span class="rb-css rd" style="--n:145"></span><b class="rb-total">782</b></div></div>
+      <div class="rb-row" style="--i:2"><p class="rb-name"><i class="tok rd"></i>vinext with PR #4726<span>189 JS* + 169 CSS</span></p><div class="rb-bar"><span class="rb-js rd" style="--n:189"></span><span class="rb-css rd" style="--n:169"></span><b class="rb-total">358</b></div></div>
+      <div class="rb-row" style="--i:3"><p class="rb-name"><i class="tok rd"></i>PR #4726 + the four changes above<span>52 JS + 169 CSS</span></p><div class="rb-bar"><span class="rb-js rd" style="--n:52"></span><span class="rb-css rd" style="--n:169"></span><b class="rb-total">221</b></div></div>
+    </div>
+    <p class="rb-legend"><span><i class="rb-k js"></i>JavaScript</span><span><i class="rb-k css"></i>CSS</span><span class="rb-note">* 210 JS counting lazy chunks</span></p>
+  </figure>
+  <p class="small">Section 04 counts something else: the scripts the product page's HTML lists at start (55 for webpack, 576 for vinext 1.4.5). The bars also count the chunks the browser fetches right after start. Both come from the same builds.</p>
 </section>
 </div>
 

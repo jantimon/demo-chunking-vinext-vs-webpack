@@ -654,6 +654,7 @@ pack();
 squares();
 onView($("#race"), () => $("#race").classList.add("seen"));
 waterfallFigure();
+for (const id of ["#patch", "#realbars"]) if ($(id)) onView($(id), () => $(id).classList.add("seen"));
 onView($("#rg"), () => {
   [...document.querySelectorAll(".rg-step")].forEach((item, index) => (item.style.transitionDelay = `${index * 0.9}s`));
   $("#rg").classList.add("seen");
