@@ -49,7 +49,8 @@
 <section id="s2">
   <h2><span class="num">02</span>A small <span class="hi">shop</span></h2>
   <p>Three pages, an <code>_app</code> that wraps every page, and three dialogs that load on demand. Each module shows its size and which of them import it. The color marks the set of importers.</p>
-  <figure class="graph wide" id="graph" aria-label="The toy shop's modules and their importers"></figure>
+  <p class="frame-tag toy wide">Toy shop · 20 modules, built to show the mechanism</p>
+  <figure class="graph wide is-toy" id="graph" aria-label="The toy shop's modules and their importers"></figure>
   <p>As with CSS Modules or a compile-time CSS-in-JS library, every component imports its own stylesheet, and here also a small styling runtime, <code>styled</code>. <code>IconButton</code> extends <code>Button</code>, so its CSS has to load after Button's.</p>
   <p class="small">The app is real and has one set of source files. <a href="demo/">The demo</a> builds it with webpack 5 using Next.js 16.4's chunk settings, and with Vite 8 / Rolldown the way vinext 1.4 loads Pages Router pages. Only the entry and the bundler settings differ. Every chunk in the next figure is a file from those builds.</p>
 </section>
@@ -57,7 +58,8 @@
 <section id="s3">
   <h2><span class="num">03</span>Watch both <span class="hi">pack</span> the product page</h2>
   <p>One module per step, for everything the product page loads.</p>
-  <figure class="stage wide" id="pack" aria-label="Step by step: where each module of the product page lands">
+  <p class="frame-tag toy wide">Toy shop · 20 modules, built to show the mechanism</p>
+  <figure class="stage wide is-toy" id="pack" aria-label="Step by step: where each module of the product page lands">
     <div class="stage-head"><p class="cap" id="packCap">The product page's modules</p><p class="keys">← → step · space play</p></div>
     <div class="roots" id="roots" aria-label="Roots: what can import a module"></div>
     <div class="tray" id="tray"></div>
@@ -80,6 +82,7 @@
 <section id="s4">
   <h2><span class="num">04</span>The same rule in a <span class="hi">large</span> app</h2>
   <p>A real Next.js Pages Router app with 225 pages, built both ways. Every page and every lazy import is a root, and almost every module is reached by its own mix of roots. The product page alone touches 536 different importer sets.</p>
+  <p class="frame-tag real wide">Real app · Next.js Pages Router, 225 pages</p>
   <figure class="scale wide" id="scale" aria-label="JavaScript files the product page's HTML lists at start">
     <div class="scale-row"><p class="scale-name"><i class="tok wp"></i>webpack</p><div class="squares" data-n="55" data-kind="wp"></div><p class="scale-num"><b>55</b> files</p></div>
     <div class="scale-row"><p class="scale-name"><i class="tok rd"></i>Rolldown</p><div class="squares" data-n="576" data-kind="rd"></div><p class="scale-num"><b>576</b> files</p></div>
@@ -93,6 +96,7 @@
   </div>
   <h3>What a customer notices</h3>
   <p>iPhone 13 profile over emulated 4G, median of 5 runs. The tap test taps a line every 100 ms until its dialog opens.</p>
+  <p class="frame-tag real wide">Real app · Next.js Pages Router, 225 pages</p>
   <figure class="race wide" id="race" aria-label="First paint and first working tap">
     <div class="race-row"><p>First paint</p><div class="bar-pair"><span class="bar wp" style="--v:832"><b>0.83 s</b></span><span class="bar rd" style="--v:1576"><b>1.58 s</b></span></div></div>
     <div class="race-row"><p>First tap works</p><div class="bar-pair"><span class="bar wp" style="--v:1430"><b>1.43 s</b></span><span class="bar rd" style="--v:2167"><b>2.17 s</b></span></div></div>
@@ -103,6 +107,7 @@
 <section id="sprio">
   <h2><span class="num">05</span>Who gets the connection <span class="hi">first</span></h2>
   <p>Chrome tells the server how urgent each file is. Render-blocking CSS is Highest. webpack's scripts load with <code>defer</code> and are Low. vinext's are module scripts and are High from the start. The product image starts at Medium and becomes High only once layout shows it on screen.</p>
+  <p class="frame-tag real wide">Real app · Next.js Pages Router, 225 pages</p>
   <figure class="wf wide" id="wf" aria-label="Download waterfall of the product page, webpack and vinext on one time axis">
     <div class="wf-head"><p class="wf-cap">Product page, iPhone 13 profile over emulated 4G · every line is one request</p><p class="wf-clock" id="wfClock">0.00 s</p></div>
     <div class="wf-lane" data-side="webpack"><p class="wf-name"><i class="tok wp"></i>webpack</p><svg class="wf-svg" aria-hidden="true"></svg></div>
