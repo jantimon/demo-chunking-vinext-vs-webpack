@@ -12,7 +12,9 @@ Every branch is published to GitHub Pages under its own name (`/` in a name beco
 |---|---|
 | [/](https://jantimon.github.io/demo-chunking-vinext-vs-webpack/) | `main` (vinext 1.4.5) |
 | [/1.4.5/](https://jantimon.github.io/demo-chunking-vinext-vs-webpack/1.4.5/) | `main` |
-| `/<branch>/` | any other branch, e.g. [/vite-pr-4726/](https://jantimon.github.io/demo-chunking-vinext-vs-webpack/vite-pr-4726/) |
+| [/vite-pr-4726/](https://jantimon.github.io/demo-chunking-vinext-vs-webpack/vite-pr-4726/) | `vite-pr-4726`: the step figure uses vinext PR #4726's chunking |
+| [/rolldown-patch/](https://jantimon.github.io/demo-chunking-vinext-vs-webpack/rolldown-patch/) | `rolldown-patch`: adds section 07, the toy built with a patched Rolldown (R1) and plugins that split CSS in order (R2o, R3, R4). Not a release |
+| `/<branch>/` | any other branch |
 
 A push to any branch redeploys all of them (`.github/workflows/pages.yml`).
 

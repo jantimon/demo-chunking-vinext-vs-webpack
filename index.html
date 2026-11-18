@@ -70,11 +70,11 @@
   </figure>
   <p>With <a href="https://github.com/cloudflare/vinext/pull/4726">vinext PR #4726</a>, Rolldown copies small shared code too, but not all of it:</p>
   <ul class="diff">
-    <li><b class="rd-t">Rolldown copies <code>translate</code> three times into one page.</b> It is small and has no CSS, so the PR copies it into every chunk that imports it. The product page loads three of those chunks together and runs <code>translate</code> three times. webpack copies only into files of different pages.</li>
-    <li><b class="wp-t">Only webpack copies <code>Price</code> and <code>IconButton</code>.</b> The PR never copies a shared chunk that holds CSS, so each keeps its own chunk and its own stylesheet.</li>
-    <li><b class="rd-t"><code>Button</code> and <code>styled</code> join <code>_app</code>'s group.</b> The PR groups everything <code>_app</code> imports, so they no longer get a file of their own.</li>
+    <li><b class="rd-t">Rolldown copies <code>translate</code> three times into one page.</b> It is small and has no CSS, so PR #4726 copies it into every chunk that imports it. The product page loads three of those chunks together and runs <code>translate</code> three times. webpack copies only into files of different pages.</li>
+    <li><b class="wp-t">Only webpack copies <code>Price</code> and <code>IconButton</code>.</b> PR #4726 never copies a shared chunk that holds CSS, so each keeps its own chunk and its own stylesheet.</li>
+    <li><b class="rd-t"><code>Button</code> and <code>styled</code> join <code>_app</code>'s group.</b> PR #4726 groups everything <code>_app</code> imports, so they no longer get a file of their own.</li>
   </ul>
-  <p>The product page loads 15 files instead of 16 without the PR, and webpack's 8. One of the 15 is new: a 51-byte entry file that only starts the real entry chunk.</p>
+  <p>The product page loads 15 files instead of 16 without PR #4726, and webpack's 8. One of the 15 is new: a 51-byte entry file that only starts the real entry chunk.</p>
 </section>
 
 <section id="s4">
@@ -136,12 +136,12 @@
     <li class="fix">
       <p class="fix-k">4 · Copy small chunks, like webpack</p>
       <p>Rolldown 1.2 can copy small automatic chunks into the chunks that use them: <code>experimentalInlineCommonChunks: { maxSize: 20000 }</code>, webpack's floor. The build drops from 1,618 to 457 files, the product page loads 72 scripts and 33 stylesheets. But copied modules bring their CSS twice, the cascade order changes, and the header logo rendered twice.</p>
-      <p class="pending">Speed results from the overnight run follow here.</p>
+      <p class="pending">Load-time measurements for this option follow.</p>
     </li>
     <li class="fix">
       <p class="fix-k">5 · Copy small chunks, but leave CSS alone</p>
       <p><a href="https://github.com/cloudflare/vinext/pull/4726">vinext PR #4726</a> copies like option 4 and excludes stylesheets, so CSS is never duplicated. Rolldown applies the exclude to a whole chunk: <a href="https://rolldown.rs/in-depth/inline-common-chunks">"Matching any module with exclude prevents its entire common chunk from being inlined."</a> In an app where every component imports its own CSS, almost every shared chunk holds CSS, so its JavaScript stays a separate file too. In the toy shop that is <code>Price</code> and <code>IconButton</code>.</p>
-      <p class="pending">The large app's numbers from the overnight run follow here.</p>
+      <p class="pending">Numbers for the large app follow.</p>
     </li>
   </ol>
 </section>
