@@ -373,7 +373,7 @@ h3 { font: 700 22px/1.2 var(--display); margin: 1.8em 0 .3em; }
 .gb-ref { margin-bottom: 14px; border-bottom: 1px dashed var(--line2); }
 .gb-node { width: 14px; height: 14px; margin: 4px 0 0 4px; border-radius: 50%; background: var(--rd); box-shadow: 0 0 0 4px #24242c; z-index: 1; }
 .gb-pt.hollow .gb-node { background: #24242c; border: 2px solid var(--rd); }
-.gb-pt.wp .gb-node { background: none; border: 2px dashed var(--wp); }
+.gb-pt.wp .gb-node { width: 12px; height: 12px; margin: 5px 0 0 5px; border-radius: 3px; background: var(--wp); }
 .gb-pt.wp .gb-name { color: var(--wp); }
 .gb-name { margin: 0; font: 600 15px/1.4 var(--sans); }
 .gb-tag { display: inline-block; margin-left: 6px; padding: 0 5px; border-radius: 5px; font: 500 10.5px/1.5 var(--mono); color: var(--faint); border: 1px solid var(--line2); vertical-align: 2px; }
