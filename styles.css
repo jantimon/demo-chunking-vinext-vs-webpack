@@ -8,6 +8,9 @@
   --muted: #a3a09a;
   --faint: #6d6b67;
   --accent: #ff8a3d;
+  --brand-webpack: #8dd6f9;
+  --brand-vite: #9135ff;
+  --brand-rolldown: #ff4100;
   --wp: #5b9cff;
   --rd: #ff8a3d;
   /* one color per set of importers in the toy shop */
@@ -119,13 +122,13 @@ h3 { font: 700 22px/1.2 var(--display); margin: 1.8em 0 .3em; }
 .chip .sz { color: var(--muted); font-size: 11px; }
 .tray .chip.done { opacity: .28; }
 .tray .chip.now { box-shadow: 0 0 0 2px var(--c), 0 0 26px color-mix(in srgb, var(--c) 60%, transparent); transform: translateY(-3px) scale(1.18); position: relative; z-index: 4; }
-.decide-slot { height: 132px; margin: -6px 0 6px; }
-@media (max-width: 640px) { .decide-slot { height: 158px; } }
+.decide-slot { height: 142px; margin: -6px 0 6px; }
+@media (max-width: 640px) { .decide-slot { height: 200px; } }
 .decider { position: absolute; z-index: 8; padding: 12px 14px; border-radius: 14px; background: rgb(24 24 30 / .97); border: 1px solid var(--line2); box-shadow: 0 18px 50px rgb(0 0 0 / .6); opacity: 0; transform: translateY(-6px) scale(.98); pointer-events: none; transition: opacity .45s, transform .45s; }
 .decider.open { opacity: 1; transform: none; }
 .dc-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
 .dc-by { font: 500 12px/1.3 var(--mono); color: var(--muted); }
-.dc-row { display: grid; grid-template-columns: 10px auto 1fr; gap: 8px; align-items: baseline; padding: 6px 0 0; font-size: 14px; line-height: 1.4; opacity: 0; transform: translateX(-6px); transition: opacity .5s, transform .5s; }
+.dc-row { display: grid; grid-template-columns: 10px auto auto minmax(0, 1fr); gap: 8px; align-items: baseline; padding: 6px 0 0; font-size: 14px; line-height: 1.4; opacity: 0; transform: translateX(-6px); transition: opacity .5s, transform .5s; }
 .dc-row.show { opacity: 1; transform: none; }
 .dc-row b { font: 700 13px/1.4 var(--display); }
 .dc-row.wp b { color: var(--wp); } .dc-row.rd b { color: var(--rd); }
@@ -340,3 +343,13 @@ h3 { font: 700 22px/1.2 var(--display); margin: 1.8em 0 .3em; }
 .frame-tag.real { color: var(--bg); background: var(--text); }
 .frame-tag + figure { margin-top: 14px; }
 .is-toy { outline: 1.5px dashed color-mix(in srgb, var(--s-pc) 45%, transparent); outline-offset: 6px; border-radius: 16px; }
+
+/* Brand icons (Simple Icons, CC0), decorative */
+.bi { display: inline-block; width: 1em; height: 1em; margin-right: .32em; vertical-align: -.14em; fill: currentColor; flex: none; }
+.bi.webpack { color: var(--brand-webpack); } .bi.vite { color: var(--brand-vite); } .bi.rolldown { color: var(--brand-rolldown); } .bi.github { color: var(--text); }
+
+/* Step figure: hint while autoplay runs a repeated pattern faster */
+.fast-hint { display: inline-block; margin-right: 10px; padding: 0 6px; border-radius: 5px; font: 600 11px/1.6 var(--mono); color: var(--bg); background: var(--muted); opacity: 0; transition: opacity .3s; }
+.stage.fast .fast-hint { opacity: 1; }
+@media (max-width: 640px) { .stage-head .keys { display: block; position: absolute; top: -9px; right: 16px; font-size: 0; } .stage-head .keys .fast-hint { margin: 0; font-size: 11px; } }
+.dc-row .bi { margin: .18em 0 0; align-self: start; } .dc-row b { white-space: nowrap; }
