@@ -1,0 +1,105 @@
+diff --git a/crates/rolldown/src/stages/generate_stage/inline_common_chunks/place.rs b/crates/rolldown/src/stages/generate_stage/inline_common_chunks/place.rs
+index d57b59e..ffb3003 100644
+--- a/crates/rolldown/src/stages/generate_stage/inline_common_chunks/place.rs
++++ b/crates/rolldown/src/stages/generate_stage/inline_common_chunks/place.rs
+@@ -139,8 +139,11 @@ pub(super) fn compute_placement(
+ 
+   prune_async_inherited_records(
+     &projected,
++    static_importees,
+     dynamic_importees,
+     &is_entry,
++    &exec_order,
++    &component_of,
+     records,
+     &registered,
+     &mut carried,
+@@ -153,10 +156,14 @@ pub(super) fn compute_placement(
+ }
+ 
+ // See internal-docs/inline-common-chunks/design.md#registration-on-entry-loading-paths.
++#[expect(clippy::too_many_arguments)]
+ fn prune_async_inherited_records(
+   projected: &FxHashMap<ChunkIdx, FxHashSet<ChunkIdx>>,
++  static_importees: &IndexVec<ChunkIdx, FxHashSet<ChunkIdx>>,
+   dynamic_importees: &IndexVec<ChunkIdx, FxIndexSet<ChunkIdx>>,
+   is_entry: &impl Fn(ChunkIdx) -> bool,
++  exec_order: &impl Fn(ChunkIdx) -> u32,
++  component_of: &FxHashMap<ChunkIdx, usize>,
+   records: &FxIndexSet<ChunkIdx>,
+   registered: &FxHashMap<ChunkIdx, FxHashSet<ChunkIdx>>,
+   carried: &mut FxHashMap<ChunkIdx, Vec<ChunkIdx>>,
+@@ -194,9 +201,23 @@ fn prune_async_inherited_records(
+     at_dynamic_import.extend(registered[&file].iter().map(|record| record_bits[record]));
+     // A static dependency evaluates before the importing file's registrations. A dynamic
+     // import runs after those registrations and its dependencies outside the static cycle.
+-    for (&target, available) in projected[&file]
++    // Sibling order (experimental): the file's static imports evaluate one after another in the
++    // order they are printed, so a static dependency also starts after the registrations of every
++    // earlier sibling's static closure, unless the sibling shares the file's import cycle.
++    let siblings = printed_static_order(file, static_importees, records, projected, exec_order);
++    let mut static_targets = Vec::with_capacity(siblings.len());
++    let mut running = at_start.clone();
++    for target in siblings {
++      static_targets.push((target, running.clone()));
++      if component_of.get(&target) != component_of.get(&file) {
++        if let Some(done) = registered.get(&target) {
++          running.extend(done.iter().map(|record| record_bits[record]));
++        }
++      }
++    }
++    for (&target, available) in static_targets
+       .iter()
+-      .map(|target| (target, &at_start))
++      .map(|(target, available)| (target, available))
+       .chain(projected_dynamic[&file].iter().map(|target| (target, &at_dynamic_import)))
+     {
+       if !projected.contains_key(&target) {
+@@ -231,6 +252,47 @@ fn prune_async_inherited_records(
+   });
+ }
+ 
++/// The projected static importees of `file` in the order `apply_inline_common_chunks_links`
++/// prints them: the file's own importees by `exec_order`, each record expanded in place into its
++/// importees, then any projected importee not reached that way (from carried records) last.
++fn printed_static_order(
++  file: ChunkIdx,
++  static_importees: &IndexVec<ChunkIdx, FxHashSet<ChunkIdx>>,
++  records: &FxIndexSet<ChunkIdx>,
++  projected: &FxHashMap<ChunkIdx, FxHashSet<ChunkIdx>>,
++  exec_order: &impl Fn(ChunkIdx) -> u32,
++) -> Vec<ChunkIdx> {
++  fn walk(
++    chunk: ChunkIdx,
++    static_importees: &IndexVec<ChunkIdx, FxHashSet<ChunkIdx>>,
++    records: &FxIndexSet<ChunkIdx>,
++    exec_order: &impl Fn(ChunkIdx) -> u32,
++    allowed: &FxHashSet<ChunkIdx>,
++    expanded: &mut FxHashSet<ChunkIdx>,
++    order: &mut FxIndexSet<ChunkIdx>,
++  ) {
++    let mut importees = static_importees[chunk].iter().copied().collect::<Vec<_>>();
++    importees.sort_unstable_by_key(|idx| (exec_order(*idx), idx.raw()));
++    for importee in importees {
++      if records.contains(&importee) {
++        if expanded.insert(importee) {
++          walk(importee, static_importees, records, exec_order, allowed, expanded, order);
++        }
++      } else if allowed.contains(&importee) {
++        order.insert(importee);
++      }
++    }
++  }
++  let allowed = &projected[&file];
++  let mut order = FxIndexSet::default();
++  let mut expanded = FxHashSet::default();
++  walk(file, static_importees, records, exec_order, allowed, &mut expanded, &mut order);
++  let mut rest = allowed.iter().copied().filter(|idx| !order.contains(idx)).collect::<Vec<_>>();
++  rest.sort_unstable_by_key(|idx| (exec_order(*idx), idx.raw()));
++  order.extend(rest);
++  order.into_iter().collect()
++}
++
+ /// Adds `importee` to `files`, or, when it is a record, the files behind it: its importees,
+ /// records among them expanded the same way, each record once.
+ fn expand(

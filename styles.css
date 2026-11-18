@@ -49,6 +49,7 @@ p code, li code { background: var(--bg3); border: 1px solid var(--line); padding
 #s4 { background: #17171c; }
 #sprio { background: #1a1a20; }
 #s5 { background: #1d1d24; }
+#spatch { background: #202028; }
 .stack > section > :last-child { margin-bottom: 0; }
 @media (min-width: 820px) and (min-height: 600px) {
   .stack > section { position: sticky; top: var(--stick-top, 0px); }
@@ -61,12 +62,14 @@ p code, li code { background: var(--bg3); border: 1px solid var(--line); padding
     #s4 { view-timeline: --cover4 block; }
     #sprio { view-timeline: --coverP block; }
     #s5 { view-timeline: --cover5 block; }
-    #s1, #s2, #s3, #s4, #sprio { transform-origin: 50% 30%; animation: sink linear both; animation-range: entry 0% contain 0%; }
+    #spatch { view-timeline: --cover6 block; }
+    #s1, #s2, #s3, #s4, #sprio, #s5 { transform-origin: 50% 30%; animation: sink linear both; animation-range: entry 0% contain 0%; }
     #s1 { animation-timeline: --cover2; }
     #s2 { animation-timeline: --cover3; }
     #s3 { animation-timeline: --cover4; }
     #s4 { animation-timeline: --coverP; }
     #sprio { animation-timeline: --cover5; }
+    #s5 { animation-timeline: --cover6; }
   }
 }
 @keyframes sink { to { filter: brightness(.4); scale: .96; } }
@@ -333,3 +336,14 @@ h3 { font: 700 22px/1.2 var(--display); margin: 1.8em 0 .3em; }
 @media (max-width: 640px) { .wf { padding: 12px 10px; } .wf-group { font-size: 10px; } .wf-tick { font-size: 9.5px; } .wf-imglabel { font-size: 10.5px; } }
 @media (max-width: 640px) { .stage-head .keys { display: none; } }
 .flipping { position: relative; z-index: 9; }
+
+/* 07 · patched build table */
+.ptab { margin: 18px 0 8px; overflow-x: auto; }
+.ptab table { width: 100%; border-collapse: collapse; font: 500 14px/1.4 var(--sans); }
+.ptab th { text-align: right; font: 500 11px/1.3 var(--mono); letter-spacing: .04em; color: var(--faint); padding: 8px 10px; border-bottom: 1px solid var(--line2); vertical-align: bottom; }
+.ptab td { text-align: right; padding: 9px 10px; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+.ptab th:first-child, .ptab td:first-child { text-align: left; }
+.ptab td:first-child .tok { margin-right: 8px; }
+.ptab-best td { color: var(--text); font-weight: 600; background: color-mix(in srgb, var(--rd) 9%, transparent); }
+.ptab figcaption { margin-top: 10px; font-size: 14px; color: var(--muted); }
+@media (max-width: 640px) { .ptab table { font-size: 13px; } .ptab th, .ptab td { padding: 7px 6px; } }

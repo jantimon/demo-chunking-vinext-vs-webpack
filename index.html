@@ -70,11 +70,11 @@
   </figure>
   <p>With <a href="https://github.com/cloudflare/vinext/pull/4726">vinext PR #4726</a>, Rolldown copies small shared code too, but not all of it:</p>
   <ul class="diff">
-    <li><b class="rd-t">Rolldown copies <code>translate</code> three times into one page.</b> It is small and has no CSS, so the PR copies it into every chunk that imports it. The product page loads three of those chunks together and runs <code>translate</code> three times. webpack copies only into files of different pages.</li>
-    <li><b class="wp-t">Only webpack copies <code>Price</code> and <code>IconButton</code>.</b> The PR never copies a shared chunk that holds CSS, so each keeps its own chunk and its own stylesheet.</li>
-    <li><b class="rd-t"><code>Button</code> and <code>styled</code> join <code>_app</code>'s group.</b> The PR groups everything <code>_app</code> imports, so they no longer get a file of their own.</li>
+    <li><b class="rd-t">Rolldown copies <code>translate</code> three times into one page.</b> It is small and has no CSS, so PR #4726 copies it into every chunk that imports it. The product page loads three of those chunks together and runs <code>translate</code> three times. webpack copies only into files of different pages.</li>
+    <li><b class="wp-t">Only webpack copies <code>Price</code> and <code>IconButton</code>.</b> PR #4726 never copies a shared chunk that holds CSS, so each keeps its own chunk and its own stylesheet.</li>
+    <li><b class="rd-t"><code>Button</code> and <code>styled</code> join <code>_app</code>'s group.</b> PR #4726 groups everything <code>_app</code> imports, so they no longer get a file of their own.</li>
   </ul>
-  <p>The product page loads 15 files instead of 16 without the PR, and webpack's 8. One of the 15 is new: a 51-byte entry file that only starts the real entry chunk.</p>
+  <p>The product page loads 15 files instead of 16 without PR #4726, and webpack's 8. One of the 15 is new: a 51-byte entry file that only starts the real entry chunk.</p>
 </section>
 
 <section id="s4">
@@ -136,14 +136,46 @@
     <li class="fix">
       <p class="fix-k">4 · Copy small chunks, like webpack</p>
       <p>Rolldown 1.2 can copy small automatic chunks into the chunks that use them: <code>experimentalInlineCommonChunks: { maxSize: 20000 }</code>, webpack's floor. The build drops from 1,618 to 457 files, the product page loads 72 scripts and 33 stylesheets. But copied modules bring their CSS twice, the cascade order changes, and the header logo rendered twice.</p>
-      <p class="pending">Speed results from the overnight run follow here.</p>
+      <p class="pending">Load-time measurements for this option follow.</p>
     </li>
     <li class="fix">
       <p class="fix-k">5 · Copy small chunks, but leave CSS alone</p>
       <p><a href="https://github.com/cloudflare/vinext/pull/4726">vinext PR #4726</a> copies like option 4 and excludes stylesheets, so CSS is never duplicated. Rolldown applies the exclude to a whole chunk: <a href="https://rolldown.rs/in-depth/inline-common-chunks">"Matching any module with exclude prevents its entire common chunk from being inlined."</a> In an app where every component imports its own CSS, almost every shared chunk holds CSS, so its JavaScript stays a separate file too. In the toy shop that is <code>Price</code> and <code>IconButton</code>.</p>
-      <p class="pending">The large app's numbers from the overnight run follow here.</p>
+      <p class="pending">Numbers for the large app follow in section 07.</p>
     </li>
   </ol>
+</section>
+
+<section id="spatch">
+  <h2><span class="num">07</span>A patched Rolldown, <span class="hi">tested</span></h2>
+  <p>This version of the page builds the toy shop with a Rolldown that I patched myself and with build plugins that copy what a change to vinext would do. None of it is released. It shows what it takes to get close to webpack's file count without breaking the CSS order. Four changes on top of <a href="https://github.com/cloudflare/vinext/pull/4726">vinext PR #4726</a>:</p>
+  <ol class="fixes wide">
+    <li class="fix"><p class="fix-k">R1 · Later chunks reuse an earlier chunk's copy</p><p>A patch to Rolldown 1.2.19. When a file imports several shared chunks one after the other, the browser runs them in that order, so a later chunk can use a module that an earlier one brought along. Rolldown copies the module into each of them instead. The patch drops the copy wherever an earlier chunk is sure to have run first. In the toy, <code>translate</code> drops from three of the product page's files to two. <a href="demo/patches/rolldown-r1-sibling-order.patch">The patch</a>.</p></li>
+    <li class="fix"><p class="fix-k">R2o · Move stylesheets into chunks of their own, in order</p><p>A build plugin. A first build records every chunk that holds CSS. The second build puts each of those chunks' stylesheets into a CSS-only chunk, ranked so that a chunk's stylesheet comes after those of the chunks it imports. The JavaScript chunks then hold no CSS, so PR #4726 can copy the small ones into the files that use them.</p></li>
+    <li class="fix"><p class="fix-k">R3 · No empty script files</p><p>A build plugin. Vite drops the JavaScript file of a CSS-only chunk only when that file exports nothing, and Rolldown leaves unused exports in it. The plugin hides them. Without it, the toy's product page loads 4 more scripts of 98 to 147 bytes that do nothing.</p></li>
+    <li class="fix"><p class="fix-k">R4 · Stylesheet links in that order</p><p>A change to vinext's server: it writes a page's stylesheet links sorted by the rank from R2o, so <code>IconButton</code>'s CSS lands after <code>Button</code>'s.</p></li>
+  </ol>
+  <figure class="ptab wide" id="patch" aria-label="The toy shop's product page in each build">
+    <table>
+      <thead><tr><th>Toy shop, product page</th><th>Scripts</th><th>CSS files</th><th>Extra copies</th><th>CSS order</th></tr></thead>
+      <tbody>
+        <tr><td><i class="tok wp"></i>webpack, Next.js 16.4 settings</td><td>6</td><td>2</td><td>0</td><td>kept</td></tr>
+        <tr><td><i class="tok rd"></i>vinext 1.4.5</td><td>10</td><td>6</td><td>0</td><td>kept</td></tr>
+        <tr><td><i class="tok rd"></i>vinext with PR #4726</td><td>10</td><td>5</td><td>2</td><td>kept</td></tr>
+        <tr><td><i class="tok rd"></i>PR #4726 + R1</td><td>10</td><td>5</td><td>1</td><td>kept</td></tr>
+        <tr class="ptab-best"><td><i class="tok rd"></i>PR #4726 + R1, R2o, R3, R4</td><td>8</td><td>5</td><td>0</td><td>kept</td></tr>
+      </tbody>
+    </table>
+    <figcaption>Files the product page loads at start. A module counts as an extra copy for every file of the page it sits in beyond the first. CSS order kept: <code>IconButton</code>'s rules come after <code>Button</code>'s. webpack copies too, but into files of different pages, so no single page loads a module twice.</figcaption>
+  </figure>
+  <p>The stylesheet count stays where it was: R2o keeps one stylesheet for every chunk that held CSS. In the toy, a simpler split that groups stylesheets by the pages that load them, without a rank, also keeps the one <code>Button</code>/<code>IconButton</code> pair in order.</p>
+  <p>The large app shows the difference. On its product page, there are 321 pairs of a component and one that extends it. The simple split put the extension's CSS first in 19 of them; the patched build in none. JavaScript files the product page loads at start, counted on a newer build of the app than section 04's:</p>
+  <div class="facts wide">
+    <div class="fact"><p class="fact-k">webpack</p><p class="fact-v"><span class="wp-t">71</span></p><p>6 stylesheets</p></div>
+    <div class="fact"><p class="fact-k">vinext 1.4.5</p><p class="fact-v"><span class="rd-t">637</span></p><p>145 stylesheets</p></div>
+    <div class="fact"><p class="fact-k">vinext with PR #4726</p><p class="fact-v"><span class="rd-t">189</span></p><p>210 counting lazy chunks · 169 stylesheets</p></div>
+    <div class="fact"><p class="fact-k">PR #4726 + R1, R2o, R3, R4</p><p class="fact-v"><span class="rd-t">52</span></p><p>169 stylesheets, in the right order</p></div>
+  </div>
 </section>
 </div>
 

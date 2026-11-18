@@ -1,0 +1,212 @@
+{
+  "_Carousel-DS_lbzKv.js": {
+    "file": "Carousel-DS_lbzKv.js",
+    "name": "Carousel",
+    "imports": [
+      "_rolldown-runtime-CyFmcnh3.js",
+      "_framework-CYQSzyXs.js",
+      "_pages-app-CDcMZBnr.js"
+    ],
+    "css": [
+      "css-order-0001-DZGUhspq.css"
+    ]
+  },
+  "_client-entry-DCgQJcyd.js": {
+    "file": "client-entry-DCgQJcyd.js",
+    "name": "client-entry",
+    "imports": [
+      "_rolldown-runtime-CyFmcnh3.js"
+    ],
+    "dynamicImports": [
+      "src/pages/home.js",
+      "src/pages/product.js",
+      "src/pages/cart.js",
+      "src/pages/_app.js"
+    ]
+  },
+  "_css-order-0001-DZGUhspq.css": {
+    "file": "css-order-0001-DZGUhspq.css",
+    "src": "_css-order-0001-DZGUhspq.css"
+  },
+  "_css-order-0002-CSA85Zqp.css": {
+    "file": "css-order-0002-CSA85Zqp.css",
+    "src": "_css-order-0002-CSA85Zqp.css"
+  },
+  "_css-order-0003-Bcfh0ai9.css": {
+    "file": "css-order-0003-Bcfh0ai9.css",
+    "src": "_css-order-0003-Bcfh0ai9.css"
+  },
+  "_css-order-0004-CBbbKixx.css": {
+    "file": "css-order-0004-CBbbKixx.css",
+    "src": "_css-order-0004-CBbbKixx.css"
+  },
+  "_css-order-0005-CIwHDl2e.css": {
+    "file": "css-order-0005-CIwHDl2e.css",
+    "src": "_css-order-0005-CIwHDl2e.css"
+  },
+  "_css-order-0006-B8STsB-e.css": {
+    "file": "css-order-0006-B8STsB-e.css",
+    "src": "_css-order-0006-B8STsB-e.css"
+  },
+  "_css-order-0007-DEW-EwBs.css": {
+    "file": "css-order-0007-DEW-EwBs.css",
+    "src": "_css-order-0007-DEW-EwBs.css"
+  },
+  "_css-order-0008-Brb4BWRu.css": {
+    "file": "css-order-0008-Brb4BWRu.css",
+    "src": "_css-order-0008-Brb4BWRu.css"
+  },
+  "_css-order-0009-BHOkn21T.css": {
+    "file": "css-order-0009-BHOkn21T.css",
+    "src": "_css-order-0009-BHOkn21T.css"
+  },
+  "_framework-CYQSzyXs.js": {
+    "file": "framework-CYQSzyXs.js",
+    "name": "framework",
+    "imports": [
+      "_rolldown-runtime-CyFmcnh3.js"
+    ]
+  },
+  "_pages-app-CDcMZBnr.js": {
+    "file": "pages-app-CDcMZBnr.js",
+    "name": "pages-app",
+    "imports": [
+      "_rolldown-runtime-CyFmcnh3.js",
+      "_framework-CYQSzyXs.js"
+    ],
+    "css": [
+      "pages-app-CjYNBkEp.css"
+    ]
+  },
+  "_pages-app-CjYNBkEp.css": {
+    "file": "pages-app-CjYNBkEp.css",
+    "src": "_pages-app-CjYNBkEp.css"
+  },
+  "_rolldown-runtime-CyFmcnh3.js": {
+    "file": "rolldown-runtime-CyFmcnh3.js",
+    "name": "rolldown-runtime"
+  },
+  "src/client-entry.js": {
+    "file": "index-CtviY6Xq.js",
+    "name": "index",
+    "src": "src/client-entry.js",
+    "isEntry": true,
+    "imports": [
+      "_client-entry-DCgQJcyd.js"
+    ]
+  },
+  "src/dialogs/LoginDialog.js": {
+    "file": "LoginDialog-BfWnLWII.js",
+    "name": "LoginDialog",
+    "src": "src/dialogs/LoginDialog.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-CyFmcnh3.js",
+      "_pages-app-CDcMZBnr.js"
+    ],
+    "css": [
+      "css-order-0004-CBbbKixx.css"
+    ]
+  },
+  "src/dialogs/ReviewsDialog.js": {
+    "file": "ReviewsDialog-CJnpAoXv.js",
+    "name": "ReviewsDialog",
+    "src": "src/dialogs/ReviewsDialog.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-CyFmcnh3.js",
+      "_pages-app-CDcMZBnr.js"
+    ],
+    "css": [
+      "css-order-0005-CIwHDl2e.css"
+    ]
+  },
+  "src/dialogs/SizeGuide.js": {
+    "file": "SizeGuide-B6_1drdP.js",
+    "name": "SizeGuide",
+    "src": "src/dialogs/SizeGuide.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-CyFmcnh3.js",
+      "_framework-CYQSzyXs.js",
+      "_pages-app-CDcMZBnr.js"
+    ],
+    "css": [
+      "css-order-0006-B8STsB-e.css",
+      "css-order-0002-CSA85Zqp.css"
+    ]
+  },
+  "src/pages/_app.js": {
+    "file": "_app-6T6xa7tY.js",
+    "name": "_app",
+    "src": "src/pages/_app.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-CyFmcnh3.js",
+      "_framework-CYQSzyXs.js",
+      "_client-entry-DCgQJcyd.js",
+      "_pages-app-CDcMZBnr.js"
+    ],
+    "dynamicImports": [
+      "src/dialogs/LoginDialog.js"
+    ]
+  },
+  "src/pages/cart.js": {
+    "file": "cart-Dv6NtKm3.js",
+    "name": "cart",
+    "src": "src/pages/cart.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-CyFmcnh3.js",
+      "_client-entry-DCgQJcyd.js",
+      "_pages-app-CDcMZBnr.js",
+      "_framework-CYQSzyXs.js"
+    ],
+    "dynamicImports": [
+      "src/dialogs/SizeGuide.js"
+    ],
+    "css": [
+      "css-order-0002-CSA85Zqp.css",
+      "css-order-0003-Bcfh0ai9.css",
+      "css-order-0008-Brb4BWRu.css"
+    ]
+  },
+  "src/pages/home.js": {
+    "file": "home-VwCoxC-l.js",
+    "name": "home",
+    "src": "src/pages/home.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-CyFmcnh3.js",
+      "_pages-app-CDcMZBnr.js",
+      "_framework-CYQSzyXs.js",
+      "_Carousel-DS_lbzKv.js"
+    ],
+    "css": [
+      "css-order-0003-Bcfh0ai9.css",
+      "css-order-0009-BHOkn21T.css"
+    ]
+  },
+  "src/pages/product.js": {
+    "file": "product-DWrKAf8r.js",
+    "name": "product",
+    "src": "src/pages/product.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "_rolldown-runtime-CyFmcnh3.js",
+      "_framework-CYQSzyXs.js",
+      "_client-entry-DCgQJcyd.js",
+      "_pages-app-CDcMZBnr.js",
+      "_Carousel-DS_lbzKv.js"
+    ],
+    "dynamicImports": [
+      "src/dialogs/ReviewsDialog.js",
+      "src/dialogs/SizeGuide.js"
+    ],
+    "css": [
+      "css-order-0002-CSA85Zqp.css",
+      "css-order-0003-Bcfh0ai9.css",
+      "css-order-0007-DEW-EwBs.css"
+    ]
+  }
+}

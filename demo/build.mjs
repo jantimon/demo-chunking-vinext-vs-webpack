@@ -1,5 +1,5 @@
 // Builds the toy shop with webpack (Next.js 16.4 splitChunks settings) and with Vite 8 / Rolldown
-// (vinext's Pages Router setup), plus three Rolldown variants, and writes result.json:
+// (vinext's Pages Router setup), plus Rolldown variants, and writes result.json:
 // every output file with its modules and size, and what each page loads at start.
 //   node make-app.mjs && node build.mjs
 import { createRequire } from "node:module";
@@ -12,7 +12,7 @@ const here = dirname(new URL(import.meta.url).pathname);
 const src = join(here, "src");
 const out = join(here, "out");
 // Folders with node_modules: WEBPACK_ROOT has next@16.4 (webpack 5, css-loader), VITE_ROOT has vite@8.3.
-const { WEBPACK_ROOT, VITE_ROOT } = process.env;
+const { WEBPACK_ROOT, VITE_ROOT, ROLLDOWN_R1_BINDING } = process.env;
 if (!WEBPACK_ROOT || !VITE_ROOT) {
   console.error("Set WEBPACK_ROOT (next 16.4 + webpack 5 + css-loader) and VITE_ROOT (vite 8.3) to folders with those packages installed.");
   process.exit(2);
@@ -129,7 +129,7 @@ function lazyFilesWebpack(json, page) {
 }
 
 /** Vite 8 + Rolldown with vinext's Pages Router shape: one client entry, pages and _app as import(). */
-async function buildVite(variant, codeSplitting, extraRolldown = {}, extraPlugins = []) {
+async function buildVite(variant, codeSplitting, extraRolldown = {}, extraPlugins = [], stylesheetRank = null) {
   const dir = join(out, variant);
   trashDir(dir);
   let bundle;
@@ -185,6 +185,9 @@ async function buildVite(variant, codeSplitting, extraRolldown = {}, extraPlugin
     };
     visit(keyOf("pages/_app.js"));
     visit(keyOf(`pages/${page}.js`));
+    // R4: the patched vinext sorts the page's stylesheet links by the build's CSS rank.
+    const rank = stylesheetRank?.();
+    if (rank) css.sort((left, right) => (rank[left] ?? -1) - (rank[right] ?? -1));
     const lazy = {};
     for (const dialog of ["ReviewsDialog", "SizeGuide"]) {
       const key = keyOf(`dialogs/${dialog}.js`);
@@ -271,7 +274,164 @@ function prPagesApp() {
   return { plugin, group: { name: (id) => (appRoots.has(id) ? "pages-app" : null), minSize: 0 } };
 }
 
+
+const STYLESHEET = /\.(?:css|less|sass|scss|styl|stylus|pcss|postcss|sss)(?:$|\?)/;
+
+/**
+ * R2o, first pass: from an ordinary build's chunk graph, each chunk that holds CSS becomes one CSS
+ * group, ranked in topological order of the static imports (dependencies first; an import cycle is
+ * one position).
+ */
+function planCssGroups(chunks) {
+  const contentKey = new Map(Object.entries(chunks).map(([name, chunk]) => [name, [...chunk.modules].sort().join("\n")]));
+  const names = Object.keys(chunks).sort((left, right) => (contentKey.get(left) < contentKey.get(right) ? -1 : 1));
+  const imports = (name) => chunks[name].imports.filter((importee) => importee in chunks);
+  const indexOf = new Map();
+  const lowLink = new Map();
+  const onStack = new Set();
+  const stack = [];
+  const componentOf = new Map();
+  let counter = 0;
+  const strongConnect = (name) => {
+    indexOf.set(name, counter);
+    lowLink.set(name, counter++);
+    stack.push(name);
+    onStack.add(name);
+    for (const importee of imports(name)) {
+      if (!indexOf.has(importee)) {
+        strongConnect(importee);
+        lowLink.set(name, Math.min(lowLink.get(name), lowLink.get(importee)));
+      } else if (onStack.has(importee)) lowLink.set(name, Math.min(lowLink.get(name), indexOf.get(importee)));
+    }
+    if (lowLink.get(name) === indexOf.get(name)) {
+      let member;
+      do {
+        member = stack.pop();
+        onStack.delete(member);
+        componentOf.set(member, name);
+      } while (member !== name);
+    }
+  };
+  for (const name of names) if (!indexOf.has(name)) strongConnect(name);
+  const members = new Map();
+  for (const name of names) members.set(componentOf.get(name), [...(members.get(componentOf.get(name)) ?? []), name]);
+  const pending = new Map([...members.keys()].map((component) => [component, 0]));
+  const dependents = new Map();
+  for (const name of names) {
+    const from = componentOf.get(name);
+    for (const importee of imports(name)) {
+      const to = componentOf.get(importee);
+      if (to === from) continue;
+      const set = dependents.get(to) ?? new Set();
+      if (!set.has(from)) (set.add(from), pending.set(from, pending.get(from) + 1));
+      dependents.set(to, set);
+    }
+  }
+  const order = [...members.keys()].sort((left, right) => names.indexOf(left) - names.indexOf(right));
+  const ready = order.filter((component) => pending.get(component) === 0);
+  const groups = [];
+  while (ready.length) {
+    const component = ready.shift();
+    const styled = members.get(component).filter((name) => chunks[name].modules.some((id) => STYLESHEET.test(id)));
+    if (styled.length) groups.push(styled);
+    const unlocked = [];
+    for (const dependent of dependents.get(component) ?? []) {
+      pending.set(dependent, pending.get(dependent) - 1);
+      if (pending.get(dependent) === 0) unlocked.push(dependent);
+    }
+    ready.push(...unlocked.sort((left, right) => names.indexOf(left) - names.indexOf(right)));
+  }
+  return groups;
+}
+/** R2o, first pass: a plugin that records module -> CSS group from the build's chunk graph. */
+function cssOrderPlan(plan) {
+  return {
+    name: "toy:css-order-plan",
+    generateBundle(_options, bundle) {
+      const chunks = {};
+      for (const [fileName, output] of Object.entries(bundle)) if (output.type === "chunk") chunks[fileName] = { modules: output.moduleIds, imports: output.imports };
+      planCssGroups(chunks).forEach((group, rank) => {
+        for (const name of group) for (const id of chunks[name].modules) if (STYLESHEET.test(id)) plan.set(relative(src, id), `css-order-${String(rank).padStart(4, "0")}`);
+      });
+    },
+  };
+}
+/** R2o, second pass: one CSS group per planned chunk; R4 needs each stylesheet's rank. */
+function cssOrderGroups(plan, rank) {
+  return {
+    group: { minSize: 0, name: (id) => (STYLESHEET.test(id) ? (plan.get(relative(src, id)) ?? null) : null) },
+    plugin: {
+      name: "toy:css-order-rank",
+      generateBundle(_options, bundle) {
+        for (const output of Object.values(bundle)) {
+          const match = output.type === "chunk" && /^css-order-(\d+)$/.exec(output.name);
+          if (match) for (const css of output.viteMetadata?.importedCss ?? []) rank[css] = Number(match[1]);
+        }
+      },
+    },
+  };
+}
+/** R2 without order: each stylesheet goes to a group named after the roots (entries, import() targets) that reach it. */
+const cssByRootSet = {
+  minSize: 0,
+  name(moduleId, ctx) {
+    if (!STYLESHEET.test(moduleId)) return null;
+    const roots = new Set();
+    const seen = new Set();
+    const pending = [moduleId];
+    while (pending.length) {
+      const id = pending.pop();
+      if (seen.has(id)) continue;
+      seen.add(id);
+      const info = ctx.getModuleInfo(id);
+      if (!info) continue;
+      if (info.isEntry || info.dynamicImporters.length) roots.add(moduleName(id));
+      pending.push(...info.importers);
+    }
+    return `css-${[...roots].sort().join("-")}`;
+  },
+};
+/**
+ * R3: Vite drops a chunk as pure CSS only when it has no exports; a chunk of stylesheets still exports
+ * their unused init wrappers, so hide them.
+ */
+const cssOnlyChunksArePureCss = {
+  name: "toy:css-only-chunks-are-pure-css",
+  configResolved(config) {
+    const cssPost = config.plugins.find((plugin) => plugin.name === "vite:css-post");
+    const original = cssPost.renderChunk;
+    const handler = typeof original === "function" ? original : original.handler;
+    const wrapped = function (code, chunk, ...rest) {
+      const ids = Object.keys(chunk.modules);
+      const view = ids.length && ids.every((id) => STYLESHEET.test(id)) ? new Proxy(chunk, { get: (target, key) => (key === "exports" ? [] : Reflect.get(target, key)) }) : chunk;
+      return handler.call(this, code, view, ...rest);
+    };
+    cssPost.renderChunk = typeof original === "function" ? wrapped : { ...original, handler: wrapped };
+  },
+};
+
 const framework = { name: "framework", test: /node_modules[\\/]react[\\/]/, priority: 40 };
+const inline = { maxSize: 20_000, exclude: STYLESHEET };
+/** The PR #4726 setup, plus extra groups after its pages-app group. */
+const prBuild = (variant, extraGroups = [], plugins = [], stylesheetRank = null) => {
+  const pr = prPagesApp();
+  return buildVite(variant, { minSize: 10_000, groups: [framework, pr.group, ...extraGroups], experimentalInlineCommonChunks: inline }, {}, [pr.plugin, ...plugins], stylesheetRank);
+};
+
+if (process.env.TOY_PATCHED_PASS) {
+  // Runs in a child process: Rolldown loads its native binding once per process.
+  const result = {};
+  result.r1 = await prBuild("r1");
+  result.naiveSplit = await prBuild("naive-split", [cssByRootSet], [cssOnlyChunksArePureCss]);
+  const plan = new Map();
+  await prBuild("patched-plan", [], [cssOrderPlan(plan)]);
+  trashDir(join(out, "patched-plan"));
+  const rank = {};
+  const groups = cssOrderGroups(plan, rank);
+  result.patched = await prBuild("patched", [groups.group], [groups.plugin, cssOnlyChunksArePureCss], () => rank);
+  writeFileSync(join(here, "result-patched.json"), JSON.stringify(result));
+  process.exit(0);
+}
 const result = { webpack: await buildWebpack() };
 result.rolldown = await buildVite("rolldown", { groups: [framework] });
 result.routeGroups = await buildVite("route-groups", { groups: [framework, ...routeGroups(result.rolldown)] });
@@ -279,17 +439,13 @@ result.chunkGroups = await buildVite("chunk-groups", {
   groups: [framework, { name: "app", test: (id) => !id.includes("node_modules"), priority: 10, entriesAware: true, entriesAwareMergeThreshold: 20_000, maxSize: 300_000 }],
 });
 result.inlineCommon = await buildVite("inline-common", { groups: [framework], experimentalInlineCommonChunks: { maxSize: 20_000 } });
-const pr = prPagesApp();
-result.pr4726 = await buildVite(
-  "pr-4726",
-  {
-    minSize: 10_000,
-    groups: [framework, pr.group],
-    experimentalInlineCommonChunks: { maxSize: 20_000, exclude: /\.(?:css|less|sass|scss|styl|stylus|pcss|postcss|sss)(?:$|\?)/ },
-  },
-  {},
-  [pr.plugin],
-);
+result.pr4726 = await prBuild("pr-4726");
+// R1 is a Rolldown 1.2.19 binding built with patches/rolldown-r1-sibling-order.patch; without it the patched builds are skipped.
+if (ROLLDOWN_R1_BINDING) {
+  execFileSync(process.execPath, [new URL(import.meta.url).pathname], { stdio: "inherit", env: { ...process.env, TOY_PATCHED_PASS: "1", NAPI_RS_NATIVE_LIBRARY_PATH: ROLLDOWN_R1_BINDING } });
+  Object.assign(result, JSON.parse(readFileSync(join(here, "result-patched.json"), "utf8")));
+  execFileSync("trash", [join(here, "result-patched.json")]);
+}
 writeFileSync(join(here, "result.json"), JSON.stringify(result, null, 1));
 for (const [name, item] of Object.entries(result)) {
   const product = item.pages.product;
