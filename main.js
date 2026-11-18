@@ -517,7 +517,7 @@ function waterfallFigure(redraw = false) {
   ];
   const lanes = [...document.querySelectorAll(".wf-lane")].map((lane) => {
     const side = lane.dataset.side;
-    const svg = lane.querySelector("svg");
+    const svg = lane.querySelector(".wf-svg");
     const { rows, fcp, lcp } = data[side];
     const ordered = GROUPS.flatMap(([type]) => rows.filter((row) => row[0] === type).sort((a, b) => a[1] - b[1] || a[3] - b[3]));
     const width = Math.round(Math.min(1000, Math.max(300, lane.clientWidth || 1000)));
