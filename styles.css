@@ -61,7 +61,7 @@ p code, li code { background: var(--bg3); border: 1px solid var(--line); padding
     #s4 { view-timeline: --cover4 block; }
     #sprio { view-timeline: --coverP block; }
     #s5 { view-timeline: --cover5 block; }
-    #s1, #s2, #s3, #s4, #sprio { transform-origin: 50% 30%; animation: sink linear both; animation-range: entry 0% contain 0%; }
+    #s1, #s2, #s3, #s4, #sprio { transform-origin: 50% 30%; animation: sink linear both; animation-range: entry 50% entry 100%; }
     #s1 { animation-timeline: --cover2; }
     #s2 { animation-timeline: --cover3; }
     #s3 { animation-timeline: --cover4; }
@@ -333,3 +333,10 @@ h3 { font: 700 22px/1.2 var(--display); margin: 1.8em 0 .3em; }
 @media (max-width: 640px) { .wf { padding: 12px 10px; } .wf-group { font-size: 10px; } .wf-tick { font-size: 9.5px; } .wf-imglabel { font-size: 10.5px; } }
 @media (max-width: 640px) { .stage-head .keys { display: none; } }
 .flipping { position: relative; z-index: 9; }
+
+/* Toy shop figures vs real-app figures */
+.frame-tag { justify-self: start; display: inline-flex; align-items: center; gap: 8px; margin: 26px 0 -8px; padding: 4px 10px; border-radius: 7px; font: 600 11px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.frame-tag.toy { color: var(--s-pc); border: 1px dashed color-mix(in srgb, var(--s-pc) 70%, transparent); background: color-mix(in srgb, var(--s-pc) 8%, transparent); }
+.frame-tag.real { color: var(--bg); background: var(--text); }
+.frame-tag + figure { margin-top: 14px; }
+.is-toy { outline: 1.5px dashed color-mix(in srgb, var(--s-pc) 45%, transparent); outline-offset: 6px; border-radius: 16px; }
