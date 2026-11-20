@@ -83,7 +83,7 @@ const STEPS = [
   { cap: "Gallery · 30 KB · only product", mod: "Gallery", wp: "Into the product page's file.", rd: "Into the product page's chunk." },
   { cap: "formatDate · 0.6 KB · product + reviews dialog", mod: "formatDate", wp: "The dialog only opens from product, which has it already: stays in product.", rd: "Same decision: the product page's chunk." },
   { cap: "The product page itself", mod: "product", wp: "Its own entry file.", rd: "Its own chunk." },
-  { cap: "Stylesheets", mod: "css", wp: "One stylesheet per entry.", rd: "One stylesheet per chunk with CSS." },
+  { cap: "Stylesheets", mod: "css", wp: "No shared chunk has 20 KB of CSS, so all CSS <b>stays with its entry</b>: one stylesheet each.", rd: "<b>One stylesheet per chunk</b> with CSS, however small." },
 ];
 const ORDER = STEPS.map((step) => step.mod).filter((mod) => mod && mod !== "css");
 const stepOf = (mod) => STEPS.findIndex((step) => step.mod === mod);
@@ -154,7 +154,7 @@ const DECIDE = {
   Gallery: [["product"], "into product", "into product"],
   formatDate: [["product", "reviews"], "into product · the dialog opens only there", "into product · same decision"],
   product: [["product"], "its own entry file", "its own chunk"],
-  css: [[], "one stylesheet per entry", "one stylesheet per chunk"],
+  css: [[], "CSS under 20 KB stays with its entry", "one stylesheet per chunk with CSS"],
 };
 
 /** Steps whose decision repeats an earlier pattern: autoplay runs them at about twice the speed. */
@@ -667,3 +667,58 @@ onView($("#rg"), () => {
   [...document.querySelectorAll(".rg-step")].forEach((item, index) => (item.style.transitionDelay = `${index * 0.9}s`));
   $("#rg").classList.add("seen");
 });
+
+/* 04 · CSS floor: one component per step, then the counts */
+function cssFloor() {
+  const figure = $("#cssfloor");
+  if (!figure) return;
+  const CAPS = [
+    "Three components the product page shares with other pages",
+    "Search box · 21.6 KB of CSS, over the 20 KB floor",
+    "Dialog · 2.6 KB of CSS, under the floor",
+    "Divider · 0.2 KB of CSS, under the floor",
+    "Product page: 6 stylesheets with webpack, 169 with vinext PR #4726",
+  ];
+  const KEYS = [null, "search", "dialog", "divider", null];
+  const LAST = CAPS.length - 1;
+  const fills = [...figure.querySelectorAll(".cf-fill")];
+  const counts = [...figure.querySelectorAll(".cf-count b")];
+  let timer = 0;
+  let frame = 0;
+  const countUp = () => {
+    const begin = performance.now();
+    const tick = (now) => {
+      const share = Math.min(1, (now - begin) / 1200);
+      for (const count of counts) count.textContent = Math.round(Number(count.dataset.n) * share);
+      if (share < 1) frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+  };
+  const show = (step) => {
+    for (const fill of fills) fill.classList.toggle("on", Number(fill.dataset.at) <= step);
+    for (const comp of figure.querySelectorAll(".cf-comp")) comp.classList.toggle("cur", comp.dataset.k === KEYS[step]);
+    figure.classList.toggle("playing", step > 0 && step < LAST);
+    figure.classList.toggle("done", step === LAST);
+    $("#cfCap").textContent = CAPS[step];
+  };
+  const play = () => {
+    clearTimeout(timer);
+    cancelAnimationFrame(frame);
+    let step = 0;
+    show(0);
+    const advance = () => {
+      if (!isShown(figure)) { timer = setTimeout(advance, 400); return; }
+      show(++step);
+      if (step === LAST) countUp();
+      else timer = setTimeout(advance, 2600);
+    };
+    timer = setTimeout(advance, 2500);
+  };
+  $("#cfReplay").onclick = play;
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) show(LAST);
+  else {
+    show(0);
+    onView(figure, play);
+  }
+}
+cssFloor();
