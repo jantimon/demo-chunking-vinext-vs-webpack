@@ -16,7 +16,7 @@ Static explainer page, dark theme. No build step for the page; `demo/` builds th
 | `#graph` | toy modules with importers | `MODULES` in main.js |
 | `#pack` | step figure: each module lands in webpack's and Rolldown's files for the product page | `data.js` (real build output) |
 | `#scale` | 55 vs 576 squares | real app |
-| `#cssfloor` | three shared components: where their JS and CSS land; webpack's 20 KB CSS floor vs one stylesheet per chunk; 6 vs 145 stylesheets | real app (webpack build vs vinext 1.4.5 build), `cssFloor()` in main.js |
+| `#cssfloor` | three shared components: webpack groups them into one chunk with one stylesheet, Rolldown into three chunks with three stylesheets; 6 vs 145 stylesheets | real app (webpack build vs vinext 1.4.5 build), `cssFloor()` in main.js |
 | `#race` | first paint / page ready (React hydrated) bars, webpack vs vinext 1.4.5 | real app, iPhone 13 profile, 4G, median of 20 runs |
 | `#wf` | animated download waterfall, both builds on one time axis, rows grouped by priority | `waterfall.js`: the run closest to the medians (first paint, largest paint, ready) per build, real app, iPhone 13 profile, 4G, 100 streams (type and timing only) |
 | `#rg` | route-grouping outcome | real app |
