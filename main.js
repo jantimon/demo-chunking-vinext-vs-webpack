@@ -668,57 +668,298 @@ onView($("#rg"), () => {
   $("#rg").classList.add("seen");
 });
 
-/* 04 · CSS grouping: one component per step, then the counts */
-function cssFloor() {
+/* 04 · grouping trees: every shared group of the product page runs through each bundler's rule */
+function groupingTrees() {
   const figure = $("#cssfloor");
-  if (!figure) return;
-  const CAPS = [
-    "Three components the product page shares with other pages",
-    "Search box: both bundlers put it into a shared chunk",
-    "Dialog: webpack adds it to the same chunk, Rolldown makes a second chunk",
-    "Divider: webpack adds it to the same chunk, Rolldown makes a third chunk",
-    "Product page: 6 stylesheets with webpack, 145 with vinext 1.4.5",
-  ];
-  const KEYS = [null, "search", "dialog", "divider", null];
-  const LAST = CAPS.length - 1;
-  const fills = [...figure.querySelectorAll(".cf-fill")];
-  const counts = [...figure.querySelectorAll(".cf-count b")];
-  let timer = 0;
+  const data = window.GROUPING;
+  if (!figure || !data) return;
+  const NS = "http://www.w3.org/2000/svg";
+  const el = (parent, tag, attrs = {}, text) => {
+    const node = document.createElementNS(NS, tag);
+    for (const [key, value] of Object.entries(attrs)) node.setAttribute(key, value);
+    if (text !== undefined) node.textContent = text;
+    parent.append(node);
+    return node;
+  };
+  const READ = 2500;
+  const SLOW_RUN = 2000;
+  const SLOW_DROP = 1000;
+  const SLOW_STEP = 3700;
+  const FAST_SPREAD = 4000;
+  const FAST_RUN = 900;
+  const FAST_DROP = 500;
+  const BASKET_TOP = 372;
+  const BASKET_H = 92;
+  const rolldown = data[figure.dataset.build];
+  const wp = data.webpack;
+  const fullMax = Math.max(wp.html.js, wp.html.css, rolldown.html.js, rolldown.html.css);
+  const HEAT = [[0, [58, 58, 70]], [0.12, [138, 80, 44]], [0.5, [255, 106, 43]], [1, [255, 214, 130]]];
+  const heat = (share) => {
+    const value = Math.max(0, Math.min(1, share));
+    const upper = HEAT.findIndex(([stop]) => stop >= value);
+    if (upper <= 0) return `rgb(${HEAT[0][1].join(",")})`;
+    const [s0, c0] = HEAT[upper - 1];
+    const [s1, c1] = HEAT[upper];
+    const mix = (value - s0) / (s1 - s0);
+    return `rgb(${c0.map((channel, index) => Math.round(channel + (c1[index] - channel) * mix)).join(",")})`;
+  };
+  const length = (points) => points.slice(1).reduce((sum, point, index) => sum + Math.hypot(point[0] - points[index][0], point[1] - points[index][1]), 0);
+  const pointAt = (points, distance) => {
+    let left = distance;
+    for (let index = 1; index < points.length; index++) {
+      const [x0, y0] = points[index - 1];
+      const [x1, y1] = points[index];
+      const step = Math.hypot(x1 - x0, y1 - y0);
+      if (left <= step) return [x0 + ((x1 - x0) * left) / step, y0 + ((y1 - y0) * left) / step];
+      left -= step;
+    }
+    return points.at(-1);
+  };
+  const ease = (share) => (share < 0.5 ? 2 * share * share : 1 - (-2 * share + 2) ** 2 / 2);
+
+  function box(svg, x, y, w, h, kind, lines) {
+    el(svg, "rect", { x, y, width: w, height: h, rx: 10, class: `gt-box ${kind}` });
+    lines.forEach(([text, cls, dy]) => el(svg, "text", { x: x + w / 2, y: y + dy, "text-anchor": "middle", class: cls }, text));
+  }
+  function basket(svg, x, kind, label, start) {
+    el(svg, "rect", { x, y: BASKET_TOP, width: 160, height: BASKET_H, rx: 12, class: "gt-basket" });
+    const fill = el(svg, "rect", { x: x + 1, y: BASKET_TOP + BASKET_H - 1, width: 158, height: 0, rx: 11, class: `gt-fill ${kind}` });
+    el(svg, "rect", { x: x + 12, y: BASKET_TOP + 12, width: 26, height: 14, rx: 3, class: `gt-chip ${kind}` });
+    el(svg, "text", { x: x + 25, y: BASKET_TOP + 22.5, "text-anchor": "middle", class: `gt-chipt ${kind}` }, kind.toUpperCase());
+    el(svg, "text", { x: x + 46, y: BASKET_TOP + 23.5, class: "gt-bl" }, label);
+    const number = el(svg, "text", { x: x + 12, y: BASKET_TOP + 62, class: "gt-bn" }, String(start));
+    el(svg, "text", { x: x + 12, y: BASKET_TOP + 81, class: "gt-bl" }, `${start} at start`);
+    return { fill, number, start };
+  }
+
+  function buildPanel(panel, spec) {
+    const svg = $(".gt-svg", panel);
+    svg.replaceChildren();
+    const edges = {};
+    for (const [key, points] of Object.entries(spec.edges)) {
+      edges[key] = { points, node: el(svg, "polyline", { points: points.join(" "), class: "gt-edge" }), count: 0 };
+    }
+    const layer = el(svg, "g");
+    spec.draw(svg);
+    const outs = {};
+    for (const [key, { x, y }] of Object.entries(spec.counters)) outs[key] = { node: el(svg, "text", { x, y, "text-anchor": "middle", class: "gt-n" }, "× 0"), box: svg.querySelectorAll(".gt-box.out")[spec.outIndex[key]] };
+    for (const [x, y, text] of spec.labels) el(svg, "text", { x, y, class: "gt-yn" }, text);
+    const baskets = { js: basket(svg, 30, "js", "scripts", spec.start.js), css: basket(svg, 210, "css", "stylesheets", spec.start.css) };
+    return { svg, edges, outs, baskets, layer, pool: [], say: $(".gt-say", panel) };
+  }
+
+  const ENTRY = (svg) => box(svg, 70, 6, 260, 44, "", [["group of modules", "gt-t", 20], ["used by the same pages", "gt-t", 37]]);
+  const OWN = (svg, x) => box(svg, x, 250, 146, 86, "out", [["own file", "gt-t", 22], ["one more script", "gt-sub", 40], ["(and stylesheet)", "gt-sub", 55]]);
+  const WEBPACK_SPEC = {
+    start: wp.start,
+    edges: {
+      e0: [[200, 50], [200, 78]],
+      small: [[125, 96], [72, 96], [72, 150]],
+      big: [[200, 114], [200, 132], [272, 132], [272, 150]],
+      cap: [[352, 198], [352, 250]],
+      own: [[220, 198], [220, 250]],
+      js: [[219, 336], [219, 354], [110, 354], [110, 372]],
+      css: [[219, 336], [219, 354], [290, 354], [290, 372]],
+    },
+    draw(svg) {
+      ENTRY(svg);
+      box(svg, 125, 78, 150, 36, "ask", [["at least 20 KB?", "gt-t ask", 23]]);
+      box(svg, 6, 150, 132, 86, "out", [["copied into", "gt-t", 22], ["bigger files", "gt-t", 38], ["no new file", "gt-sub", 55]]);
+      box(svg, 150, 150, 244, 48, "ask", [["page already loads 25 files", "gt-t ask", 20], ["from this entry?", "gt-t ask", 37]]);
+      box(svg, 300, 250, 94, 86, "out", [["merged into", "gt-t", 22], ["another file", "gt-t", 38], ["no new file", "gt-sub", 55]]);
+      OWN(svg, 146);
+    },
+    outIndex: { small: 0, cap: 1, own: 2 },
+    counters: { small: { x: 72, y: 228 }, cap: { x: 347, y: 328 }, own: { x: 219, y: 328 } },
+    labels: [[86, 89, "no"], [208, 128, "yes"], [358, 228, "yes"], [228, 228, "no"]],
+    routes: { small: ["e0", "small"], cap: ["e0", "big", "cap"], own: ["e0", "big", "own"] },
+    ends: { small: [72, 172], cap: [347, 268], own: [219, 268] },
+    dropFrom: [219, 336],
+    tokens: wp.tokens.map((token) => ({ css: token.css, path: token.path, addJs: token.addJs, addCss: token.addCss })),
+  };
+  const ROLLDOWN_SPEC = {
+    start: rolldown.start,
+    edges: {
+      e0: [[200, 50], [200, 78]],
+      own: [[200, 130], [200, 250]],
+      js: [[200, 336], [200, 354], [110, 354], [110, 372]],
+      css: [[200, 336], [200, 354], [290, 354], [290, 372]],
+    },
+    draw(svg) {
+      ENTRY(svg);
+      box(svg, 50, 78, 300, 52, "", [["one chunk per set of importers,", "gt-t", 22], ["any size", "gt-t", 40]]);
+      OWN(svg, 127);
+    },
+    outIndex: { own: 0 },
+    counters: { own: { x: 200, y: 328 } },
+    labels: [],
+    routes: { own: ["e0", "own"] },
+    ends: { own: [200, 268] },
+    dropFrom: [200, 336],
+    tokens: rolldown.tokens.map((token) => ({ css: token.css, path: "own", addJs: true, addCss: token.css })),
+  };
+
+  const SAY = {
+    webpack: [
+      { pick: (token) => token.path === "small" && token.css, text: "Under 20 KB: copied into bigger files, no new file" },
+      { pick: (token) => token.path === "own" && token.addCss, text: "At least 20 KB, fewer than 25 files: own script and stylesheet" },
+      { pick: (token) => token.path === "cap", text: "At least 20 KB, but already 25 files: merged into another file" },
+    ],
+    rolldown: [
+      { pick: (token) => token.css, text: "One chunk for this set of importers: own script and stylesheet" },
+      { pick: (token) => token.css, text: "Another set of importers: another script and stylesheet" },
+      { pick: (token) => token.css, text: "No minimum size: another script and stylesheet" },
+    ],
+  };
+
+  function schedule(spec, says) {
+    const rest = [...spec.tokens];
+    const slow = says.map(({ pick }) => rest.splice(rest.findIndex(pick), 1)[0]);
+    let seed = 7;
+    const random = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    for (let index = rest.length - 1; index > 0; index--) {
+      const other = Math.floor(random() * (index + 1));
+      [rest[index], rest[other]] = [rest[other], rest[index]];
+    }
+    const fastStart = READ + says.length * SLOW_STEP;
+    const runs = [
+      ...slow.map((token, index) => ({ token, at: READ + index * SLOW_STEP, run: SLOW_RUN, drop: SLOW_DROP })),
+      ...rest.map((token, index) => ({ token, at: fastStart + (index / rest.length) * FAST_SPREAD, run: FAST_RUN, drop: FAST_DROP })),
+    ];
+    for (const item of runs) {
+      const route = spec.routes[item.token.path];
+      item.points = [];
+      item.passes = route.map((key) => {
+        item.points.push(...spec.edges[key]);
+        return [key, length(item.points)];
+      });
+      item.points.push(spec.ends[item.token.path]);
+      item.total = length(item.points);
+      item.end = item.at + item.run;
+    }
+    return { runs, fastStart, slowCount: says.length, fastCount: rest.length, finish: fastStart + FAST_SPREAD + FAST_RUN + FAST_DROP };
+  }
+
+  const sides = [
+    { side: "webpack", spec: WEBPACK_SPEC },
+    { side: "rolldown", spec: ROLLDOWN_SPEC },
+  ].map(({ side, spec }) => {
+    const panel = figure.querySelector(`.gt-panel[data-side="${side}"]`);
+    return { side, spec, view: buildPanel(panel, spec), plan: schedule(spec, SAY[side]), says: SAY[side] };
+  });
+  const END = Math.max(...sides.map(({ plan }) => plan.finish)) + 300;
+  const total = (spec) => spec.tokens.length;
+  const requests = (html) => html.js + html.css;
+  const more = requests(rolldown.html) - requests(wp.html);
+
+  function sprite(view, index, kind) {
+    let node = view.pool[index];
+    if (!node) {
+      node = view.pool[index] = el(view.layer, "g");
+      el(node, "circle", { r: 5.5, class: "gt-dot" });
+      el(node, "rect", { x: -8, y: -5, width: 16, height: 10, rx: 2 });
+    }
+    node.dataset.kind = kind;
+    node.firstChild.style.display = kind.startsWith("dot") ? "" : "none";
+    node.firstChild.setAttribute("class", kind === "dot-css" ? "gt-dot css" : "gt-dot");
+    node.lastChild.style.display = kind.startsWith("dot") ? "none" : "";
+    node.lastChild.setAttribute("class", `gt-chip ${kind}`);
+    node.style.display = "";
+    return node;
+  }
+
+  function render(time) {
+    for (const { side, spec, view, plan, says } of sides) {
+      const counts = Object.fromEntries(Object.keys(spec.edges).map((key) => [key, 0]));
+      const outs = Object.fromEntries(Object.keys(spec.routes).map((key) => [key, 0]));
+      const landed = { js: 0, css: 0 };
+      let used = 0;
+      for (const item of plan.runs) {
+        if (time < item.at) continue;
+        const walked = time >= item.end ? item.total : ease((time - item.at) / item.run) * item.total;
+        for (const [key, distance] of item.passes) if (walked >= distance) counts[key]++;
+        if (time >= item.end) outs[item.token.path]++;
+        else {
+          const [x, y] = pointAt(item.points, walked);
+          const node = sprite(view, used++, item.token.css ? "dot-css" : "dot");
+          node.setAttribute("transform", `translate(${x} ${y})`);
+          node.style.opacity = String(Math.min(1, (time - item.at) / 200));
+        }
+        for (const kind of ["js", "css"]) {
+          if (!(kind === "js" ? item.token.addJs : item.token.addCss)) continue;
+          if (time < item.end) continue;
+          if (time >= item.end + item.drop) {
+            counts[kind]++;
+            landed[kind]++;
+            continue;
+          }
+          const share = ease((time - item.end) / item.drop);
+          const path = [spec.dropFrom, ...spec.edges[kind].slice(1), [spec.edges[kind].at(-1)[0], BASKET_TOP + 30]];
+          const [x, y] = pointAt(path, share * length(path));
+          sprite(view, used++, kind).setAttribute("transform", `translate(${x} ${y})`);
+        }
+      }
+      for (let index = used; index < view.pool.length; index++) view.pool[index].style.display = "none";
+      const all = total(spec);
+      for (const [key, edge] of Object.entries(view.edges)) {
+        const share = counts[key] / all;
+        edge.node.style.stroke = heat(share);
+        edge.node.style.strokeWidth = String(2 + 6 * share);
+      }
+      for (const [key, out] of Object.entries(view.outs)) {
+        out.node.textContent = `× ${outs[key]}`;
+        out.box.style.stroke = outs[key] ? heat(outs[key] / all) : "";
+      }
+      for (const kind of ["js", "css"]) {
+        const basketView = view.baskets[kind];
+        const value = basketView.start + landed[kind];
+        basketView.number.textContent = String(value);
+        const height = Math.max(2, ((BASKET_H - 2) * value) / fullMax);
+        basketView.fill.setAttribute("height", String(height));
+        basketView.fill.setAttribute("y", String(BASKET_TOP + BASKET_H - 1 - height));
+      }
+      const slowIndex = Math.floor((time - READ) / SLOW_STEP);
+      let text = "";
+      let quiet = false;
+      if (time < READ) quiet = true;
+      else if (slowIndex < plan.slowCount) text = says[slowIndex].text;
+      else if (time < plan.finish) text = `The other ${plan.fastCount} groups`;
+      else if (side === "webpack") {
+        const quietCount = all - outs.own;
+        text = `${quietCount} of ${all} groups add no file`;
+      } else text = `Each of the ${all} groups adds a file`;
+      if (view.say.textContent !== text && text) view.say.textContent = text;
+      view.say.classList.toggle("off", quiet);
+    }
+    const cap = $("#gtCap");
+    const done = time >= END;
+    const html = done
+      ? `<span>webpack ${requests(wp.html)} requests, Rolldown ${requests(rolldown.html)}: <b>${more} more requests</b></span>`
+      : "Each dot is one group of modules the product page shares with other pages";
+    if (cap.innerHTML !== html) cap.innerHTML = html;
+  }
+
   let frame = 0;
-  const countUp = () => {
-    const begin = performance.now();
-    const tick = (now) => {
-      const share = Math.min(1, (now - begin) / 1200);
-      for (const count of counts) count.textContent = Math.round(Number(count.dataset.n) * share);
-      if (share < 1) frame = requestAnimationFrame(tick);
-    };
-    frame = requestAnimationFrame(tick);
-  };
-  const show = (step) => {
-    for (const fill of fills) fill.classList.toggle("on", Number(fill.dataset.at) <= step);
-    for (const comp of figure.querySelectorAll(".cf-comp")) comp.classList.toggle("cur", comp.dataset.k === KEYS[step]);
-    figure.classList.toggle("playing", step > 0 && step < LAST);
-    figure.classList.toggle("done", step === LAST);
-    $("#cfCap").textContent = CAPS[step];
-  };
-  const play = () => {
-    clearTimeout(timer);
+  function play() {
     cancelAnimationFrame(frame);
-    let step = 0;
-    show(0);
-    const advance = () => {
-      if (!isShown(figure)) { timer = setTimeout(advance, 400); return; }
-      show(++step);
-      if (step === LAST) countUp();
-      else timer = setTimeout(advance, 2600);
+    let clock = 0;
+    let last = performance.now();
+    const tick = (now) => {
+      if (isShown(figure)) clock += Math.min(64, now - last);
+      last = now;
+      render(Math.min(clock, END));
+      if (clock < END) frame = requestAnimationFrame(tick);
     };
-    timer = setTimeout(advance, 2500);
-  };
-  $("#cfReplay").onclick = play;
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) show(LAST);
+    render(0);
+    frame = requestAnimationFrame(tick);
+  }
+  $("#gtReplay").onclick = play;
+  const step = Number(new URLSearchParams(location.search).get("gt"));
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) render(END);
+  else if (step) render(Math.min(step, END));
   else {
-    show(0);
+    render(0);
     onView(figure, play);
   }
 }
-cssFloor();
+groupingTrees();
