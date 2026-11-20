@@ -29,7 +29,7 @@ const color = (name) => `var(--s-${MODULES[name].set})`;
 const kb = (value) => (value < 1 ? `${value * 1000} B` : `${value} KB`);
 const chipHtml = (name, withSize = true) => `<span class="chip" style="--c:${color(name)}">${name}${withSize ? `<span class="sz">${kb(MODULES[name].kb)}</span>` : ""}</span>`;
 
-/* 02 · module graph: hover or focus a card to see its importers (or a root's modules) */
+/* 04 · module graph: hover or focus a card to see its importers (or a root's modules) */
 const GRAPH_ROOTS = [
   ["_app", "wraps every page"],
   ["home", "page"],
@@ -66,7 +66,7 @@ function graph() {
   host.addEventListener("focusout", (event) => { if (!host.contains(event.relatedTarget)) light(new Set()); });
 }
 
-/* 03 · step figure: where each module of the product page lands */
+/* 05 · step figure: where each module of the product page lands */
 const STEPS = [
   { cap: "The product page's modules, before bundling", mod: null, wp: "Next.js makes every page an entry that depends on <code>_app</code>, and splits shared code from 20 KB up.", rd: "vinext loads <code>_app</code> and every page with <code>import()</code> from one client entry. Rolldown splits with no minimum size." },
   { cap: "React · every page", mod: "react", wp: "Into the <b>framework</b> chunk, as Next.js configures it.", rd: "Into the <b>framework</b> chunk, as vinext configures it." },
@@ -502,7 +502,7 @@ function pack() {
   }, { threshold: 0.45 }).observe(stage);
 }
 
-/* 05 · animated download waterfall of both median runs, one time axis */
+/* 06 · animated download waterfall of both median runs, one time axis */
 function waterfallFigure(redraw = false) {
   const data = window.WATERFALL;
   const MAX = 3000;
@@ -649,7 +649,7 @@ onView($("#rg"), () => {
   $("#rg").classList.add("seen");
 });
 
-/* 04 · grouping trees: every shared group of the product page runs through each bundler's rule */
+/* 02 · grouping trees: every shared group of the product page runs through each bundler's rule */
 function groupingTrees() {
   const figure = $("#cssfloor");
   const data = window.GROUPING;

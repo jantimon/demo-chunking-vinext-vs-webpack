@@ -243,7 +243,7 @@ h3 { font: 700 22px/1.2 var(--display); margin: 1.8em 0 .3em; }
   .intro { padding: 48px 0 32px; }
   h1 { font-size: clamp(36px, 10.5vw, 46px); }
   .dek { font-size: 17px; }
-  .split, .facts, .fixes, .about { grid-template-columns: 1fr; }
+  .split, .facts, .facts.two, .fixes, .about { grid-template-columns: 1fr; }
   .lanes { gap: 6px; }
   .lane-name span, .file-top .tag, .fname .long { display: none; }
   .fname .short { display: inline; }
@@ -391,7 +391,7 @@ h3 { font: 700 22px/1.2 var(--display); margin: 1.8em 0 .3em; }
   .gt-cap { min-height: 4.2em; }
   .gt-panels { grid-template-columns: 1fr; }
 }
-.cf-src { margin: -6px 0 0; font-size: 13.5px; line-height: 1.6; color: var(--faint); }
+.cf-src { margin: -6px 0 14px; font-size: 13.5px; line-height: 1.6; color: var(--faint); }
 .cf-src a { color: var(--muted); text-decoration-color: rgb(163 160 154 / .45); }
 .cf-src a:hover { color: var(--text); }
 .cf-src code { background: none; border: 0; padding: 0; color: inherit; }
