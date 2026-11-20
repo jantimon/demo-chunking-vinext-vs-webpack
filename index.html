@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Same code, ten times the files</title>
-<meta name="description" content="webpack copies small shared code into every chunk that needs it. Rolldown never copies, so it cuts one chunk per unique set of importers, and a large Next.js Pages Router app on vinext ends up with hundreds of tiny files.">
+<meta name="description" content="webpack copies small shared code into every chunk that needs it. Rolldown never copies, so it makes one chunk per unique set of importers, and a large Next.js Pages Router app on vinext ends up with hundreds of tiny files.">
 <meta name="theme-color" content="#0c0c0e">
 <meta name="author" content="Jan Nicklas">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Same code, ten times the files">
-<meta property="og:description" content="webpack copies small shared code into every chunk that needs it. Rolldown never copies, so it cuts one chunk per unique set of importers, and a large Next.js Pages Router app on vinext ends up with hundreds of tiny files.">
+<meta property="og:description" content="webpack copies small shared code into every chunk that needs it. Rolldown never copies, so it makes one chunk per unique set of importers, and a large Next.js Pages Router app on vinext ends up with hundreds of tiny files.">
 <meta property="og:url" content="https://jantimon.github.io/demo-chunking-vinext-vs-webpack/">
 <meta property="og:image" content="https://jantimon.github.io/demo-chunking-vinext-vs-webpack/assets/og.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
@@ -33,7 +33,7 @@
 <header class="intro">
   <p class="kicker"><i class="tok wp"></i><i class="tok rd"></i> <svg class="bi webpack" aria-hidden="true"><use href="#bi-webpack"/></svg>webpack × <svg class="bi rolldown" aria-hidden="true"><use href="#bi-rolldown"/></svg>Rolldown · Next.js Pages Router<a class="kicker-gh" href="https://github.com/jantimon/demo-chunking-vinext-vs-webpack" aria-label="Source and demo builds on GitHub" title="Source and demo builds on GitHub"><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></p>
   <h1>Same code,<br><span>ten times the files</span></h1>
-  <p class="dek"><strong class="dek-em">webpack copies</strong> small shared code into every chunk that needs it. <strong class="dek-em">Rolldown never copies</strong>, so it cuts one chunk for every unique set of importers, and a large app ends up with hundreds of tiny files.</p>
+  <p class="dek"><strong class="dek-em">webpack copies</strong> small shared code into every chunk that needs it. <strong class="dek-em">Rolldown never copies</strong>, so it makes one chunk for every unique set of importers, and a large app ends up with hundreds of tiny files.</p>
 </header>
 
 <div class="stack">
@@ -43,9 +43,9 @@
   <div class="split wide" aria-label="Three ways to pack the same pages">
     <figure class="pack-way"><figcaption>One file per page</figcaption><div class="ways"><b class="w-big"></b><b class="w-big"></b><b class="w-big"></b></div><p>Shared code downloads again on every page.</p></figure>
     <figure class="pack-way good"><figcaption>Pages + shared chunks</figcaption><div class="ways"><b class="w-mid"></b><b class="w-mid"></b><b class="w-mid shared"></b></div><p>The goal: few files, shared code cached once.</p></figure>
-    <figure class="pack-way"><figcaption>One file per module</figcaption><div class="ways"><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b></div><p>Every file costs a request and a compile step.</p></figure>
+    <figure class="pack-way"><figcaption>One file per module</figcaption><div class="ways"><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b><b class="w-dot"></b></div><p>Every file needs its own request and compile step.</p></figure>
   </div>
-  <p>A module that several pages share, but not all, needs a home. webpack copies it into each page's file when it is under 20 KB. Rolldown never copies: it puts the module into a chunk for exactly that set of pages.</p>
+  <p>A module that several pages share, but not all, has to go into some file. webpack copies it into each page's file when it is under 20 KB. Rolldown never copies: it puts the module into a chunk for exactly that set of pages.</p>
 </section>
 
 <section id="s2">
@@ -61,7 +61,7 @@
   <h2><span class="num">03</span>Watch both <span class="hi">pack</span> the product page</h2>
   <p>One module per step, for everything the product page loads.</p>
   <p class="frame-tag toy wide">Toy shop · 20 modules, built to show the mechanism</p>
-  <figure class="stage wide is-toy" id="pack" aria-label="Step by step: where each module of the product page lands">
+  <figure class="stage wide is-toy" id="pack" aria-label="Step by step: which file each module of the product page goes into">
     <div class="stage-head"><p class="cap" id="packCap">The product page's modules</p><p class="keys"><span class="fast-hint" aria-hidden="true">×2</span>← → step · space play</p></div>
     <div class="roots" id="roots" aria-label="Roots: what can import a module"></div>
     <div class="tray" id="tray"></div>
@@ -74,15 +74,15 @@
   </figure>
   <p>The two differ only on small code that several pages share:</p>
   <ul class="diff">
-    <li><b class="wp-t"><svg class="bi webpack" aria-hidden="true"><use href="#bi-webpack"/></svg>webpack copies it.</b> <code>Price</code>, <code>translate</code>, <code>IconButton</code> and <code>useCart</code> sit a second time in the cart page's file.</li>
-    <li><b class="rd-t"><svg class="bi rolldown" aria-hidden="true"><use href="#bi-rolldown"/></svg>Rolldown gives it a file.</b> One for <code>Price</code>, one for <code>translate</code>, one for <code>IconButton</code> and <code>useCart</code>, and one for <code>Button</code> and <code>styled</code>, because Rolldown doesn't know <code>_app</code> always loads before a page.</li>
+    <li><b class="wp-t"><svg class="bi webpack" aria-hidden="true"><use href="#bi-webpack"/></svg>webpack copies it.</b> <code>Price</code>, <code>translate</code>, <code>IconButton</code> and <code>useCart</code> are in the cart page's file a second time.</li>
+    <li><b class="rd-t"><svg class="bi rolldown" aria-hidden="true"><use href="#bi-rolldown"/></svg>Rolldown puts it into a separate file.</b> One for <code>Price</code>, one for <code>translate</code>, one for <code>IconButton</code> and <code>useCart</code>, and one for <code>Button</code> and <code>styled</code>, because Rolldown has no information that <code>_app</code> always loads before a page.</li>
   </ul>
-  <p>React, the 30 KB gallery and code that only one page uses end up the same in both. The product page loads 8 more files with Rolldown: those four, plus one stylesheet each for <code>Button</code>, <code>Price</code>, <code>IconButton</code> and the carousel chunk.</p>
+  <p>React, the 30 KB gallery and code that only one page uses go into the same files in both. The product page loads 8 more files with Rolldown: those four, plus one stylesheet each for <code>Button</code>, <code>Price</code>, <code>IconButton</code> and the carousel chunk.</p>
 </section>
 
 <section id="s4">
   <h2><span class="num">04</span>The same rule in a <span class="hi">large</span> app</h2>
-  <p>A real Next.js Pages Router app with 225 pages, built both ways. Every page and every lazy import is a root, and almost every module is reached by its own mix of roots. The product page alone touches 536 different importer sets.</p>
+  <p>A real Next.js Pages Router app with 225 pages, built both ways. Every page and every lazy import is a root, and almost every module is imported by its own combination of roots. The modules of the product page alone have 536 different importer sets.</p>
   <p class="frame-tag real wide">Real app · Next.js Pages Router, 225 pages</p>
   <figure class="scale wide" id="scale" aria-label="JavaScript files the product page's HTML lists at start">
     <div class="scale-row"><p class="scale-name"><i class="tok wp"></i><svg class="bi webpack" aria-hidden="true"><use href="#bi-webpack"/></svg>webpack</p><div class="squares" data-n="55" data-kind="wp"></div><p class="scale-num"><b>55</b> files</p></div>
@@ -93,23 +93,23 @@
     <div class="fact"><p class="fact-k">Code shipped, joined into one file</p><p class="fact-v"><span class="wp-t">837 KB</span> vs <span class="rd-t">850 KB</span></p><p>Nearly the same code. Both builds gzipped as one file.</p></div>
     <div class="fact"><p class="fact-k">The same code as separate files</p><p class="fact-v"><span class="wp-t">865 KB</span> vs <span class="rd-t">954 KB</span></p><p>gzip restarts for each file: 28 KB overhead against 104 KB.</p></div>
     <div class="fact"><p class="fact-k">Stylesheets before the first paint</p><p class="fact-v"><span class="wp-t">6</span> vs <span class="rd-t">145</span></p><p>Vite writes one stylesheet per chunk that holds CSS, and the page lists all of them.</p></div>
-    <div class="fact"><p class="fact-k">Whole build on disk</p><p class="fact-v"><span class="wp-t">21.0 MB</span> vs <span class="rd-t">16.8 MB</span></p><p>webpack's build is bigger: that is the price of the copies.</p></div>
+    <div class="fact"><p class="fact-k">Whole build on disk</p><p class="fact-v"><span class="wp-t">21.0 MB</span> vs <span class="rd-t">16.8 MB</span></p><p>webpack's build is bigger because it copies shared code into several files.</p></div>
   </div>
   <h3>Why webpack has only 6 stylesheets</h3>
-  <p>webpack applies the 20 KB floor to CSS on its own. When it moves shared modules into a chunk, it measures their JavaScript and their CSS apart. CSS under 20 KB stays in the page's stylesheet, and only the JavaScript moves. Vite writes a stylesheet for every chunk that holds any CSS, and in this app every styled component has its own CSS module.</p>
+  <p>webpack applies the 20 KB minimum to CSS separately. When it moves shared modules into a chunk, it measures their JavaScript and their CSS apart. CSS under 20 KB stays in the page's stylesheet, and only the JavaScript moves. Vite writes a stylesheet for every chunk that holds any CSS, and in this app every styled component has its own CSS module.</p>
   <p class="cf-src">The rule in code: <a href="https://github.com/vercel/next.js/blob/v16.4.2/packages/next/src/build/webpack-config.ts#L1237-L1238">Next.js sets <code>minSize: 20000</code></a> · <a href="https://github.com/webpack-contrib/mini-css-extract-plugin/blob/v2.4.4/src/index.js#L431-L433">mini-css-extract gives CSS its own size type</a> · <a href="https://github.com/webpack/webpack/blob/v5.98.0/lib/optimize/SplitChunksPlugin.js#L1286-L1311">webpack drops the type that stays under 20 KB</a></p>
   <p class="frame-tag real wide">Real app · three of the product page's shared components</p>
   <figure class="cf wide" id="cssfloor" aria-label="Where the CSS of three shared components ends up with webpack and with Rolldown">
     <div class="cf-head"><p class="cf-cap" id="cfCap">Three components the product page shares with other pages</p><button type="button" class="cf-replay" id="cfReplay">Replay</button></div>
     <div class="cf-comps"><div class="cf-comp" data-k="search" style="--c:var(--s-hp)"><p class="cf-cname">Search box</p><div class="cf-blks"><span class="chip"><i class="ficon js">JS</i>JS</span><span class="chip"><i class="ficon css">CSS</i>21.6 KB</span></div><span class="cf-meter" style="--kb:21.6" aria-hidden="true"><i></i></span></div><div class="cf-comp" data-k="dialog" style="--c:var(--s-hpc)"><p class="cf-cname">Dialog</p><div class="cf-blks"><span class="chip"><i class="ficon js">JS</i>JS</span><span class="chip"><i class="ficon css">CSS</i>2.6 KB</span></div><span class="cf-meter" style="--kb:2.6" aria-hidden="true"><i></i></span></div><div class="cf-comp" data-k="divider" style="--c:var(--s-p)"><p class="cf-cname">Divider</p><div class="cf-blks"><span class="chip"><i class="ficon js">JS</i>JS</span><span class="chip"><i class="ficon css">CSS</i>0.2 KB</span></div><span class="cf-meter" style="--kb:0.2" aria-hidden="true"><i></i></span></div></div>
-    <p class="cf-floor" aria-hidden="true"><i></i>20 KB floor</p>
+    <p class="cf-floor" aria-hidden="true"><i></i>20 KB minimum</p>
     <div class="cf-lanes">
-      <div class="cf-lane wp"><p class="lane-name"><i class="tok wp"></i><svg class="bi webpack" aria-hidden="true"><use href="#bi-webpack"/></svg>webpack <span>Next.js 16.4 settings</span></p><div class="cf-file"><p class="cf-fname">shared chunk</p><div class="cf-row"><span class="cf-slot"><span class="chip cf-fill" data-at="1" style="--c:var(--s-hp)"><i class="ficon js">JS</i>search box</span></span><span class="cf-slot"><span class="chip cf-fill" data-at="1" style="--c:var(--s-hp)"><i class="ficon css">CSS</i>search box</span></span></div><em class="cf-tag cf-fill" data-at="1">over 20 KB · own CSS file</em></div><div class="cf-file"><p class="cf-fname">shared chunk</p><div class="cf-row"><span class="cf-slot"><span class="chip cf-fill" data-at="2" style="--c:var(--s-hpc)"><i class="ficon js">JS</i>dialog</span></span><span class="cf-slot"></span></div><em class="cf-tag cf-fill" data-at="2">JS moves, CSS stays behind</em></div><div class="cf-file"><p class="cf-fname">shared chunk</p><div class="cf-row"><span class="cf-slot"><span class="chip cf-fill" data-at="3" style="--c:var(--s-p)"><i class="ficon js">JS</i>divider</span></span><span class="cf-slot"></span></div><em class="cf-tag cf-fill" data-at="3">JS moves, CSS stays behind</em></div><div class="cf-file cf-page"><p class="cf-fname">page stylesheet</p><div class="cf-row"><span class="chip cf-own"><i class="ficon css">CSS</i>page</span><span class="cf-slot"><span class="chip cf-fill" data-at="2" style="--c:var(--s-hpc)"><i class="ficon css">CSS</i>dialog</span></span><span class="cf-slot"><span class="chip cf-fill" data-at="3" style="--c:var(--s-p)"><i class="ficon css">CSS</i>divider</span></span></div><em class="cf-tag cf-fill" data-at="2">under 20 KB · stays with the page</em></div><p class="cf-count"><b data-n="6">6</b> stylesheets on the product page</p></div>
+      <div class="cf-lane wp"><p class="lane-name"><i class="tok wp"></i><svg class="bi webpack" aria-hidden="true"><use href="#bi-webpack"/></svg>webpack <span>Next.js 16.4 settings</span></p><div class="cf-file"><p class="cf-fname">shared chunk</p><div class="cf-row"><span class="cf-slot"><span class="chip cf-fill" data-at="1" style="--c:var(--s-hp)"><i class="ficon js">JS</i>search box</span></span><span class="cf-slot"><span class="chip cf-fill" data-at="1" style="--c:var(--s-hp)"><i class="ficon css">CSS</i>search box</span></span></div><em class="cf-tag cf-fill" data-at="1">over 20 KB · own CSS file</em></div><div class="cf-file"><p class="cf-fname">shared chunk</p><div class="cf-row"><span class="cf-slot"><span class="chip cf-fill" data-at="2" style="--c:var(--s-hpc)"><i class="ficon js">JS</i>dialog</span></span><span class="cf-slot"></span></div><em class="cf-tag cf-fill" data-at="2">JS moves, CSS stays with the page</em></div><div class="cf-file"><p class="cf-fname">shared chunk</p><div class="cf-row"><span class="cf-slot"><span class="chip cf-fill" data-at="3" style="--c:var(--s-p)"><i class="ficon js">JS</i>divider</span></span><span class="cf-slot"></span></div><em class="cf-tag cf-fill" data-at="3">JS moves, CSS stays with the page</em></div><div class="cf-file cf-page"><p class="cf-fname">page stylesheet</p><div class="cf-row"><span class="chip cf-own"><i class="ficon css">CSS</i>page</span><span class="cf-slot"><span class="chip cf-fill" data-at="2" style="--c:var(--s-hpc)"><i class="ficon css">CSS</i>dialog</span></span><span class="cf-slot"><span class="chip cf-fill" data-at="3" style="--c:var(--s-p)"><i class="ficon css">CSS</i>divider</span></span></div><em class="cf-tag cf-fill" data-at="2">under 20 KB · stays with the page</em></div><p class="cf-count"><b data-n="6">6</b> stylesheets on the product page</p></div>
       <div class="cf-lane rd"><p class="lane-name"><i class="tok rd"></i><svg class="bi rolldown" aria-hidden="true"><use href="#bi-rolldown"/></svg>Rolldown <span><svg class="bi vite" aria-hidden="true"><use href="#bi-vite"/></svg>vinext 1.4.5</span></p><div class="cf-file"><p class="cf-fname">shared chunk</p><div class="cf-row"><span class="cf-slot"><span class="chip cf-fill" data-at="1" style="--c:var(--s-hp)"><i class="ficon js">JS</i>search box</span></span><span class="cf-slot"><span class="chip cf-fill" data-at="1" style="--c:var(--s-hp)"><i class="ficon css">CSS</i>search box</span></span></div><em class="cf-tag cf-fill" data-at="1">own CSS file</em></div><div class="cf-file"><p class="cf-fname">shared chunk</p><div class="cf-row"><span class="cf-slot"><span class="chip cf-fill" data-at="2" style="--c:var(--s-hpc)"><i class="ficon js">JS</i>dialog</span></span><span class="cf-slot"><span class="chip cf-fill" data-at="2" style="--c:var(--s-hpc)"><i class="ficon css">CSS</i>dialog</span></span></div><em class="cf-tag cf-fill" data-at="2">own CSS file</em></div><div class="cf-file"><p class="cf-fname">shared chunk</p><div class="cf-row"><span class="cf-slot"><span class="chip cf-fill" data-at="3" style="--c:var(--s-p)"><i class="ficon js">JS</i>divider</span></span><span class="cf-slot"><span class="chip cf-fill" data-at="3" style="--c:var(--s-p)"><i class="ficon css">CSS</i>divider</span></span></div><em class="cf-tag cf-fill" data-at="3">own CSS file</em></div><div class="cf-file cf-page"><p class="cf-fname">page stylesheet</p><div class="cf-row"><span class="chip cf-own"><i class="ficon css">CSS</i>page</span><span class="cf-slot"></span><span class="cf-slot"></span></div><em class="cf-tag cf-none">&nbsp;</em></div><p class="cf-count"><b data-n="145">145</b> stylesheets, 87 of them under 1 KB</p></div>
     </div>
   </figure>
-  <p class="small">In the real build, the dialog and divider CSS sit in the search box chunk's CSS file, not in the page's. The same rule put them there, because they also belong to a larger shared group with the search box, and that group's CSS passed 20 KB.</p>
-  <p>webpack pays for the floor with copies. It writes small shared CSS into the stylesheet of each page that needs it, so the dialog's CSS sits in 10 of the build's CSS files. vinext has no such floor.</p>
+  <p class="small">In the real build, the dialog and divider CSS are in the search box chunk's CSS file, not in the page's. The same rule put them there, because they also belong to a larger shared group with the search box, and that group's CSS is over 20 KB.</p>
+  <p>Because of the 20 KB minimum, webpack writes the same small CSS into several stylesheets: the dialog's CSS is in 10 of the build's CSS files. vinext has no such minimum.</p>
   <h3>What a customer notices</h3>
   <p>iPhone 13 profile over emulated 4G, median of 20 runs. The server sends files in the order Chrome asks for, up to 100 at a time, as the production CDN does. "Page ready" is the moment React has hydrated the page, so a tap works.</p>
   <p class="frame-tag real wide">Real app · Next.js Pages Router, 225 pages</p>
@@ -121,7 +121,7 @@
 </section>
 
 <section id="sprio">
-  <h2><span class="num">05</span>Who gets the connection <span class="hi">first</span></h2>
+  <h2><span class="num">05</span>Which files the server sends <span class="hi">first</span></h2>
   <p>Chrome tells the server how urgent each file is. Render-blocking CSS is Highest. webpack's scripts load with <code>defer</code> and are Low. vinext's are module scripts and are High from the start. The product image starts at Medium and becomes High only once layout shows it on screen. In these runs the server sends files in that order, up to 100 at a time, as the production CDN does.</p>
   <p class="frame-tag real wide">Real app · Next.js Pages Router, 225 pages</p>
   <figure class="wf wide" id="wf" aria-label="Download waterfall of the product page, webpack and vinext on one time axis">
@@ -130,7 +130,7 @@
     <div class="wf-lane" data-side="vinext"><p class="wf-name"><i class="tok rd"></i><svg class="bi vite" aria-hidden="true"><use href="#bi-vite"/></svg>vinext 1.4.5</p><svg class="wf-svg" aria-hidden="true"></svg></div>
     <div class="wf-legend"><span><i class="wf-k lcp"></i>product image</span><span><i class="wf-k css"></i>CSS</span><span><i class="wf-k js-wp"></i>scripts, <svg class="bi webpack" aria-hidden="true"><use href="#bi-webpack"/></svg>webpack</span><span><i class="wf-k js-rd"></i>scripts, <svg class="bi vite" aria-hidden="true"><use href="#bi-vite"/></svg>vinext</span><span><i class="wf-k other"></i>other</span><span class="wf-k-line">│ first paint · ┊ largest paint</span><button type="button" class="wf-replay" id="wfReplay">Replay</button></div>
   </figure>
-  <p>Both ask for the product image at about 0.45 s. webpack has it at 1.07 s, vinext at 0.98 s, and the largest paint follows right after. The image does not wait behind vinext's 641 scripts.</p>
+  <p>Both ask for the product image at about 0.45 s. webpack has it at 1.07 s, vinext at 0.98 s, and the largest paint follows right after. vinext's 641 scripts do not delay the image.</p>
   <p>What still differs is when the page is ready. React hydrates only after every script the HTML lists has arrived: 55 for webpack, 576 for vinext. The page is ready at 1.56 s with webpack and at 2.07 s with vinext. Medians of 20 runs.</p>
   <p>vinext asks for about 800 files, and the server sends 100 at a time. Allowed 256 at a time, it is ready at 1.78 s, but the product image now shares the connection with more scripts, and the largest paint moves from 1.01 s to 1.28 s (median of 10 runs).</p>
 </section>
@@ -140,24 +140,24 @@
   <ol class="fixes wide">
     <li class="fix">
       <p class="fix-k">1 · "HTTP/2 makes small files free"</p>
-      <p>It removes the six-connection limit, not the cost per file. Each file still pays its own gzip start, its own compile step, and for CSS a render-blocking request. The HTML of the product page carries 1,152 script and preload tags.</p>
+      <p>It removes the limit of six connections, not the work each file needs. Each file still needs its own request, its own decompression and compile step, and for CSS a request that blocks the first paint. The HTML of the product page has 1,152 script and preload tags.</p>
     </li>
     <li class="fix fix-wide">
       <p class="fix-k">2 · "Port vinext's App Router grouping to the Pages Router"</p>
       <p>vinext already groups chunks the Next.js way, but only for the App Router. We ported its rule: modules that the same set of pages load at start share one chunk.</p>
       <div class="rg" id="rg">
         <div class="rg-step" data-i="0"><span class="rg-mark ok">✓</span><p><b>Start-up code merges.</b> The chunks <code>_app</code> loads go from 136 to 11.</p></div>
-        <div class="rg-step" data-i="1"><span class="rg-mark no">✗</span><p><b>Lazy code stays split.</b> The rule leaves dynamic <code>import()</code> alone, and lazy dialogs reach most of the app: about 500 tiny chunks remain, and the product page still loads about 470 scripts.</p></div>
+        <div class="rg-step" data-i="1"><span class="rg-mark no">✗</span><p><b>Lazy code stays split.</b> The rule leaves dynamic <code>import()</code> alone, and lazy dialogs import most of the app: about 500 tiny chunks remain, and the product page still loads about 470 scripts.</p></div>
         <div class="rg-step" data-i="2"><span class="rg-mark warn">!</span><p><b>Keep page files out of the groups.</b> vinext's server finds a page's scripts and CSS through the page file's own chunk. Our first port grouped the page files too, and the product page painted without its CSS.</p></div>
       </div>
     </li>
     <li class="fix">
       <p class="fix-k">3 · Manual chunk groups</p>
-      <p>Rolldown's <code>codeSplitting.groups</code> with framework, library and app groups cut the files to 371. Each group carries code for other pages too: the product page loads 3 MB of JavaScript.</p>
+      <p>Rolldown's <code>codeSplitting.groups</code> with framework, library and app groups cut the files to 371. Each group also holds code for other pages: the product page loads 3 MB of JavaScript.</p>
     </li>
     <li class="fix">
       <p class="fix-k">4 · Copy small chunks, like webpack</p>
-      <p>Rolldown 1.2 can copy small automatic chunks into the chunks that use them: <code>experimentalInlineCommonChunks: { maxSize: 20000 }</code>, webpack's floor. The build drops from 1,618 to 457 files, the product page loads 72 scripts and 33 stylesheets. But copied modules bring their CSS twice, the cascade order changes, and the header logo rendered twice.</p>
+      <p>Rolldown 1.2 can copy small automatic chunks into the chunks that use them: <code>experimentalInlineCommonChunks: { maxSize: 20000 }</code>, the same 20 KB minimum webpack uses. The build drops from 1,618 to 457 files, the product page loads 72 scripts and 33 stylesheets. But copied modules load their CSS twice, the cascade order changes, and the header logo rendered twice.</p>
       <p class="pending">Load-time measurements for this option follow.</p>
     </li>
   </ol>
@@ -168,7 +168,7 @@
   <div>
     <p class="about-k">Written by</p>
     <p class="about-name">Jan Nicklas <span>@jantimon</span></p>
-    <p>Feel free to reach out, I'd love to hear from you.</p>
+    <p>Feel free to write to me, I'd love to hear from you.</p>
     <ul class="social">
       <li><a href="https://bsky.app/profile/jantimon.bsky.social"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M3.5 2.2C5.3 3.5 7.3 6.3 8 7.8c.7-1.5 2.7-4.3 4.5-5.6 1.3-1 3.5-1.7 3.5.7 0 .5-.3 4-.4 4.6-.6 2-2.6 2.5-4.4 2.2 3.1.5 3.9 2.3 2.2 4-3.3 3.3-4.7-.8-5.1-1.9L8 11.1l-.3.7c-.4 1.1-1.8 5.2-5.1 1.9-1.7-1.7-.9-3.5 2.2-4-1.8.3-3.8-.2-4.4-2.2C.3 6.9 0 3.4 0 2.9 0 .5 2.2 1.2 3.5 2.2z"/></svg>Bluesky</a></li>
       <li><a href="https://x.com/jantimon"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M12.2 1h2.3L9.5 6.8 15.4 15h-4.6L7.2 10.2 3 15H.7l5.4-6.2L.4 1h4.7l3.3 4.4L12.2 1zm-.8 12.6h1.3L4.6 2.3H3.2l8.2 11.3z"/></svg>X</a></li>

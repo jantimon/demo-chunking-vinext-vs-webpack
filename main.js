@@ -68,7 +68,7 @@ function graph() {
 
 /* 03 · step figure: where each module of the product page lands */
 const STEPS = [
-  { cap: "The product page's modules, before bundling", mod: null, wp: "Next.js makes every page an entry that depends on <code>_app</code>, and splits shared code from 20 KB up.", rd: "vinext loads <code>_app</code> and every page with <code>import()</code> from one client entry. Rolldown splits with no size floor." },
+  { cap: "The product page's modules, before bundling", mod: null, wp: "Next.js makes every page an entry that depends on <code>_app</code>, and splits shared code from 20 KB up.", rd: "vinext loads <code>_app</code> and every page with <code>import()</code> from one client entry. Rolldown splits with no minimum size." },
   { cap: "React · every page", mod: "react", wp: "Into the <b>framework</b> chunk, as Next.js configures it.", rd: "Into the <b>framework</b> chunk, as vinext configures it." },
   { cap: "_app · wraps every page", mod: "_app", wp: "Its own entry file.", rd: "Its own chunk." },
   { cap: "Header · only _app uses it", mod: "Header", wp: "Into <code>_app</code>.", rd: "Into <code>_app</code>." },
@@ -674,9 +674,9 @@ function cssFloor() {
   if (!figure) return;
   const CAPS = [
     "Three components the product page shares with other pages",
-    "Search box · 21.6 KB of CSS, over the 20 KB floor",
-    "Dialog · 2.6 KB of CSS, under the floor",
-    "Divider · 0.2 KB of CSS, under the floor",
+    "Search box · 21.6 KB of CSS, over the 20 KB minimum",
+    "Dialog · 2.6 KB of CSS, under 20 KB",
+    "Divider · 0.2 KB of CSS, under 20 KB",
     "Product page: 6 stylesheets with webpack, 145 with vinext 1.4.5",
   ];
   const KEYS = [null, "search", "dialog", "divider", null];
