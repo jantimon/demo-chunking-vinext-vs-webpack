@@ -689,8 +689,8 @@ function groupingTrees() {
   const FAST_SPREAD = 4000;
   const FAST_RUN = 900;
   const FAST_DROP = 500;
-  const BASKET_TOP = 372;
   const BASKET_H = 92;
+  const BAR_W = 136;
   const rolldown = data[figure.dataset.build];
   const wp = data.webpack;
   const fullMax = Math.max(wp.html.js, wp.html.css, rolldown.html.js, rolldown.html.css);
@@ -722,20 +722,22 @@ function groupingTrees() {
     el(svg, "rect", { x, y, width: w, height: h, rx: 10, class: `gt-box ${kind}` });
     lines.forEach(([text, cls, dy]) => el(svg, "text", { x: x + w / 2, y: y + dy, "text-anchor": "middle", class: cls }, text));
   }
-  function basket(svg, x, kind, label, start) {
-    el(svg, "rect", { x, y: BASKET_TOP, width: 160, height: BASKET_H, rx: 12, class: "gt-basket" });
-    const fill = el(svg, "rect", { x: x + 1, y: BASKET_TOP + BASKET_H - 1, width: 158, height: 0, rx: 11, class: `gt-fill ${kind}` });
-    el(svg, "rect", { x: x + 12, y: BASKET_TOP + 12, width: 26, height: 14, rx: 3, class: `gt-chip ${kind}` });
-    el(svg, "text", { x: x + 25, y: BASKET_TOP + 22.5, "text-anchor": "middle", class: `gt-chipt ${kind}` }, kind.toUpperCase());
-    el(svg, "text", { x: x + 46, y: BASKET_TOP + 23.5, class: "gt-bl" }, label);
-    const number = el(svg, "text", { x: x + 12, y: BASKET_TOP + 62, class: "gt-bn" }, String(start));
-    el(svg, "text", { x: x + 12, y: BASKET_TOP + 81, class: "gt-bl" }, `${start} at start`);
-    return { fill, number, start };
+  function basket(svg, x, top, kind, label, start) {
+    el(svg, "rect", { x, y: top, width: 160, height: BASKET_H, rx: 12, class: "gt-basket" });
+    el(svg, "rect", { x: x + 12, y: top + 12, width: 26, height: 14, rx: 3, class: `gt-chip ${kind}` });
+    el(svg, "text", { x: x + 25, y: top + 22.5, "text-anchor": "middle", class: `gt-chipt ${kind}` }, kind.toUpperCase());
+    el(svg, "text", { x: x + 46, y: top + 23.5, class: "gt-bl" }, label);
+    const number = el(svg, "text", { x: x + 12, y: top + 56, class: "gt-bn" }, String(start));
+    el(svg, "rect", { x: x + 12, y: top + 64, width: BAR_W, height: 6, rx: 3, class: "gt-track" });
+    const bar = el(svg, "rect", { x: x + 12, y: top + 64, width: 0, height: 6, rx: 3, class: `gt-bar ${kind}` });
+    el(svg, "text", { x: x + 12, y: top + 84, class: "gt-bl" }, `${start} at start`);
+    return { bar, number, start };
   }
 
   function buildPanel(panel, spec) {
     const svg = $(".gt-svg", panel);
     svg.replaceChildren();
+    svg.setAttribute("viewBox", `0 0 400 ${spec.height}`);
     const edges = {};
     for (const [key, points] of Object.entries(spec.edges)) {
       edges[key] = { points, node: el(svg, "polyline", { points: points.join(" "), class: "gt-edge" }), count: 0 };
@@ -745,14 +747,16 @@ function groupingTrees() {
     const outs = {};
     for (const [key, { x, y }] of Object.entries(spec.counters)) outs[key] = { node: el(svg, "text", { x, y, "text-anchor": "middle", class: "gt-n" }, "× 0"), box: svg.querySelectorAll(".gt-box.out")[spec.outIndex[key]] };
     for (const [x, y, text] of spec.labels) el(svg, "text", { x, y, class: "gt-yn" }, text);
-    const baskets = { js: basket(svg, 30, "js", "scripts", spec.start.js), css: basket(svg, 210, "css", "stylesheets", spec.start.css) };
+    const baskets = { js: basket(svg, 30, spec.basketTop, "js", "scripts", spec.start.js), css: basket(svg, 210, spec.basketTop, "css", "stylesheets", spec.start.css) };
     return { svg, edges, outs, baskets, layer, pool: [], say: $(".gt-say", panel) };
   }
 
   const ENTRY = (svg) => box(svg, 70, 6, 260, 44, "", [["group of modules", "gt-t", 20], ["used by the same pages", "gt-t", 37]]);
-  const OWN = (svg, x) => box(svg, x, 250, 146, 86, "out", [["own file", "gt-t", 22], ["one more script", "gt-sub", 40], ["(and stylesheet)", "gt-sub", 55]]);
+  const OWN = (svg, x, y = 250) => box(svg, x, y, 146, 86, "out", [["own file", "gt-t", 22], ["one more script", "gt-sub", 40], ["(and stylesheet)", "gt-sub", 55]]);
   const WEBPACK_SPEC = {
     start: wp.start,
+    height: 470,
+    basketTop: 372,
     edges: {
       e0: [[200, 50], [200, 78]],
       small: [[125, 96], [72, 96], [72, 150]],
@@ -778,26 +782,32 @@ function groupingTrees() {
     dropFrom: [219, 336],
     tokens: wp.tokens.map((token) => ({ css: token.css, path: token.path, addJs: token.addJs, addCss: token.addCss })),
   };
-  const ROLLDOWN_SPEC = {
-    start: rolldown.start,
-    edges: {
-      e0: [[200, 50], [200, 78]],
-      own: [[200, 130], [200, 250]],
-      js: [[200, 336], [200, 354], [110, 354], [110, 372]],
-      css: [[200, 336], [200, 354], [290, 354], [290, 372]],
-    },
-    draw(svg) {
-      ENTRY(svg);
-      box(svg, 50, 78, 300, 52, "", [["one chunk per set of importers,", "gt-t", 22], ["any size", "gt-t", 40]]);
-      OWN(svg, 127);
-    },
-    outIndex: { own: 0 },
-    counters: { own: { x: 200, y: 328 } },
-    labels: [],
-    routes: { own: ["e0", "own"] },
-    ends: { own: [200, 268] },
-    dropFrom: [200, 336],
-    tokens: rolldown.tokens.map((token) => ({ css: token.css, path: "own", addJs: true, addCss: token.css })),
+  // On one column the Rolldown tree is not next to webpack's, so its long edge gets shorter.
+  const rolldownSpec = (narrow) => {
+    const up = narrow ? 150 : 0;
+    const own = 250 - up;
+    const top = 372 - up;
+    return {
+      start: rolldown.start,
+      height: 470 - up,
+      basketTop: top,
+      edges: {
+        own: [[200, 50], [200, own]],
+        js: [[200, own + 86], [200, own + 104], [110, own + 104], [110, top]],
+        css: [[200, own + 86], [200, own + 104], [290, own + 104], [290, top]],
+      },
+      draw(svg) {
+        box(svg, 50, 6, 300, 44, "", [["one chunk per set of importers,", "gt-t", 20], ["any size", "gt-t", 37]]);
+        OWN(svg, 127, own);
+      },
+      outIndex: { own: 0 },
+      counters: { own: { x: 200, y: own + 78 } },
+      labels: [],
+      routes: { own: ["own"] },
+      ends: { own: [200, own + 18] },
+      dropFrom: [200, own + 86],
+      tokens: rolldown.tokens.map((token) => ({ css: token.css, path: "own", addJs: true, addCss: token.css })),
+    };
   };
 
   const SAY = {
@@ -841,13 +851,15 @@ function groupingTrees() {
     return { runs, fastStart, slowCount: says.length, fastCount: rest.length, finish: fastStart + FAST_SPREAD + FAST_RUN + FAST_DROP };
   }
 
-  const sides = [
+  const narrow = matchMedia("(max-width: 760px)");
+  const build = () => [
     { side: "webpack", spec: WEBPACK_SPEC },
-    { side: "rolldown", spec: ROLLDOWN_SPEC },
+    { side: "rolldown", spec: rolldownSpec(narrow.matches) },
   ].map(({ side, spec }) => {
     const panel = figure.querySelector(`.gt-panel[data-side="${side}"]`);
     return { side, spec, view: buildPanel(panel, spec), plan: schedule(spec, SAY[side]), says: SAY[side] };
   });
+  let sides = build();
   const END = Math.max(...sides.map(({ plan }) => plan.finish)) + 300;
   const total = (spec) => spec.tokens.length;
   const requests = (html) => html.js + html.css;
@@ -895,7 +907,7 @@ function groupingTrees() {
             continue;
           }
           const share = ease((time - item.end) / item.drop);
-          const path = [spec.dropFrom, ...spec.edges[kind].slice(1), [spec.edges[kind].at(-1)[0], BASKET_TOP + 30]];
+          const path = [spec.dropFrom, ...spec.edges[kind].slice(1), [spec.edges[kind].at(-1)[0], spec.basketTop + 30]];
           const [x, y] = pointAt(path, share * length(path));
           sprite(view, used++, kind).setAttribute("transform", `translate(${x} ${y})`);
         }
@@ -915,9 +927,7 @@ function groupingTrees() {
         const basketView = view.baskets[kind];
         const value = basketView.start + landed[kind];
         basketView.number.textContent = String(value);
-        const height = Math.max(2, ((BASKET_H - 2) * value) / fullMax);
-        basketView.fill.setAttribute("height", String(height));
-        basketView.fill.setAttribute("y", String(BASKET_TOP + BASKET_H - 1 - height));
+        basketView.bar.setAttribute("width", String((BAR_W * value) / fullMax));
       }
       const slowIndex = Math.floor((time - READ) / SLOW_STEP);
       let text = "";
@@ -941,9 +951,10 @@ function groupingTrees() {
   }
 
   let frame = 0;
+  let clock = 0;
   function play() {
     cancelAnimationFrame(frame);
-    let clock = 0;
+    clock = 0;
     let last = performance.now();
     const tick = (now) => {
       if (isShown(figure)) clock += Math.min(64, now - last);
@@ -956,7 +967,12 @@ function groupingTrees() {
   }
   $("#gtReplay").onclick = play;
   const step = Number(new URLSearchParams(location.search).get("gt"));
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) render(END);
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  narrow.addEventListener("change", () => {
+    sides = build();
+    render(still ? END : Math.min(step || clock, END));
+  });
+  if (still) render(END);
   else if (step) render(Math.min(step, END));
   else {
     render(0);

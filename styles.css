@@ -468,8 +468,8 @@ h3 { font: 700 22px/1.2 var(--display); margin: 1.8em 0 .3em; }
 .gt-yn { font: 700 11px var(--mono); fill: var(--muted) !important; letter-spacing: .06em; text-transform: uppercase; }
 .gt-edge { fill: none; stroke-linecap: round; stroke-linejoin: round; }
 .gt-basket { fill: #15151a; stroke: var(--line2); stroke-width: 1.2; }
-.gt-fill.js { fill: color-mix(in srgb, var(--file-js) 26%, transparent); }
-.gt-fill.css { fill: color-mix(in srgb, var(--file-css) 40%, transparent); }
+.gt-track { fill: #26262e; }
+.gt-bar.js { fill: var(--file-js); } .gt-bar.css { fill: var(--file-css); }
 .gt-bn { font: 800 30px var(--display); font-variant-numeric: tabular-nums; }
 .gt-bl { font: 600 12px var(--mono); fill: var(--muted) !important; }
 .gt-chip.js { fill: var(--file-js); } .gt-chip.css { fill: var(--file-css); }
