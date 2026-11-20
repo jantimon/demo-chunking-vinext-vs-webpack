@@ -98,6 +98,7 @@
   </div>
   <h3>Why webpack has only 6 stylesheets</h3>
   <p>webpack applies the 20 KB floor to CSS on its own. When it moves shared modules into a chunk, it measures their JavaScript and their CSS apart. CSS under 20 KB stays in the page's stylesheet, and only the JavaScript moves. Vite writes a stylesheet for every chunk that holds any CSS, and in this app every styled component has its own CSS module.</p>
+  <p class="cf-src">The rule in code: <a href="https://github.com/vercel/next.js/blob/v16.4.2/packages/next/src/build/webpack-config.ts#L1237-L1238">Next.js sets <code>minSize: 20000</code></a> · <a href="https://github.com/webpack-contrib/mini-css-extract-plugin/blob/v2.4.4/src/index.js#L431-L433">mini-css-extract gives CSS its own size type</a> · <a href="https://github.com/webpack/webpack/blob/v5.98.0/lib/optimize/SplitChunksPlugin.js#L1286-L1311">webpack drops the type that stays under 20 KB</a></p>
   <p class="frame-tag real wide">Real app · three of the product page's shared components</p>
   <figure class="cf wide" id="cssfloor" aria-label="Where the CSS of three shared components ends up with webpack and with Rolldown">
     <div class="cf-head"><p class="cf-cap" id="cfCap">Three components the product page shares with other pages</p><button type="button" class="cf-replay" id="cfReplay">Replay</button></div>

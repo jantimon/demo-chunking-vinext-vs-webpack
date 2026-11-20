@@ -486,3 +486,7 @@ html.js .cf:not(.done) .cf-count { opacity: 0; }
   .cf-comp .cf-meter { grid-column: 1 / -1; }
   .cf-lanes { grid-template-columns: 1fr; }
 }
+.cf-src { margin: -6px 0 0; font-size: 13.5px; line-height: 1.6; color: var(--faint); }
+.cf-src a { color: var(--muted); text-decoration-color: rgb(163 160 154 / .45); }
+.cf-src a:hover { color: var(--text); }
+.cf-src code { background: none; border: 0; padding: 0; color: inherit; }
