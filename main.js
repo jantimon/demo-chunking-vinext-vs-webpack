@@ -76,9 +76,9 @@ const STEPS = [
   { cap: "styled · 3 KB · every component with CSS", mod: "styled", wp: "<code>Header</code> uses it, so it is in <code>_app</code> already: <b>stays there</b>.", rd: "Header uses it, so it <b>joins the pages-app group</b> too." },
   { cap: "Carousel · 26 KB · home + product", mod: "Carousel", wp: "Shared and over 20 KB: <b>a shared chunk</b>.", rd: "Set home + product: <b>a new chunk</b>." },
   { cap: "Rating · 1 KB · home + product", mod: "Rating", wp: "Same pages as Carousel: joins its chunk.", rd: "Same set as Carousel: joins its chunk." },
-  { cap: "Price · 1.5 KB · home + product + cart", mod: "Price", wp: "Joins the home + product chunk and is <b>copied</b> into the cart page's file.", rd: "Under 20 KB, but it carries CSS: <b>a new chunk</b>, no copy." },
+  { cap: "Price · 1.5 KB · home + product + cart", mod: "Price", wp: "Joins the home + product chunk and is <b>copied</b> into the cart page's file.", rd: "Under 20 KB, but it has CSS: <b>a new chunk</b>, no copy." },
   { cap: "translate · 1.5 KB · home, product, cart, three dialogs", mod: "translate", wp: "Joins the home + product chunk and is <b>copied</b> into the cart and login dialog files.", rd: "Under 20 KB, no CSS: <b>copied</b> into every chunk that imports it, three of them on this page." },
-  { cap: "IconButton · 1 KB · product + cart + size guide", mod: "IconButton", wp: "Under 20 KB: into the product file, <b>copied</b> into the cart file.", rd: "Under 20 KB, but it carries CSS: <b>a new chunk</b> for product + cart." },
+  { cap: "IconButton · 1 KB · product + cart + size guide", mod: "IconButton", wp: "Under 20 KB: into the product file, <b>copied</b> into the cart file.", rd: "Under 20 KB, but it has CSS: <b>a new chunk</b> for product + cart." },
   { cap: "useCart · 2 KB · product + cart + size guide", mod: "useCart", wp: "Under 20 KB: <b>copied</b> into the product and cart files.", rd: "Same set as <code>IconButton</code>: joins its chunk, so no copy." },
   { cap: "Gallery · 30 KB · only product", mod: "Gallery", wp: "Into the product page's file.", rd: "Into the product page's chunk." },
   { cap: "formatDate · 0.6 KB · product + reviews dialog", mod: "formatDate", wp: "The dialog only opens from product, which has it already: stays in product.", rd: "Same decision: the product page's chunk." },
@@ -675,9 +675,9 @@ function cssFloor() {
   if (!figure) return;
   const CAPS = [
     "Three components the product page shares with other pages",
-    "Search box · 21.6 KB of CSS, over the 20 KB floor",
-    "Dialog · 2.6 KB of CSS, under the floor",
-    "Divider · 0.2 KB of CSS, under the floor",
+    "Search box · 21.6 KB of CSS, over the 20 KB minimum",
+    "Dialog · 2.6 KB of CSS, under 20 KB",
+    "Divider · 0.2 KB of CSS, under 20 KB",
     "Product page: 6 stylesheets with webpack, 169 with vinext PR #4726",
   ];
   const KEYS = [null, "search", "dialog", "divider", null];
