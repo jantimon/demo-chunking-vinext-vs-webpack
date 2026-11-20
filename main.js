@@ -381,8 +381,8 @@ function animateStep() {
     return;
   }
   landed = { wp: false, rd: false };
-  pace = playing && FAST.has(STEPS[step].mod) ? 0.45 : 1;
-  stage.classList.toggle("fast", pace < 1);
+  pace = playing ? (FAST.has(STEPS[step].mod) ? 0.4 : 0.75) : 1;
+  stage.classList.toggle("fast", pace < 0.5);
   render(false);
   const usages = DECIDE[STEPS[step].mod][0].length;
   const t = (700 + usages * 220) * pace;
@@ -620,7 +620,7 @@ addEventListener("resize", () => {
   waterfallFigure(true);
 });
 
-/* 04 · squares and bars, filled when they scroll into view */
+/* Figures that start when they scroll into view */
 function onView(element, run) {
   new IntersectionObserver(([entry], observer) => {
     if (entry.isIntersecting) {
@@ -628,24 +628,6 @@ function onView(element, run) {
       observer.disconnect();
     }
   }, { threshold: 0.35 }).observe(element);
-}
-function squares() {
-  for (const host of document.querySelectorAll(".squares")) {
-    const count = Number(host.dataset.n);
-    host.innerHTML = "<i></i>".repeat(count);
-  }
-  onView($("#scale"), () => {
-    for (const host of document.querySelectorAll(".squares")) {
-      const cells = [...host.children];
-      const perTick = Math.max(1, Math.ceil(cells.length / 60));
-      let index = 0;
-      const tick = () => {
-        for (let k = 0; k < perTick && index < cells.length; k++) cells[index++].classList.add("on");
-        if (index < cells.length) requestAnimationFrame(tick);
-      };
-      tick();
-    }
-  });
 }
 
 /* Stacked sections: a section taller than the viewport sticks once its bottom reaches the viewport's bottom. */
@@ -660,7 +642,6 @@ function stack() {
 stack();
 graph();
 pack();
-squares();
 onView($("#race"), () => $("#race").classList.add("seen"));
 waterfallFigure();
 onView($("#rg"), () => {
