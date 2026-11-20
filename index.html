@@ -49,9 +49,42 @@
   <p>A module that several pages share, but not all, has to go into some file. webpack copies it into each page's file when it is under 20 KB. Rolldown never copies: it puts the module into a chunk for exactly that set of pages.</p>
 </section>
 
+<section id="s4">
+  <h2><span class="num">02</span>How each bundler <span class="hi">decides</span></h2>
+  <p>A real Next.js Pages Router app with 225 pages, built both ways. Every page and every lazy import can load a module, and almost every module is loaded by its own combination of them.</p>
+  <p class="gt-intro">On its product page we saw <span class="gt-who"><svg class="bi webpack" aria-hidden="true"><use href="#bi-webpack"/></svg>webpack</span> with <b>57 × <i class="ficon js">JS</i></b> and <b>6 × <i class="ficon css">CSS</i></b> requests and <span class="gt-who"><svg class="bi vite" aria-hidden="true"><use href="#bi-vite"/></svg>vinext with PR #4726</span> with <b>189 × <i class="ficon js">JS</i></b> and <b>169 × <i class="ficon css">CSS</i></b>: <b class="rd-t">295 more requests</b>.</p>
+  <p>Let's look at why Next.js with webpack behaves differently:</p>
+  <p class="frame-tag real wide">Real app · every shared group of the product page</p>
+  <figure class="gt wide" id="cssfloor" data-build="pr4726" aria-label="How webpack and Rolldown decide which shared groups of modules get their own file, with the scripts and stylesheets each build ends up with">
+    <div class="gt-head"><p class="gt-cap" id="gtCap">Each dot is one group of modules the product page shares with other pages</p><button type="button" class="gt-replay" id="gtReplay">Replay</button></div>
+    <div class="gt-panels">
+      <div class="gt-panel" data-side="webpack"><p class="lane-name"><i class="tok wp"></i><svg class="bi webpack" aria-hidden="true"><use href="#bi-webpack"/></svg>webpack <span>Next.js 16.4 settings</span></p><p class="gt-say" aria-live="polite"></p><svg class="gt-svg" viewBox="0 0 400 470" role="img" aria-label="webpack's decision tree"></svg></div>
+      <div class="gt-panel" data-side="rolldown"><p class="lane-name"><i class="tok rd"></i><svg class="bi rolldown" aria-hidden="true"><use href="#bi-rolldown"/></svg>Rolldown <span><svg class="bi vite" aria-hidden="true"><use href="#bi-vite"/></svg>vinext with <svg class="bi github" aria-hidden="true"><use href="#bi-github"/></svg>PR #4726</span></p><p class="gt-say" aria-live="polite"></p><svg class="gt-svg" viewBox="0 0 400 470" role="img" aria-label="Rolldown's decision tree"></svg></div>
+    </div>
+    <figcaption>webpack's dots are the shared chunks of a webpack build with both rules off; Rolldown's are its shared chunks. The counts start with the files the page loads anyway: the page, _app, the runtime and the other start files.</figcaption>
+  </figure>
+  <p class="cf-src">webpack's two rules in Next.js: <a href="https://github.com/vercel/next.js/blob/v16.4.2/packages/next/src/build/webpack-config.ts#L1237">at most 25 files at page start (<code>maxInitialRequests: 25</code>)</a> · <a href="https://github.com/vercel/next.js/blob/v16.4.2/packages/next/src/build/webpack-config.ts#L1238">shared code only in its own file from 20 KB (<code>minSize: 20000</code>)</a></p>
+  <p>With both rules off, webpack's HTML lists 254 scripts and 76 stylesheets, and the page is ready 0.19 s later than with both rules on, about half of the 0.38 s that PR #4726 adds (iPhone 13 profile, 4G, median of 10 runs).</p>
+  <div class="facts two wide">
+    <div class="fact"><p class="fact-k">Code the product page loads, joined into one file</p><p class="fact-v"><span class="wp-t">889 KB</span> vs <span class="rd-t">1,057 KB</span></p><p>PR #4726 copies small shared code into every chunk that imports it, so one page can load the same module several times.</p></div>
+    <div class="fact"><p class="fact-k">Whole build on disk</p><p class="fact-v"><span class="wp-t">21.5 MB</span> vs <span class="rd-t">22.3 MB</span></p><p>Both builds copy shared code into several files.</p></div>
+  </div>
+</section>
+
+<section id="snotice">
+  <h2><span class="num">03</span>What a customer <span class="hi">notices</span></h2>
+  <p>iPhone 13 profile over emulated 4G, median of 20 runs. The server sends files in the order Chrome asks for, up to 100 at a time, as the production CDN does. "Page ready" is the moment React has hydrated the page, so a tap works.</p>
+  <p class="frame-tag real wide">Real app · Next.js Pages Router, 225 pages</p>
+  <figure class="race wide" id="race" aria-label="First paint and page ready">
+    <div class="race-row"><p>First paint</p><div class="bar-pair"><span class="bar wp" style="--v:800"><b>0.80 s</b></span><span class="bar rd" style="--v:860"><b>0.86 s</b></span></div></div>
+    <div class="race-row"><p>Page ready</p><div class="bar-pair"><span class="bar wp" style="--v:1564"><b>1.56 s</b></span><span class="bar rd" style="--v:1943"><b>1.94 s</b></span></div></div>
+    <figcaption>webpack against vinext with PR #4726. The server sends the 169 stylesheets first, so vinext paints only 0.06 s later. React hydrates only after the last of the 189 scripts has arrived, so the page is ready 0.38 s later. vinext 1.4.5 is ready at 2.07 s.</figcaption>
+  </figure>
+</section>
+
 <section id="s2">
-  <h2><span class="num">02</span>A small <span class="hi">shop</span></h2>
-  <p>Three pages, an <code>_app</code> that wraps every page, and three dialogs that load on demand. Each module shows its size and which of them import it. The color marks the set of importers.</p>
+  <h2><span class="num">04</span>A small <span class="hi">shop</span></h2>
+  <p>To see the decisions module by module, take a small shop: three pages, an <code>_app</code> that wraps every page, and three dialogs that load on demand. Each module shows its size and which of them import it. The color marks the set of importers.</p>
   <p class="frame-tag toy wide">Toy shop · 20 modules, built to show the mechanism</p>
   <figure class="graph wide is-toy" id="graph" aria-label="The toy shop's modules and their importers"></figure>
   <p>As with CSS Modules or a compile-time CSS-in-JS library, every component imports its own stylesheet, and here also a small styling runtime, <code>styled</code>. <code>IconButton</code> extends <code>Button</code>, so its CSS has to load after Button's.</p>
@@ -59,7 +92,7 @@
 </section>
 
 <section id="s3">
-  <h2><span class="num">03</span>Watch both <span class="hi">pack</span> the product page</h2>
+  <h2><span class="num">05</span>Watch both <span class="hi">pack</span> the product page</h2>
   <p>One module per step, for everything the product page loads.</p>
   <p class="frame-tag toy wide">Toy shop · 20 modules, built to show the mechanism</p>
   <figure class="stage wide is-toy" id="pack" aria-label="Step by step: which file each module of the product page goes into">
@@ -82,47 +115,8 @@
   <p>The product page loads 15 files instead of 16 without PR #4726, and webpack's 8. One of the 15 is new: a 51-byte entry file that only starts the real entry chunk.</p>
 </section>
 
-<section id="s4">
-  <h2><span class="num">04</span>The same rule in a <span class="hi">large</span> app</h2>
-  <p>A real Next.js Pages Router app with 225 pages, built both ways. Every page and every lazy import is a root, and almost every module is imported by its own combination of roots. The modules of the product page alone have 536 different importer sets.</p>
-  <p class="frame-tag real wide">Real app · Next.js Pages Router, 225 pages</p>
-  <figure class="scale wide" id="scale" aria-label="JavaScript files the product page's HTML lists at start">
-    <div class="scale-row"><p class="scale-name"><i class="tok wp"></i><svg class="bi webpack" aria-hidden="true"><use href="#bi-webpack"/></svg>webpack</p><div class="squares" data-n="55" data-kind="wp"></div><p class="scale-num"><b>55</b> files</p></div>
-    <div class="scale-row"><p class="scale-name"><i class="tok rd"></i><svg class="bi rolldown" aria-hidden="true"><use href="#bi-rolldown"/></svg>Rolldown</p><div class="squares" data-n="576" data-kind="rd"></div><p class="scale-num"><b>576</b> files</p></div>
-    <figcaption>JavaScript files the product page's HTML lists at start. 385 of Rolldown's are under 1 KB; none of webpack's are.</figcaption>
-  </figure>
-  <div class="facts wide">
-    <div class="fact"><p class="fact-k">Code shipped, joined into one file</p><p class="fact-v"><span class="wp-t">837 KB</span> vs <span class="rd-t">850 KB</span></p><p>Nearly the same code. Both builds gzipped as one file.</p></div>
-    <div class="fact"><p class="fact-k">The same code as separate files</p><p class="fact-v"><span class="wp-t">865 KB</span> vs <span class="rd-t">954 KB</span></p><p>gzip restarts for each file: 28 KB overhead against 104 KB.</p></div>
-    <div class="fact"><p class="fact-k">Stylesheets before the first paint</p><p class="fact-v"><span class="wp-t">6</span> vs <span class="rd-t">145</span></p><p>Vite writes one stylesheet per chunk that holds CSS, and the page lists all of them.</p></div>
-    <div class="fact"><p class="fact-k">Whole build on disk</p><p class="fact-v"><span class="wp-t">21.0 MB</span> vs <span class="rd-t">16.8 MB</span></p><p>webpack's build is bigger because it copies shared code into several files.</p></div>
-  </div>
-  <h3>Why webpack has only 6 stylesheets</h3>
-  <p class="gt-intro">In the real app's product page we saw <span class="gt-who"><svg class="bi webpack" aria-hidden="true"><use href="#bi-webpack"/></svg>webpack</span> with <b>57 × <i class="ficon js">JS</i></b> and <b>6 × <i class="ficon css">CSS</i></b> requests and <span class="gt-who"><svg class="bi vite" aria-hidden="true"><use href="#bi-vite"/></svg>vinext</span> with <b>189 × <i class="ficon js">JS</i></b> and <b>169 × <i class="ficon css">CSS</i></b>: <b class="rd-t">295 more requests</b>.</p>
-  <p>Let's look at why Next.js with webpack behaves differently:</p>
-  <p class="frame-tag real wide">Real app · every shared group of the product page</p>
-  <figure class="gt wide" id="cssfloor" data-build="pr4726" aria-label="How webpack and Rolldown decide which shared groups of modules get their own file, with the scripts and stylesheets each build ends up with">
-    <div class="gt-head"><p class="gt-cap" id="gtCap">Each dot is one group of modules the product page shares with other pages</p><button type="button" class="gt-replay" id="gtReplay">Replay</button></div>
-    <div class="gt-panels">
-      <div class="gt-panel" data-side="webpack"><p class="lane-name"><i class="tok wp"></i><svg class="bi webpack" aria-hidden="true"><use href="#bi-webpack"/></svg>webpack <span>Next.js 16.4 settings</span></p><p class="gt-say" aria-live="polite"></p><svg class="gt-svg" viewBox="0 0 400 470" role="img" aria-label="webpack's decision tree"></svg></div>
-      <div class="gt-panel" data-side="rolldown"><p class="lane-name"><i class="tok rd"></i><svg class="bi rolldown" aria-hidden="true"><use href="#bi-rolldown"/></svg>Rolldown <span><svg class="bi vite" aria-hidden="true"><use href="#bi-vite"/></svg>vinext with <svg class="bi github" aria-hidden="true"><use href="#bi-github"/></svg>PR #4726</span></p><p class="gt-say" aria-live="polite"></p><svg class="gt-svg" viewBox="0 0 400 470" role="img" aria-label="Rolldown's decision tree"></svg></div>
-    </div>
-    <figcaption>webpack's dots are the shared chunks of a webpack build with both rules off; Rolldown's are its shared chunks. The counts start with the files the page loads anyway: the page, _app, the runtime and the other start files.</figcaption>
-  </figure>
-  <p class="cf-src">webpack's two rules in Next.js: <a href="https://github.com/vercel/next.js/blob/v16.4.2/packages/next/src/build/webpack-config.ts#L1237">at most 25 files at page start (<code>maxInitialRequests: 25</code>)</a> · <a href="https://github.com/vercel/next.js/blob/v16.4.2/packages/next/src/build/webpack-config.ts#L1238">shared code only in its own file from 20 KB (<code>minSize: 20000</code>)</a></p>
-  <p>With both rules off, webpack's HTML lists 254 scripts and 76 stylesheets, and the page is ready 0.19 s later, about half of the 0.38 s that PR #4726 adds (iPhone 13 profile, 4G, median of 10 runs).</p>
-  <h3>What a customer notices</h3>
-  <p>iPhone 13 profile over emulated 4G, median of 20 runs. The server sends files in the order Chrome asks for, up to 100 at a time, as the production CDN does. "Page ready" is the moment React has hydrated the page, so a tap works.</p>
-  <p class="frame-tag real wide">Real app · Next.js Pages Router, 225 pages</p>
-  <figure class="race wide" id="race" aria-label="First paint and page ready">
-    <div class="race-row"><p>First paint</p><div class="bar-pair"><span class="bar wp" style="--v:800"><b>0.80 s</b></span><span class="bar rd" style="--v:904"><b>0.90 s</b></span></div></div>
-    <div class="race-row"><p>Page ready</p><div class="bar-pair"><span class="bar wp" style="--v:1564"><b>1.56 s</b></span><span class="bar rd" style="--v:2070"><b>2.07 s</b></span></div></div>
-    <figcaption>webpack against vinext 1.4.5. The server sends the 145 stylesheets first, so vinext paints only 0.10 s later. React hydrates only after the last of the 576 scripts has arrived, so the page is ready 0.50 s later.</figcaption>
-  </figure>
-</section>
-
 <section id="sprio">
-  <h2><span class="num">05</span>Which files the server sends <span class="hi">first</span></h2>
+  <h2><span class="num">06</span>Which files the server sends <span class="hi">first</span></h2>
   <p>Chrome tells the server how urgent each file is. Render-blocking CSS is Highest. webpack's scripts load with <code>defer</code> and are Low. vinext's are module scripts and are High from the start. The product image starts at Medium and becomes High only once layout shows it on screen. In these runs the server sends files in that order, up to 100 at a time, as the production CDN does.</p>
   <p class="frame-tag real wide">Real app · Next.js Pages Router, 225 pages</p>
   <figure class="wf wide" id="wf" aria-label="Download waterfall of the product page, webpack and vinext on one time axis">
@@ -132,12 +126,12 @@
     <div class="wf-legend"><span><i class="wf-k lcp"></i>product image</span><span><i class="wf-k css"></i>CSS</span><span><i class="wf-k js-wp"></i>scripts, <svg class="bi webpack" aria-hidden="true"><use href="#bi-webpack"/></svg>webpack</span><span><i class="wf-k js-rd"></i>scripts, <svg class="bi vite" aria-hidden="true"><use href="#bi-vite"/></svg>vinext</span><span><i class="wf-k other"></i>other</span><span class="wf-k-line">│ first paint · ┊ largest paint</span><button type="button" class="wf-replay" id="wfReplay">Replay</button></div>
   </figure>
   <p>Both ask for the product image at about 0.44 s. webpack has it at 1.07 s, vinext with PR #4726 at 0.95 s, and the largest paint follows right after. The 210 scripts in vinext's waterfall do not delay the image.</p>
-  <p>What still differs is when the page is ready. React hydrates only after every script the HTML lists has arrived. The page is ready at 1.56 s with webpack and at 1.94 s with PR #4726, against 2.07 s with vinext 1.4.5 in section 04. Medians of 20 runs.</p>
+  <p>What still differs is when the page is ready. React hydrates only after every script the HTML lists has arrived. The page is ready at 1.56 s with webpack and at 1.94 s with PR #4726, against 2.07 s with vinext 1.4.5. Medians of 20 runs.</p>
   <p>vinext 1.4.5 asks for about 800 files, and the server sends 100 at a time. Allowed 256 at a time, it is ready at 1.78 s, but the product image now shares the connection with more scripts, and the largest paint moves from 1.01 s to 1.28 s (median of 10 runs).</p>
 </section>
 
 <section id="s5">
-  <h2><span class="num">06</span>What makes <span class="hi">fixing</span> so <span class="hi">hard</span>?</h2>
+  <h2><span class="num">07</span>What makes <span class="hi">fixing</span> so <span class="hi">hard</span>?</h2>
   <ol class="fixes wide">
     <li class="fix">
       <p class="fix-k">1 · "HTTP/2 makes small files free"</p>

@@ -49,11 +49,12 @@ p code, li code { background: var(--bg3); border: 1px solid var(--line); padding
 .wrap > .stack { grid-column: full; timeline-scope: --cover2, --cover3, --cover4, --coverP, --cover5; }
 .stack > section { position: relative; display: grid; grid-template-columns: var(--cols); align-content: start; padding: clamp(64px, 10vh, 110px) 0 72px; background: var(--bg); border-top: 1px solid var(--line); }
 .stack > section + section { border-top-color: var(--line2); border-radius: 28px 28px 0 0; box-shadow: 0 -24px 60px -12px rgb(0 0 0 / .85); }
-#s2 { background: #111115; }
-#s3 { background: #141418; }
-#s4 { background: #17171c; }
-#sprio { background: #1a1a20; }
-#s5 { background: #1d1d24; }
+#s4 { background: #111115; }
+#snotice { background: #141418; }
+#s2 { background: #17171c; }
+#s3 { background: #1a1a20; }
+#sprio { background: #1d1d24; }
+#s5 { background: #202028; }
 .stack > section > :last-child { margin-bottom: 0; }
 @media (min-width: 820px) and (min-height: 600px) {
   .stack > section { position: sticky; top: var(--stick-top, 0px); }
@@ -61,17 +62,19 @@ p code, li code { background: var(--bg3); border: 1px solid var(--line); padding
 }
 @media (min-width: 820px) and (min-height: 600px) and (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
-    #s2 { view-timeline: --cover2 block; }
-    #s3 { view-timeline: --cover3 block; }
-    #s4 { view-timeline: --cover4 block; }
-    #sprio { view-timeline: --coverP block; }
-    #s5 { view-timeline: --cover5 block; }
-    #s1, #s2, #s3, #s4, #sprio { transform-origin: 50% 30%; animation: sink linear both; animation-range: entry 50% entry 100%; }
+    #s4 { view-timeline: --cover2 block; }
+    #snotice { view-timeline: --cover3 block; }
+    #s2 { view-timeline: --cover4 block; }
+    #s3 { view-timeline: --cover5 block; }
+    #sprio { view-timeline: --cover6 block; }
+    #s5 { view-timeline: --cover7 block; }
+    #s1, #s4, #snotice, #s2, #s3, #sprio { transform-origin: 50% 30%; animation: sink linear both; animation-range: entry 50% entry 100%; }
     #s1 { animation-timeline: --cover2; }
-    #s2 { animation-timeline: --cover3; }
-    #s3 { animation-timeline: --cover4; }
-    #s4 { animation-timeline: --coverP; }
-    #sprio { animation-timeline: --cover5; }
+    #s4 { animation-timeline: --cover3; }
+    #snotice { animation-timeline: --cover4; }
+    #s2 { animation-timeline: --cover5; }
+    #s3 { animation-timeline: --cover6; }
+    #sprio { animation-timeline: --cover7; }
   }
 }
 @keyframes sink { to { filter: brightness(.4); scale: .96; } }
@@ -181,17 +184,8 @@ h3 { font: 700 22px/1.2 var(--display); margin: 1.8em 0 .3em; }
 .controls .replay { margin-left: auto; padding: 0 12px 0 10px; }
 
 /* 04 · scale */
-.scale { margin: 22px 0 10px; display: grid; gap: 14px; }
-.scale-row { display: grid; grid-template-columns: 110px 1fr 90px; gap: 12px; align-items: center; }
-.scale-name { margin: 0; font: 700 15px/1.2 var(--display); display: flex; align-items: center; gap: 8px; }
-.scale-num { margin: 0; font: 13px/1.2 var(--mono); color: var(--muted); text-align: right; }
-.scale-num b { font: 800 26px/1 var(--display); color: var(--text); display: block; }
-.squares { display: flex; flex-wrap: wrap; gap: 2px; align-content: flex-start; }
-.squares i { width: 7px; height: 7px; border-radius: 1.5px; background: var(--line2); transition: background .2s; }
-.squares[data-kind="wp"] i.on { background: var(--wp); }
-.squares[data-kind="rd"] i.on { background: var(--rd); }
-.scale figcaption, .race figcaption { font-size: 14px; color: var(--muted); }
 .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px 0 6px; }
+.facts.two { grid-template-columns: 1fr 1fr; }
 .fact { padding: 14px; border-radius: 14px; border: 1px solid var(--line); background: #1d1d23; }
 .fact-k { margin: 0; font: 600 12px/1.35 var(--mono); color: var(--muted); }
 .fact-v { margin: 6px 0; font: 800 22px/1.15 var(--display); }
@@ -259,11 +253,7 @@ h3 { font: 700 22px/1.2 var(--display); margin: 1.8em 0 .3em; }
   .lane-note { font-size: 12.5px; }
   .count { font-size: 11.5px; }
   .count.final { font-size: 12.5px; }
-  .scale-row { grid-template-columns: 1fr; gap: 6px; }
-  .scale-num { text-align: left; }
-  .scale-num b { display: inline; margin-right: 6px; }
   .race-row { grid-template-columns: 1fr; gap: 4px; }
-  .squares i { width: 5px; height: 5px; }
   .stage { padding: 12px 10px; }
   .lane { padding: 10px 8px; }
   .file { padding: 6px 7px; }
