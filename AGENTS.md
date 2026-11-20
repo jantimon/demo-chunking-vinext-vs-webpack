@@ -17,7 +17,7 @@ Static explainer page, dark theme. No build step for the page; `demo/` builds th
 | `#graph` | toy modules with importers | `MODULES` in main.js |
 | `#pack` | step figure: each module lands in webpack's and Rolldown's files for the product page | `data.js` (real build output) |
 | `#scale` | 55 vs 576 squares | real app |
-| `#cssfloor` | two decision trees: every shared group of the product page runs through webpack's two rules and through Rolldown's one rule; edges heat up with the groups they carry, baskets count scripts and stylesheets up to 57 / 6 and 189 / 169 (`main`: 576 / 145) | `grouping.js`, `groupingTrees()` in main.js; `data-build` on the figure picks `pr4726` or `v145` |
+| `#cssfloor` | two decision trees: every shared group of the product page runs through webpack's two rules and through Rolldown's one rule; edges heat up with the groups they carry; script and stylesheet counters with bars on one scale climb to 57 / 6 and 189 / 169 (`main`: 576 / 145); below 760 px the Rolldown tree is shorter | `grouping.js`, `groupingTrees()` in main.js; `data-build` on the figure picks `pr4726` or `v145` |
 | `#race` | first paint / page ready (React hydrated) bars, webpack vs vinext 1.4.5 | real app, iPhone 13 profile, 4G, median of 20 runs |
 | `#wf` | animated download waterfall, both builds on one time axis, rows grouped by priority | `waterfall.js`: the run closest to the medians (first paint, largest paint, ready) per build, real app, iPhone 13 profile, 4G, 100 streams (type and timing only) |
 | `#rg` | route-grouping outcome | real app |
