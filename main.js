@@ -668,15 +668,15 @@ onView($("#rg"), () => {
   $("#rg").classList.add("seen");
 });
 
-/* 04 · CSS floor: one component per step, then the counts */
+/* 04 · CSS grouping: one component per step, then the counts */
 function cssFloor() {
   const figure = $("#cssfloor");
   if (!figure) return;
   const CAPS = [
     "Three components the product page shares with other pages",
-    "Search box · 21.6 KB of CSS, over the 20 KB minimum",
-    "Dialog · 2.6 KB of CSS, under 20 KB",
-    "Divider · 0.2 KB of CSS, under 20 KB",
+    "Search box: both bundlers put it into a shared chunk",
+    "Dialog: webpack adds it to the same chunk, Rolldown makes a second chunk",
+    "Divider: webpack adds it to the same chunk, Rolldown makes a third chunk",
     "Product page: 6 stylesheets with webpack, 169 with vinext PR #4726",
   ];
   const KEYS = [null, "search", "dialog", "divider", null];
