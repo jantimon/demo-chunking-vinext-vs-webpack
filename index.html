@@ -114,7 +114,7 @@
   <h3>What a customer notices</h3>
   <p>iPhone 13 profile over emulated 4G, median of 20 runs. The server sends files in the order Chrome asks for, up to 100 at a time, as the production CDN does. "Page ready" is the moment React has hydrated the page, so a tap works.</p>
   <p class="frame-tag real wide">Real app · Next.js Pages Router, 225 pages</p>
-  <figure class="race wide" id="race" aria-label="First paint and first working tap">
+  <figure class="race wide" id="race" aria-label="First paint and page ready">
     <div class="race-row"><p>First paint</p><div class="bar-pair"><span class="bar wp" style="--v:800"><b>0.80 s</b></span><span class="bar rd" style="--v:904"><b>0.90 s</b></span></div></div>
     <div class="race-row"><p>Page ready</p><div class="bar-pair"><span class="bar wp" style="--v:1564"><b>1.56 s</b></span><span class="bar rd" style="--v:2070"><b>2.07 s</b></span></div></div>
     <figcaption>webpack against vinext 1.4.5. The server sends the 145 stylesheets first, so vinext paints only 0.10 s later. React hydrates only after the last of the 576 scripts has arrived, so the page is ready 0.50 s later.</figcaption>
