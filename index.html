@@ -158,7 +158,7 @@
     <li class="fix">
       <p class="fix-k">5 · Copy small chunks, but leave CSS alone</p>
       <p><a href="https://github.com/cloudflare/vinext/pull/4726">vinext PR #4726</a> turns on the same copying of small chunks, but skips every module that is a stylesheet, so CSS is never duplicated. Rolldown applies that skip to the whole chunk: <a href="https://rolldown.rs/in-depth/inline-common-chunks">"Matching any module with exclude prevents its entire common chunk from being inlined."</a> In an app where every component imports its own CSS, almost every shared chunk holds CSS, so its JavaScript stays a separate file too. In the toy shop that is <code>Price</code> and <code>IconButton</code>.</p>
-      <p class="pending">Numbers for the large app follow in section 08.</p>
+      <p>In the large app the product page lists 189 scripts and 169 stylesheets instead of 576 and 145, and loads 1,057 KB of JavaScript (gzipped as one file) instead of 849 KB, because small shared code is now copied. It is ready at 1.94 s, against 2.07 s with vinext 1.4.5 and 1.56 s with webpack (median of 20 runs). Section 08 tests four changes on top.</p>
     </li>
   </ol>
 </section>
