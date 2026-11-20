@@ -438,3 +438,51 @@ h3 { font: 700 22px/1.2 var(--display); margin: 1.8em 0 .3em; }
 .stage.fast .fast-hint { opacity: 1; }
 @media (max-width: 640px) { .stage-head .keys { display: block; position: absolute; top: -9px; right: 16px; font-size: 0; } .stage-head .keys .fast-hint { margin: 0; font-size: 11px; } }
 .dc-row .bi { margin: .18em 0 0; align-self: start; } .dc-row b { white-space: nowrap; }
+
+/* 04 · CSS floor: where three components' CSS lands */
+.cf { margin: 0; padding: 18px 20px; border-radius: 16px; border: 1px solid var(--line); background: #1d1d23; }
+.cf-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.cf-cap { margin: 0; min-height: 2.8em; display: flex; align-items: center; font: 600 15px/1.4 var(--sans); }
+.cf-replay { flex: none; min-height: 32px; padding: 0 12px; border-radius: 9px; border: 1px solid var(--line2); background: var(--bg3); color: var(--text); font: 600 12px var(--mono); cursor: pointer; }
+.cf-comps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.cf-comp { padding: 10px; border-radius: 12px; border: 1px solid color-mix(in srgb, var(--c) 45%, transparent); background: color-mix(in srgb, var(--c) 7%, var(--bg2)); transition: box-shadow .5s, opacity .5s; }
+.cf-comp .chip { --c: inherit; }
+.cf-cname { margin: 0 0 6px; font: 700 14px/1.3 var(--display); color: var(--c); }
+.cf-blks { display: flex; flex-wrap: wrap; gap: 4px; }
+.cf-blks .chip, .cf-row .chip { padding: 2px 7px; font-size: 11px; }
+.cf-meter { position: relative; display: block; height: 6px; margin-top: 9px; border-radius: 3px; background: var(--line); }
+.cf-meter i { position: absolute; inset: 0 auto 0 0; width: min(100%, calc(var(--kb) / 25 * 100%)); border-radius: 3px; background: var(--c); }
+.cf-meter::after { content: ""; position: absolute; left: 80%; top: -3px; bottom: -3px; width: 2px; background: var(--text); }
+.cf-floor { display: flex; align-items: center; justify-content: flex-end; gap: 6px; margin: 6px 0 14px; font: 500 11px/1.3 var(--mono); color: var(--muted); }
+.cf-floor i { width: 2px; height: 10px; background: var(--text); }
+.cf-comp.cur { box-shadow: 0 0 0 2px var(--c); }
+.cf.playing .cf-comp:not(.cur) { opacity: .45; }
+.cf-lanes { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.cf-lane { min-width: 0; padding: 12px; border-radius: 14px; border: 1px solid var(--line); background: var(--bg2); }
+.cf-lane.wp { border-top: 2px solid var(--wp); } .cf-lane.rd { border-top: 2px solid var(--rd); }
+.cf-file { margin-bottom: 8px; padding: 7px 9px; border-radius: 9px; border: 1px solid var(--line2); background: var(--bg3); }
+.cf-page { border-style: dashed; }
+.cf-fname { margin: 0 0 5px; font: 500 11px/1.3 var(--mono); color: var(--faint); }
+.cf-row { display: flex; flex-wrap: wrap; gap: 5px; min-height: 24px; }
+.cf-slot { display: inline-flex; min-width: 64px; min-height: 22px; border-radius: 8px; border: 1px dashed var(--line2); }
+.cf-slot:has(.chip.on) { border-color: transparent; }
+.cf-own { --c: var(--faint); }
+.cf-tag { display: block; min-height: 1.4em; margin-top: 5px; font: 600 10.5px/1.4 var(--mono); font-style: normal; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+.cf-lane.wp .cf-page .cf-tag { color: var(--wp); }
+.cf-count { margin: 10px 0 0; font: 500 13px/1.3 var(--mono); color: var(--muted); }
+.cf-count b { display: block; font: 800 30px/1.05 var(--display); color: var(--text); font-variant-numeric: tabular-nums; }
+.cf-lane.wp .cf-count b { color: var(--wp); } .cf-lane.rd .cf-count b { color: var(--rd); }
+html.js .cf .cf-fill:not(.on) { opacity: 0; }
+html.js .cf .chip.cf-fill.on { animation: land .9s cubic-bezier(.3, 1.4, .5, 1); }
+html.js .cf .cf-tag.on { animation: fade .6s ease-out; }
+html.js .cf:not(.done) .cf-count { opacity: 0; }
+.cf-count { transition: opacity .6s; }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 640px) {
+  .cf { padding: 14px 12px; }
+  .cf-comps { grid-template-columns: 1fr; gap: 6px; }
+  .cf-comp { display: grid; grid-template-columns: 90px 1fr; align-items: center; column-gap: 8px; }
+  .cf-comp .cf-cname { margin: 0; }
+  .cf-comp .cf-meter { grid-column: 1 / -1; }
+  .cf-lanes { grid-template-columns: 1fr; }
+}
