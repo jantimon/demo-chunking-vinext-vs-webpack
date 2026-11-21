@@ -73,7 +73,7 @@
 
 <section id="snotice">
   <h2><span class="num">03</span>What a customer <span class="hi">notices</span></h2>
-  <p>iPhone 13 profile over emulated 4G, median of 20 runs. The server sends files in the order Chrome asks for, up to 100 at a time, as the production CDN does. "Page ready" is the moment React has hydrated the page, so a tap works.</p>
+  <p>iPhone 13 profile over emulated 4G, median of 20 runs. The server sends files in the order Chrome asks for, as the production CDN does. "Page ready" is the moment React has hydrated the page, so a tap works.</p>
   <p class="frame-tag real wide">Real app · Next.js Pages Router, 225 pages</p>
   <figure class="race wide" id="race" aria-label="First paint and page ready">
     <div class="race-row"><p>First paint</p><div class="bar-pair"><span class="bar wp" style="--v:800"><b>0.80 s</b></span><span class="bar rd" style="--v:860"><b>0.86 s</b></span></div></div>
@@ -117,7 +117,7 @@
 
 <section id="sprio">
   <h2><span class="num">06</span>Which files the server sends <span class="hi">first</span></h2>
-  <p>Chrome tells the server how urgent each file is. Render-blocking CSS is Highest. webpack's scripts load with <code>defer</code> and are Low. vinext's are module scripts and are High from the start. The product image starts at Medium and becomes High only once layout shows it on screen. In these runs the server sends files in that order, up to 100 at a time, as the production CDN does.</p>
+  <p>Chrome tells the server how urgent each file is. Render-blocking CSS is Highest. webpack's scripts load with <code>defer</code> and are Low. vinext's are module scripts and are High from the start. The product image starts at Medium and becomes High only once layout shows it on screen. In these runs the server sends files in that order, as the production CDN does.</p>
   <p class="frame-tag real wide">Real app · Next.js Pages Router, 225 pages</p>
   <figure class="wf wide" id="wf" aria-label="Download waterfall of the product page, webpack and vinext on one time axis">
     <div class="wf-head"><p class="wf-cap">Product page, iPhone 13 profile over emulated 4G, server sends by Chrome's priorities · every line is one request</p><p class="wf-clock" id="wfClock">0.00 s</p></div>
@@ -127,7 +127,6 @@
   </figure>
   <p>Both ask for the product image at about 0.44 s. webpack has it at 1.07 s, vinext with PR #4726 at 0.95 s, and the largest paint follows right after. The 210 scripts in vinext's waterfall do not delay the image.</p>
   <p>What still differs is when the page is ready. React hydrates only after every script the HTML lists has arrived. The page is ready at 1.56 s with webpack and at 1.94 s with PR #4726, against 2.07 s with vinext 1.4.5. Medians of 20 runs.</p>
-  <p>vinext 1.4.5 asks for about 800 files, and the server sends 100 at a time. Allowed 256 at a time, it is ready at 1.78 s, but the product image now shares the connection with more scripts, and the largest paint moves from 1.01 s to 1.28 s (median of 10 runs).</p>
 </section>
 
 <section id="s5">
