@@ -163,7 +163,7 @@
     <li class="fix">
       <p class="fix-k">6 · Cap the files per page, like webpack</p>
       <p>webpack lets each entry file start at most 25 requests (<code>maxInitialRequests: 25</code>). We added that rule to PR #4726 as a second build: the first build lists each page's shared chunks, the second merges all but the 25 largest per entry file with <code>codeSplitting.groups</code>. The product page is then ready at 1.67 s instead of 1.94 s.</p>
-      <p>With PR #4726's copying switched off as well, each module stays in one chunk. The product page loads 62 scripts and 41 stylesheets and is ready at 1.56 s, as fast as webpack (1.57 s, median of 20 runs each). The home page stays 0.14 s behind webpack: the merged chunks carry code and CSS it does not use. We have not checked the CSS order in these builds.</p>
+      <p>With PR #4726's copying switched off as well, each module stays in one chunk. The product page loads 62 scripts and 41 stylesheets and is ready at 1.56 s, as fast as webpack (1.57 s, median of 20 runs each). The home page stays 0.14 s behind webpack: the merged chunks carry code and CSS it does not use. Full-page screenshots of the product page and the home page match PR #4726 pixel for pixel, apart from one pixel on the home page without copying.</p>
     </li>
   </ol>
 </section>
