@@ -250,8 +250,8 @@
     const [wp, vx] = panels;
     const extra = (perRequest(wp.browser) * (vx.count - wp.count)) / 1000;
     const html = time >= END
-      ? `<span>${vx.count - wp.count} more requests: <b>+${Math.round(extra)} ms CPU</b> in ${wp.browser.label}</span>`
-      : "Each chip is one request, a script or a stylesheet. Each box adds its cost per request";
+      ? `<span>${vx.count - wp.count} more files downloaded: <b>+${Math.round(extra)} ms CPU</b> in ${wp.browser.label}</span>`
+      : "Each chip is one downloaded script or stylesheet. Each box adds its cost per request";
     if (cap.innerHTML !== html) cap.innerHTML = html;
   }
 
