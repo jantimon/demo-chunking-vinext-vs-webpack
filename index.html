@@ -151,12 +151,12 @@
     </li>
     <li class="fix">
       <p class="fix-k">4 · Copy small chunks, like webpack</p>
-      <p>Rolldown 1.2 can copy small automatic chunks into the chunks that use them: <code>experimentalInlineCommonChunks: { maxSize: 20000 }</code>, the same 20 KB minimum webpack uses. The build drops from 1,618 to 457 files, the product page loads 72 scripts and 33 stylesheets. But copied modules load their CSS twice, the cascade order changes, and the header logo rendered twice.</p>
-      <p>In the large app the product page loads almost as few files as with webpack, but 281 KB more JavaScript after Brotli. It is ready at 1.87 s, against 1.57 s with webpack and 2.05 s with vinext 1.4.5 (median of 30 runs each, in a later run than the race above).</p>
+      <p>Rolldown 1.2 can copy small automatic chunks into the chunks that use them: <code>experimentalInlineCommonChunks: { maxSize: 20000 }</code>, the same 20 KB minimum webpack uses. The build drops from 1,618 to 457 files. But copied modules load their CSS twice, the cascade order changes, and the header logo renders twice.</p>
+      <p>In the large app the product page loads 58 scripts and 33 stylesheets before it is ready, against 56 and 6 with webpack, and 281 KB more JavaScript after Brotli. It is ready at 1.87 s, against 1.57 s with webpack and 2.05 s with vinext 1.4.5 (median of 30 runs each, in a later run than the race above).</p>
     </li>
     <li class="fix">
       <p class="fix-k">5 · Cap the files per page, like webpack</p>
-      <p>webpack lets each entry file start at most 25 requests (<code>maxInitialRequests: 25</code>). We added that rule as a second Rolldown build on top of <a href="https://github.com/cloudflare/vinext/pull/4726">vinext PR #4726</a>'s grouping, with its copying switched off: the first build lists each page's shared chunks, the second merges all but the 25 largest per entry file with <code>codeSplitting.groups</code>. Each module stays in one chunk.</p>
+      <p>webpack lets each entry file start at most 25 requests (<code>maxInitialRequests: 25</code>). We added that rule as a second Rolldown build on top of <a href="https://github.com/cloudflare/vinext/pull/4726">vinext's open pull request #4726</a>, which puts the code <code>_app</code> imports into one group; we switched off the PR's copying of small chunks: the first build lists each page's shared chunks, the second merges all but the 25 largest per entry file with <code>codeSplitting.groups</code>. Each module stays in one chunk.</p>
       <p>In the large app the product page loads 62 scripts and 41 stylesheets and is ready at 1.56 s, as fast as webpack (1.57 s, median of 20 runs each). The home page stays 0.14 s behind webpack: the merged chunks carry code and CSS it does not use. Full-page screenshots of both pages match the build of PR #4726 pixel for pixel, apart from one pixel on the home page.</p>
     </li>
   </ol>
