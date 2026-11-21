@@ -153,12 +153,17 @@
     <li class="fix">
       <p class="fix-k">4 · Copy small chunks, like webpack</p>
       <p>Rolldown 1.2 can copy small automatic chunks into the chunks that use them: <code>experimentalInlineCommonChunks: { maxSize: 20000 }</code>, the same 20 KB minimum webpack uses. The build drops from 1,618 to 457 files, the product page loads 72 scripts and 33 stylesheets. But copied modules load their CSS twice, the cascade order changes, and the header logo rendered twice.</p>
-      <p class="pending">Load-time measurements for this option follow.</p>
+      <p>In the large app the product page loads almost as few files as with webpack, but 281 KB more JavaScript after Brotli. It is ready at 1.87 s, against 1.57 s with webpack and 2.05 s with vinext 1.4.5 (median of 30 runs each, in a later run than the race above).</p>
     </li>
     <li class="fix">
       <p class="fix-k">5 · Copy small chunks, but leave CSS alone</p>
       <p><a href="https://github.com/cloudflare/vinext/pull/4726">vinext PR #4726</a> turns on the same copying of small chunks, but skips every module that is a stylesheet, so CSS is never duplicated. Rolldown applies that skip to the whole chunk: <a href="https://rolldown.rs/in-depth/inline-common-chunks">"Matching any module with exclude prevents its entire common chunk from being inlined."</a> In an app where every component imports its own CSS, almost every shared chunk holds CSS, so its JavaScript stays a separate file too. In the toy shop that is <code>Price</code> and <code>IconButton</code>.</p>
-      <p>In the large app the product page lists 189 scripts and 169 stylesheets instead of 576 and 145, and loads 1,057 KB of JavaScript (gzipped as one file) instead of 849 KB, because small shared code is now copied. It is ready at 1.94 s, against 2.07 s with vinext 1.4.5 and 1.56 s with webpack (median of 20 runs).</p>
+      <p>In the large app the product page lists 189 scripts and 169 stylesheets instead of 576 and 145, and loads 1,057 KB of JavaScript (gzipped as one file) instead of 849 KB, because small shared code is now copied. Several copied chunks load on the same page, each with its own copy: the styling runtime arrives 40 times, the translation helpers 21 times. Only the first copy runs; the others are downloaded and compiled for nothing, 546 KB before compression. It is ready at 1.94 s, against 2.07 s with vinext 1.4.5 and 1.56 s with webpack (median of 20 runs).</p>
+    </li>
+    <li class="fix">
+      <p class="fix-k">6 · Cap the files per page, like webpack</p>
+      <p>webpack lets each entry file start at most 25 requests (<code>maxInitialRequests: 25</code>). We added that rule to PR #4726 as a second build: the first build lists each page's shared chunks, the second merges all but the 25 largest per entry file with <code>codeSplitting.groups</code>. The product page is then ready at 1.67 s instead of 1.94 s.</p>
+      <p>With PR #4726's copying switched off as well, each module stays in one chunk. The product page loads 62 scripts and 41 stylesheets and is ready at 1.56 s, as fast as webpack (1.57 s, median of 20 runs each). The home page stays 0.14 s behind webpack: the merged chunks carry code and CSS it does not use. We have not checked the CSS order in these builds.</p>
     </li>
   </ol>
 </section>
