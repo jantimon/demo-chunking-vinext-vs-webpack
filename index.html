@@ -25,6 +25,7 @@
 <script src="grouping.js" defer></script>
 <script src="waterfall.js" defer></script>
 <script src="main.js" defer></script>
+<script src="reqcost.js" defer></script>
 </head>
 <body>
 <!-- Brand icons: Simple Icons 16.38.0 (CC0-1.0), https://simpleicons.org -->
@@ -129,12 +130,29 @@
   <p>vinext asks for about 800 files, and the server sends 100 at a time. Allowed 256 at a time, it is ready at 1.78 s, but the product image now shares the connection with more scripts, and the largest paint moves from 1.01 s to 1.28 s (median of 10 runs).</p>
 </section>
 
+<section id="scost">
+  <h2><span class="num">07</span>What each extra file <span class="hi">costs</span></h2>
+  <p>Every file is one request, and every request runs through the same browser code, however small the file is. We sampled the CPU of every browser process with the macOS profiler while the product page loaded, and sorted the time by the code that ran.</p>
+  <p class="frame-tag real wide">Real app · product page, CPU of every browser process</p>
+  <figure class="gt rc wide" id="reqcost" aria-label="CPU time each request costs in the browser's processes, webpack against vinext 1.4.5">
+    <div class="gt-head"><p class="gt-cap rc-cap">Each chip is one request, a script or a stylesheet. Each box adds its cost per request</p><div class="rc-ctl"><div class="rc-tabs" role="group" aria-label="Browser engine"><button type="button" class="rc-tab" data-browser="chromium" aria-pressed="true">Chromium</button><button type="button" class="rc-tab" data-browser="webkit" aria-pressed="false">WebKit</button></div><button type="button" class="gt-replay rc-replay">Replay</button></div></div>
+    <div class="gt-panels">
+      <div class="gt-panel rc-panel" data-side="webpack"><p class="lane-name"><i class="tok wp"></i><svg class="bi webpack" aria-hidden="true"><use href="#bi-webpack"/></svg>webpack</p><p class="rc-total" aria-live="off"></p><svg class="rc-svg gt-svg" role="img" aria-label="webpack: request cost per browser process"></svg></div>
+      <div class="gt-panel rc-panel" data-side="vinext"><p class="lane-name"><i class="tok rd"></i><svg class="bi vite" aria-hidden="true"><use href="#bi-vite"/></svg>vinext 1.4.5</p><p class="rc-total" aria-live="off"></p><svg class="rc-svg gt-svg" role="img" aria-label="vinext 1.4.5: request cost per browser process"></svg></div>
+    </div>
+    <div class="rc-tip" hidden></div>
+    <figcaption>Hover or tap a box for what it does, its share of a request's cost and its source code. Files: every script and stylesheet from navigation until 3 s after the page is ready, lazy ones included. µs per request: the slope over five builds with 180 to 880 files, desktop M1 Max, no CPU or network throttling, 6 loads each. Chromium from Electron 45 (Chromium 156), WebKit from Playwright's build; Safari itself is not sampled.</figcaption>
+  </figure>
+  <p>In Chromium each request costs about 0.86 ms of CPU, in WebKit about 1.26 ms. Most of it is messages between the processes, task scheduling, URL checks and the loader code. In WebKit the largest part is Network.framework, which builds a connection object for every request although all requests share one HTTP/2 connection.</p>
+  <p>Parsing, compiling and running the code take the same time in both builds: they follow the bytes, and both builds load nearly the same code.</p>
+</section>
+
 <section id="s5">
-  <h2><span class="num">07</span>What makes <span class="hi">fixing</span> so <span class="hi">hard</span>?</h2>
+  <h2><span class="num">08</span>What makes <span class="hi">fixing</span> so <span class="hi">hard</span>?</h2>
   <ol class="fixes wide">
     <li class="fix">
       <p class="fix-k">1 · "HTTP/2 makes small files free"</p>
-      <p>It removes the limit of six connections, not the work each file needs. Each file still needs its own request, its own decompression and compile step, and for CSS a request that blocks the first paint. The HTML of the product page has 1,152 script and preload tags.</p>
+      <p>It removes the limit of six connections, not the work each request needs: about 0.9 ms of CPU in Chromium and 1.3 ms in WebKit on a fast desktop (section 07). For CSS each file is also a request that blocks the first paint. The HTML of the product page has 1,152 script and preload tags.</p>
     </li>
     <li class="fix fix-wide">
       <p class="fix-k">2 · "Port vinext's App Router grouping to the Pages Router"</p>
