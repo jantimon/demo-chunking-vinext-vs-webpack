@@ -46,7 +46,7 @@ code, pre, .mono { font-family: var(--mono); font-size: .88em; font-variant-liga
 p code, li code { background: var(--bg3); border: 1px solid var(--line); padding: 1px 5px; border-radius: 5px; }
 .wrap { display: grid; grid-template-columns: var(--cols); }
 .wrap > *, section > * { grid-column: text; min-width: 0; }
-.wrap > .stack { grid-column: full; timeline-scope: --cover2, --cover3, --cover4, --coverP, --cover5; }
+.wrap > .stack { grid-column: full; timeline-scope: --cover2, --cover3, --cover4, --cover5, --cover6, --cover7, --cover8; }
 .stack > section { position: relative; display: grid; grid-template-columns: var(--cols); align-content: start; padding: clamp(64px, 10vh, 110px) 0 72px; background: var(--bg); border-top: 1px solid var(--line); }
 .stack > section + section { border-top-color: var(--line2); border-radius: 28px 28px 0 0; box-shadow: 0 -24px 60px -12px rgb(0 0 0 / .85); }
 #s4 { background: #111115; }
@@ -54,7 +54,8 @@ p code, li code { background: var(--bg3); border: 1px solid var(--line); padding
 #s2 { background: #17171c; }
 #s3 { background: #1a1a20; }
 #sprio { background: #1d1d24; }
-#s5 { background: #202028; }
+#scost { background: #202028; }
+#s5 { background: #23232c; }
 .stack > section > :last-child { margin-bottom: 0; }
 @media (min-width: 820px) and (min-height: 600px) {
   .stack > section { position: sticky; top: var(--stick-top, 0px); }
@@ -67,14 +68,16 @@ p code, li code { background: var(--bg3); border: 1px solid var(--line); padding
     #s2 { view-timeline: --cover4 block; }
     #s3 { view-timeline: --cover5 block; }
     #sprio { view-timeline: --cover6 block; }
-    #s5 { view-timeline: --cover7 block; }
-    #s1, #s4, #snotice, #s2, #s3, #sprio { transform-origin: 50% 30%; animation: sink linear both; animation-range: entry 50% entry 100%; }
+    #scost { view-timeline: --cover7 block; }
+    #s5 { view-timeline: --cover8 block; }
+    #s1, #s4, #snotice, #s2, #s3, #sprio, #scost { transform-origin: 50% 30%; animation: sink linear both; animation-range: entry 50% entry 100%; }
     #s1 { animation-timeline: --cover2; }
     #s4 { animation-timeline: --cover3; }
     #snotice { animation-timeline: --cover4; }
     #s2 { animation-timeline: --cover5; }
     #s3 { animation-timeline: --cover6; }
     #sprio { animation-timeline: --cover7; }
+    #scost { animation-timeline: --cover8; }
   }
 }
 @keyframes sink { to { filter: brightness(.4); scale: .96; } }
