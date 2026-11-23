@@ -46,7 +46,7 @@ code, pre, .mono { font-family: var(--mono); font-size: .88em; font-variant-liga
 p code, li code { background: var(--bg3); border: 1px solid var(--line); padding: 1px 5px; border-radius: 5px; }
 .wrap { display: grid; grid-template-columns: var(--cols); }
 .wrap > *, section > * { grid-column: text; min-width: 0; }
-.wrap > .stack { grid-column: full; timeline-scope: --cover2, --cover3, --cover4, --coverP, --cover5; }
+.wrap > .stack { grid-column: full; timeline-scope: --cover2, --cover3, --cover4, --cover5, --cover6, --cover7; }
 .stack > section { position: relative; display: grid; grid-template-columns: var(--cols); align-content: start; padding: clamp(64px, 10vh, 110px) 0 72px; background: var(--bg); border-top: 1px solid var(--line); }
 .stack > section + section { border-top-color: var(--line2); border-radius: 28px 28px 0 0; box-shadow: 0 -24px 60px -12px rgb(0 0 0 / .85); }
 #s4 { background: #111115; }
